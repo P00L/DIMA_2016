@@ -3,6 +3,14 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/doc_menu"
+            android:icon="@drawable/messenger_bubble_large_blue"
+            android:title="Doctor" />
+        <item
+            android:id="@+id/drug_menu"
+            android:icon="@drawable/messenger_bubble_small_white"
+            android:title="Drug" />
+        <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
             android:title="Import" />

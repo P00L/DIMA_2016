@@ -3,9 +3,8 @@ package com.mysampleapp;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,10 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,DocFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DocFragment.OnFragmentInteractionListener, DrugFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +82,23 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        android.app.FragmentManager fragmentManager = getFragmentManager();
         switch (id){
+            case R.id.doc_menu:
+                Toast.makeText(this, "doc", Toast.LENGTH_LONG).show();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, new DocFragment()).commit();
+                break;
+            case R.id.drug_menu:
+                Toast.makeText(this, "drug", Toast.LENGTH_LONG).show();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, new DrugFragment()).commit();
+                break;
             case R.id.nav_camera:
+                Toast.makeText(this, "camera", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.nav_gallery:
+                Toast.makeText(this, "camera", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.nav_manage:
                 Toast.makeText(this, "camera", Toast.LENGTH_LONG).show();
                 break;
         }
