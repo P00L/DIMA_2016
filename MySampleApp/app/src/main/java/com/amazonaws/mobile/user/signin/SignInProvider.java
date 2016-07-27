@@ -45,6 +45,6 @@ public interface SignInProvider extends IdentityProvider {
      *         and null if the button cannot be initialized.
      */
     View.OnClickListener initializeSignInButton(Activity signInActivity,
-                                View buttonView,
-                                IdentityManager.SignInResultsHandler resultsHandler);
+                                                View buttonView,
+                                                IdentityManager.SignInResultsHandler resultsHandler);
 }
