@@ -5,15 +5,21 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.mysampleapp.demo.DemoConfiguration;
+import com.mysampleapp.demo.nosql.NoSQLSelectTableDemoFragment;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DocFragment.OnFragmentInteractionListener, DrugFragment.OnFragmentInteractionListener {
@@ -83,17 +89,43 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         android.app.FragmentManager fragmentManager = getFragmentManager();
+        AppCompatActivity activity = this;
+        Fragment fragment;
         switch (id){
             case R.id.doc_menu:
                 Toast.makeText(this, "doc", Toast.LENGTH_LONG).show();
-                fragmentManager.beginTransaction().replace(R.id.content_frame, new DocFragment()).commit();
+                fragment = new DocFragment();
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                activity.getSupportActionBar().setTitle("DOC");
                 break;
             case R.id.drug_menu:
                 Toast.makeText(this, "drug", Toast.LENGTH_LONG).show();
-                fragmentManager.beginTransaction().replace(R.id.content_frame, new DrugFragment()).commit();
+                    fragment = new DrugFragment();
+                    activity.getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content_frame, fragment)
+                            .addToBackStack(null)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit();
+                    activity.getSupportActionBar().setTitle("DRUG");
                 break;
             case R.id.nav_camera:
                 Toast.makeText(this, "camera", Toast.LENGTH_LONG).show();
+                final DemoConfiguration.DemoItem demo_item = new DemoConfiguration.DemoItem(R.string.main_fragment_title_nosql_database, R.mipmap.database,
+                        R.string.feature_nosql_database_demo_button, NoSQLSelectTableDemoFragment.class);
+                    fragment = Fragment.instantiate(this, demo_item.fragmentClassName);
+                    activity.getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content_frame, fragment, demo_item.fragmentClassName)
+                            .addToBackStack(null)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit();
+                    activity.getSupportActionBar().setTitle(demo_item.titleResId);
                 break;
             case R.id.nav_gallery:
                 Toast.makeText(this, "camera", Toast.LENGTH_LONG).show();

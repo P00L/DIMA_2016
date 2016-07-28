@@ -210,7 +210,7 @@ public class NoSQLSelectOperationDemoFragment extends DemoFragmentBase implement
         if (fragmentActivity != null) {
             fragmentActivity.getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.main_fragment_container, resultsDemoFragment)
+                .replace(R.id.content_frame, resultsDemoFragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss();
         }
