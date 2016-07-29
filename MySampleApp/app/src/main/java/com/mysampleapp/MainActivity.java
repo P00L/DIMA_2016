@@ -8,9 +8,7 @@
 //
 package com.mysampleapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,7 +18,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -28,16 +25,13 @@ import android.widget.ListView;
 
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobile.user.IdentityManager;
-import com.amazonaws.mobileconnectors.cognito.Dataset;
-import com.amazonaws.mobileconnectors.cognito.DefaultSyncCallback;
-import com.amazonaws.mobileconnectors.cognito.Record;
 import com.mysampleapp.demo.DemoConfiguration;
 import com.mysampleapp.demo.HomeDemoFragment;
 import com.mysampleapp.navigation.NavigationDrawer;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     /** Class name for log messages. */
-    private final static String LOG_TAG = MainActivity.class.getSimpleName();
+    private final static String LOG_TAG = StepperActivity.class.getSimpleName();
 
     /** Bundle key for saving/restoring the toolbar title. */
     private final static String BUNDLE_KEY_TOOLBAR_TITLE = "title";

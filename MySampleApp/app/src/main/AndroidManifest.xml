@@ -36,10 +36,10 @@
         <activity
             android:name=".SignInActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_sign_in"></activity>
+            android:label="@string/title_activity_sign_in" />
         <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"></activity>
+            android:name=".StepperActivity"
+            android:label="@string/title_activity_main" />
 
         <!-- BEGIN - FACEBOOK SIGN-IN -->
 
@@ -58,7 +58,8 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".StepperActivity"></activity>
     </application>
 
 </manifest>

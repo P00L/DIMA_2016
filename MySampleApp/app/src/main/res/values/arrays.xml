@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="steps_names">
+        <item>
+            Pippo
+        </item>
+        <item>
+            Pluto
+        </item>
+        <item>
+            Pippa
+        </item>
+        <item>
+            Pluta
+        </item>
+    </string-array>
+</resources>

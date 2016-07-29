@@ -1,13 +1,9 @@
 package com.mysampleapp;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -55,7 +51,7 @@ public class SignInActivity extends Activity {
                 @Override
                 public void run() {
                     Log.d(LOG_TAG, "Launching Main Activity...");
-                    startActivity(new Intent(SignInActivity.this, MainActivity.class)
+                    startActivity(new Intent(SignInActivity.this, StepperActivity.class)
                         .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     // finish should always be called on the main thread.
                     finish();

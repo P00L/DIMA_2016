@@ -51,4 +51,5 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-mobileanalytics:2.2.18'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
     compile 'com.android.support:design:23.4.0'
+    compile 'com.ernestoyaquello.stepperform:vertical-stepper-form:0.9.8'
 }
