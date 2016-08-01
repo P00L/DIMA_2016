@@ -162,19 +162,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hello_doc_fragment">Hello doc fragment</string>
     <string name="hello_drug_fragment">Hello drug fragment</string>
-    <string name="to">To</string>
-    <string name="name">Name</string>
-    <string name="surname">Surname</string>
-    <string name="phone">Phone</string>
-    <string name="email">Email</string>
-    <string name="address">Address</string>
-    <string name="type">Type</string>
-    <string name="quantity_mg">Quantity (mg)</string>
-    <string name="minqty">MinQuantity (mg)</string>
-    <string name="notes">Notes</string>
-    <string name="new_stuff_added">Stuff Added</string>
-    <string name="form_hint_title">form_hint_title</string>
-    <string name="form_hint_description">form_hint_description</string>
-    <string name="error_title_min_characters">error_title_min_characters</string>
+    <string name="new_alarm_added">new_alarm_added</string>
+    <string name="form_hint_title">form_int_title</string>
+    <string name="form_hint_description">form_int_des</string>
+    <string name="error_title_min_characters">error_title_min</string>
+    <string name="main_activity_explanation">asd</string>
+    <string name="main_activity_explanation_disclaimer">asd</string>
+    <string name="add_alarm">Add New Alarm</string>
 
 </resources>

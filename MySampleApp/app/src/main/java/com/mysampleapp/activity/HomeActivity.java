@@ -1,5 +1,6 @@
-package com.mysampleapp;
+package com.mysampleapp.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,12 +13,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.mysampleapp.fragment.DocFragment;
+import com.mysampleapp.fragment.DrugFragment;
+import com.mysampleapp.R;
 import com.mysampleapp.demo.DemoConfiguration;
 import com.mysampleapp.demo.nosql.NoSQLSelectTableDemoFragment;
 
@@ -129,6 +132,9 @@ public class HomeActivity extends AppCompatActivity
                 break;
             case R.id.nav_gallery:
                 Toast.makeText(this, "camera", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, FormActivity.class);
+                startActivity(intent);
+
                 break;
             case R.id.nav_manage:
                 Toast.makeText(this, "camera", Toast.LENGTH_LONG).show();

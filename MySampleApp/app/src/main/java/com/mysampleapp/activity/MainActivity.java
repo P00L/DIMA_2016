@@ -6,7 +6,7 @@
 //
 // Source code generated from template: aws-my-sample-app-android v0.8
 //
-package com.mysampleapp;
+package com.mysampleapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,13 +25,14 @@ import android.widget.ListView;
 
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobile.user.IdentityManager;
+import com.mysampleapp.R;
 import com.mysampleapp.demo.DemoConfiguration;
 import com.mysampleapp.demo.HomeDemoFragment;
 import com.mysampleapp.navigation.NavigationDrawer;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     /** Class name for log messages. */
-    private final static String LOG_TAG = StepperActivity.class.getSimpleName();
+    private final static String LOG_TAG = MainActivity.class.getSimpleName();
 
     /** Bundle key for saving/restoring the toolbar title. */
     private final static String BUNDLE_KEY_TOOLBAR_TITLE = "title";
