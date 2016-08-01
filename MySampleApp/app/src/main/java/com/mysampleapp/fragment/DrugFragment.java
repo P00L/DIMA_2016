@@ -7,11 +7,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mysampleapp.R;
+import com.mysampleapp.adapter.DrugAdapter;
 
 
 /**
@@ -23,7 +26,11 @@ import com.mysampleapp.R;
  * create an instance of this fragment.
  */
 public class DrugFragment extends Fragment {
+
     private OnFragmentInteractionListener mListener;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     public DrugFragment() {
         // Required empty public constructor
@@ -63,6 +70,16 @@ public class DrugFragment extends Fragment {
                 activity.getSupportActionBar().setTitle(R.string.add_drug);
             }
         });
+
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mAdapter = new DrugAdapter(new String[]{"hello","world","qwert","test","greg","peck"});
+        mRecyclerView.setAdapter(mAdapter);
+
         return view;
     }
 
