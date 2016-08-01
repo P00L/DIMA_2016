@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,16 +46,8 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DocFormFragment.
-     */
     // TODO: Rename and change types and number of parameters
-    public static DocFormFragment newInstance(String param1, String param2) {
+    public static DocFormFragment newInstance() {
         DocFormFragment fragment = new DocFormFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -216,7 +210,14 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             }
         }).start();
 
-        Intent intent = new Intent(getActivity(), HomeActivity.class);
-        startActivity(intent);
+        Fragment fragment = DocFragment.newInstance();
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .addToBackStack(null)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit();
+        activity.getSupportActionBar().setTitle(R.string.doctors);
     }
 }

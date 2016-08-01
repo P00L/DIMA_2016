@@ -91,18 +91,16 @@ public class HomeActivity extends AppCompatActivity
         Fragment fragment;
         switch (id){
             case R.id.doc_menu:
-                Toast.makeText(this, "doc", Toast.LENGTH_LONG).show();
-                fragment = new DocFragment();
+                fragment = DocFragment.newInstance();
                 activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
                         .addToBackStack(null)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
-                activity.getSupportActionBar().setTitle("DOC");
+                activity.getSupportActionBar().setTitle(R.string.doctors);
                 break;
             case R.id.drug_menu:
-                Toast.makeText(this, "drug", Toast.LENGTH_LONG).show();
                     fragment = new DrugFragment();
                     activity.getSupportFragmentManager()
                             .beginTransaction()
@@ -110,10 +108,9 @@ public class HomeActivity extends AppCompatActivity
                             .addToBackStack(null)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                             .commit();
-                    activity.getSupportActionBar().setTitle("DRUG");
+                    activity.getSupportActionBar().setTitle(R.string.drugs);
                 break;
             case R.id.nav_camera:
-                Toast.makeText(this, "camera", Toast.LENGTH_LONG).show();
                 final DemoConfiguration.DemoItem demo_item = new DemoConfiguration.DemoItem(R.string.main_fragment_title_nosql_database, R.mipmap.database,
                         R.string.feature_nosql_database_demo_button, NoSQLSelectTableDemoFragment.class);
                     fragment = Fragment.instantiate(this, demo_item.fragmentClassName);
@@ -124,12 +121,6 @@ public class HomeActivity extends AppCompatActivity
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                             .commit();
                     activity.getSupportActionBar().setTitle(demo_item.titleResId);
-                break;
-            case R.id.nav_gallery:
-                Toast.makeText(this, "camera", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(this, FormActivity.class);
-                startActivity(intent);
-
                 break;
             case R.id.nav_manage:
                 Toast.makeText(this, "camera", Toast.LENGTH_LONG).show();
