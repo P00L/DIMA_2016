@@ -1,13 +1,13 @@
 package com.mysampleapp.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +19,6 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.mysampleapp.R;
-import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DrugDO;
 
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormLayout;
@@ -40,8 +39,12 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
     private VerticalStepperFormLayout verticalStepperForm;
     private DynamoDBMapper mapper;
     private DrugDO drugDO;
-    private EditText email_text;
-    private EditText name;
+    private EditText name_text;
+    private EditText notes_text;
+    private EditText minqty_text;
+    private EditText qty_text;
+    private EditText type_text;
+    private EditText weight_text;
 
 
     public DrugFormFragment() {
@@ -68,7 +71,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
 
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
         drugDO = new DrugDO();
-        String[] mySteps = {"Name", "Email", "Phone Number"};
+        String[] mySteps = {"Name", "Type", "Quantity", "Weight", "Sottoscorta", "Notes"};
         int colorPrimary = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
         int colorPrimaryDark = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
 
@@ -81,7 +84,6 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                 .primaryDarkColor(colorPrimaryDark)
                 .displayBottomNavigation(true) // It is true by default, so in this case this line is not necessary
                 .init();
-        email_text = (EditText) view.findViewById(R.id.email);
         return view;
     }
 
@@ -133,42 +135,81 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                 view = createNameStep();
                 break;
             case 1:
-                view = createEmailStep();
+                view = createTypeStep();
                 break;
             case 2:
-                view = createPhoneNumberStep();
+                view = createQuantityStep();
+                break;
+            case 3:
+                view = createWeightStep();
+                break;
+            case 4:
+                view = createSottoscortaStep();
+                break;
+            case 5:
+                view = createNotesStep();
                 break;
         }
         return view;
     }
 
-
     private View createNameStep() {
         // Here we generate programmatically the view that will be added by the system to the step content layout
-        name = new EditText(getActivity());
-        name.setSingleLine(true);
-        name.setHint("Your name");
-        return name;
+        name_text = new EditText(getActivity());
+        name_text.setSingleLine(true);
+        name_text.setHint("name");
+        name_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        return name_text;
     }
 
-    private View createEmailStep() {
-// In this case we generate the view by inflating a XML file
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        LinearLayout emailLayoutContent = (LinearLayout) inflater.inflate(R.layout.email_step_layout, null, false);
-        EditText email = (EditText) emailLayoutContent.findViewById(R.id.email);
-        return emailLayoutContent;
+    private View createTypeStep() {
+        // In this case we generate the view by inflating a XML file
+        type_text = new EditText(getActivity());
+        type_text.setSingleLine(true);
+        type_text.setHint("type");
+        type_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        return type_text;
     }
 
-    private View createPhoneNumberStep() {
+    private View createQuantityStep() {
         // Here we generate programmatically the view that will be added by the system to the step content layout
-        EditText name = new EditText(getActivity());
-        name.setSingleLine(true);
-        name.setHint("Your name");
-        return name;
+        qty_text = new EditText(getActivity());
+        qty_text.setSingleLine(true);
+        qty_text.setHint("quantity");
+        qty_text.setInputType(InputType.TYPE_CLASS_NUMBER);
+        return qty_text;
     }
+
+    private View createWeightStep() {
+        // Here we generate programmatically the view that will be added by the system to the step content layout
+        weight_text = new EditText(getActivity());
+        weight_text.setSingleLine(true);
+        weight_text.setHint("weight");
+        weight_text.setInputType(InputType.TYPE_CLASS_NUMBER);
+        return weight_text;
+    }
+
+    private View createSottoscortaStep() {
+        // Here we generate programmatically the view that will be added by the system to the step content layout
+        minqty_text = new EditText(getActivity());
+        minqty_text.setSingleLine(true);
+        minqty_text.setHint("sottoscorta");
+        minqty_text.setInputType(InputType.TYPE_CLASS_NUMBER);
+        return minqty_text;
+    }
+
+    private View createNotesStep() {
+        // Here we generate programmatically the view that will be added by the system to the step content layout
+        notes_text = new EditText(getActivity());
+        notes_text.setHint("weight");
+        notes_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        return notes_text;
+    }
+
 
     @Override
     public void onStepOpening(int stepNumber) {
+        //TODO aggiungere i controlli sui campi
         switch (stepNumber) {
             case 0:
                 verticalStepperForm.setActiveStepAsCompleted();
@@ -177,27 +218,37 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                 verticalStepperForm.setActiveStepAsCompleted();
                 break;
             case 2:
-                // As soon as the phone number step is open, we mark it as completed in order to show the "Continue"
-                // button (We do it because this field is optional, so the user can skip it without giving any info)
-                verticalStepperForm.setStepAsCompleted(2);
-                // In this case, the instruction above is equivalent to:
-                // verticalStepperForm.setActiveStepAsCompleted();
+                verticalStepperForm.setActiveStepAsCompleted();
+                break;
+            case 3:
+                verticalStepperForm.setActiveStepAsCompleted();
+                break;
+            case 4:
+                verticalStepperForm.setActiveStepAsCompleted();
+                break;
+            case 5:
+                verticalStepperForm.setActiveStepAsCompleted();
                 break;
         }
     }
 
+    // metodo in carico di salvare i dati nel database dopo aver cliccato ok
     @Override
     public void sendData() {
-        String siringa = email_text.getText().toString();
-        String siringona = name.getText().toString();
         // database send data
+        // TODO aggiungere da qualche parte i controllo se il campo viene lasciato vuoto se opzionale
+        String tmp;
+
         drugDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-        drugDO.setName(siringa);
-        drugDO.setMinqty(5.2);
-        drugDO.setNotes(siringona);
-        drugDO.setQuantity(5.2);
-        drugDO.setType("type");
-        drugDO.setWeight(5.2);
+        drugDO.setName(name_text.getText().toString());
+        tmp = minqty_text.getText().toString();
+        drugDO.setMinqty(Double.parseDouble(tmp));
+        drugDO.setNotes(notes_text.getText().toString());
+        tmp = qty_text.getText().toString();
+        drugDO.setQuantity(Double.parseDouble(tmp));
+        drugDO.setType(type_text.getText().toString());
+        tmp = weight_text.getText().toString();
+        drugDO.setWeight(Double.parseDouble(tmp));
 
         new Thread(new Runnable() {
             @Override
@@ -210,7 +261,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
             }
         }).start();
 
-        Fragment fragment = DrugFragment.newInstance();
+        Fragment fragment = DrugListFragment.newInstance();
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportFragmentManager()
                 .beginTransaction()

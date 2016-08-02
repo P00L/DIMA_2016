@@ -30,6 +30,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public class SplashActivity extends Activity {
     private final static String LOG_TAG = SplashActivity.class.getSimpleName();
+    public final static String FRAGMENT_MESSAGE = "fragment_string";
     private final CountDownLatch timeoutLatch = new CountDownLatch(1);
     private SignInManager signInManager;
 
@@ -165,7 +166,9 @@ public class SplashActivity extends Activity {
      */
     protected void goMain() {
         Log.d(LOG_TAG, "Launching Main Activity...");
-        goAfterSplashTimeout(new Intent(this, HomeActivity.class));
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra(FRAGMENT_MESSAGE, "fragment_home");
+        goAfterSplashTimeout(intent);
     }
 
     /**
@@ -173,7 +176,9 @@ public class SplashActivity extends Activity {
      */
     protected void goSignIn() {
         Log.d(LOG_TAG, "Launching Sign-in Activity...");
-        goAfterSplashTimeout(new Intent(this, SignInActivity.class));
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra(FRAGMENT_MESSAGE, "fragment_home");
+        goAfterSplashTimeout(intent);
     }
 
     @Override

@@ -173,5 +173,7 @@
     <string name="drugs">drugs</string>
     <string name="doctors">doctors</string>
     <string name="add_doc">add doctor</string>
+    <string name="drug">drug</string>
+    <string name="home">home</string>
 
 </resources>

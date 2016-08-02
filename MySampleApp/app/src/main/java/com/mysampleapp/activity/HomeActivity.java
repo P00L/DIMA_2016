@@ -3,12 +3,12 @@ package com.mysampleapp.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.Space;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,19 +17,23 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.mysampleapp.fragment.DocFormFragment;
-import com.mysampleapp.fragment.DocFragment;
+import com.mysampleapp.fragment.DocListFragment;
 import com.mysampleapp.fragment.DrugFormFragment;
 import com.mysampleapp.fragment.DrugFragment;
+import com.mysampleapp.fragment.DrugListFragment;
 import com.mysampleapp.R;
 import com.mysampleapp.demo.DemoConfiguration;
 import com.mysampleapp.demo.nosql.NoSQLSelectTableDemoFragment;
+import com.mysampleapp.fragment.HomeFragment;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        DocFragment.OnFragmentInteractionListener,
-        DrugFragment.OnFragmentInteractionListener,
+        DocListFragment.OnFragmentInteractionListener,
+        DrugListFragment.OnFragmentInteractionListener,
         DrugFormFragment.OnFragmentInteractionListener,
-        DocFormFragment.OnFragmentInteractionListener{
+        DocFormFragment.OnFragmentInteractionListener,
+        DrugFragment.OnFragmentInteractionListener,
+        HomeFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,24 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Intent intent = getIntent();
+        String message = intent.getStringExtra(SplashActivity.FRAGMENT_MESSAGE);
+        Fragment fragment;
+        AppCompatActivity activity = this;
+        switch (message){
+            case "fragment_home":
+                fragment = HomeFragment.newInstance();
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                activity.getSupportActionBar().setTitle(R.string.home);
+                navigationView.setCheckedItem(R.id.nav_gallery);
+                break;
+        }
     }
 
     @Override
@@ -90,9 +112,10 @@ public class HomeActivity extends AppCompatActivity
         android.app.FragmentManager fragmentManager = getFragmentManager();
         AppCompatActivity activity = this;
         Fragment fragment;
+
         switch (id){
             case R.id.doc_menu:
-                fragment = DocFragment.newInstance();
+                fragment = DocListFragment.newInstance();
                 activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
@@ -102,29 +125,36 @@ public class HomeActivity extends AppCompatActivity
                 activity.getSupportActionBar().setTitle(R.string.doctors);
                 break;
             case R.id.drug_menu:
-                    fragment = new DrugFragment();
-                    activity.getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.content_frame, fragment)
-                            .addToBackStack(null)
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .commit();
-                    activity.getSupportActionBar().setTitle(R.string.drugs);
+                fragment = DrugListFragment.newInstance();
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                activity.getSupportActionBar().setTitle(R.string.drugs);
                 break;
             case R.id.nav_camera:
                 final DemoConfiguration.DemoItem demo_item = new DemoConfiguration.DemoItem(R.string.main_fragment_title_nosql_database, R.mipmap.database,
                         R.string.feature_nosql_database_demo_button, NoSQLSelectTableDemoFragment.class);
-                    fragment = Fragment.instantiate(this, demo_item.fragmentClassName);
-                    activity.getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.content_frame, fragment, demo_item.fragmentClassName)
-                            .addToBackStack(null)
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .commit();
-                    activity.getSupportActionBar().setTitle(demo_item.titleResId);
+                fragment = Fragment.instantiate(this, demo_item.fragmentClassName);
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment, demo_item.fragmentClassName)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                activity.getSupportActionBar().setTitle(demo_item.titleResId);
                 break;
-            case R.id.nav_manage:
-                Toast.makeText(this, "camera", Toast.LENGTH_LONG).show();
+            case R.id.nav_gallery:
+                fragment = HomeFragment.newInstance();
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                activity.getSupportActionBar().setTitle(R.string.home);
                 break;
         }
 

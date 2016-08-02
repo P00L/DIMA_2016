@@ -1,13 +1,13 @@
 package com.mysampleapp.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +19,7 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.mysampleapp.R;
-import com.mysampleapp.activity.HomeActivity;
+import com.mysampleapp.demo.nosql.DoctorDO;
 import com.mysampleapp.demo.nosql.DrugDO;
 
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormLayout;
@@ -35,12 +35,18 @@ import ernestoyaquello.com.verticalstepperform.interfaces.VerticalStepperForm;
  */
 public class DocFormFragment extends Fragment implements VerticalStepperForm {
 
+    private OnFragmentInteractionListener mListener;
+
     private VerticalStepperFormLayout verticalStepperForm;
     private DynamoDBMapper mapper;
-    private DrugDO drugDO;
+    private DoctorDO docDO;
     private EditText email_text;
-    private EditText name;
-    private OnFragmentInteractionListener mListener;
+    private EditText active_text;
+    private EditText address_text;
+    private EditText name_text;
+    private EditText phoneNumber_text;
+    private EditText surname_text;
+
 
     public DocFormFragment() {
         // Required empty public constructor
@@ -66,8 +72,8 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         View view = inflater.inflate(R.layout.fragment_doc_form, container, false);
 
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-        drugDO = new DrugDO();
-        String[] mySteps = {"Name", "Email", "Phone Number"};
+        docDO = new DoctorDO();
+        String[] mySteps = {"Name", "Surname", "e-mail", "Active", "Phone number", "Address"};
         int colorPrimary = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
         int colorPrimaryDark = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
 
@@ -80,7 +86,6 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                 .primaryDarkColor(colorPrimaryDark)
                 .displayBottomNavigation(true) // It is true by default, so in this case this line is not necessary
                 .init();
-        email_text = (EditText) view.findViewById(R.id.email);
         return view;
     }
 
@@ -133,39 +138,78 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                 view = createNameStep();
                 break;
             case 1:
-                view = createEmailStep();
+                view = createSurnameStep();
                 break;
             case 2:
-                view = createPhoneNumberStep();
+                view = createEmailStep();
+                break;
+            case 3:
+                view = createActiveStep();
+                break;
+            case 4:
+                view = createSPhoneNumberStep();
+                break;
+            case 5:
+                view = createAddressStep();
                 break;
         }
         return view;
     }
 
-
     private View createNameStep() {
         // Here we generate programmatically the view that will be added by the system to the step content layout
-        name = new EditText(getActivity());
-        name.setSingleLine(true);
-        name.setHint("Your name");
-        return name;
+        name_text = new EditText(getActivity());
+        name_text.setSingleLine(true);
+        name_text.setHint("name");
+        name_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        return name_text;
+    }
+
+    private View createSurnameStep() {
+        // Here we generate programmatically the view that will be added by the system to the step content layout
+        surname_text = new EditText(getActivity());
+        surname_text.setSingleLine(true);
+        surname_text.setHint("surname");
+        surname_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        return surname_text;
     }
 
     private View createEmailStep() {
-// In this case we generate the view by inflating a XML file
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        LinearLayout emailLayoutContent = (LinearLayout) inflater.inflate(R.layout.email_step_layout, null, false);
-        EditText email = (EditText) emailLayoutContent.findViewById(R.id.email);
-        return emailLayoutContent;
+        // Here we generate programmatically the view that will be added by the system to the step content layout
+        surname_text = new EditText(getActivity());
+        surname_text.setSingleLine(true);
+        surname_text.setHint("surname");
+        surname_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        return surname_text;
     }
 
-    private View createPhoneNumberStep() {
+    private View createActiveStep() {
         // Here we generate programmatically the view that will be added by the system to the step content layout
-        EditText name = new EditText(getActivity());
-        name.setSingleLine(true);
-        name.setHint("Your name");
-        return name;
+        email_text = new EditText(getActivity());
+        email_text.setSingleLine(true);
+        email_text.setHint("email");
+        email_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        return email_text;
     }
+
+    private View createSPhoneNumberStep() {
+        // Here we generate programmatically the view that will be added by the system to the step content layout
+        phoneNumber_text = new EditText(getActivity());
+        phoneNumber_text.setSingleLine(true);
+        phoneNumber_text.setHint("phone number");
+        phoneNumber_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        return phoneNumber_text;
+    }
+
+    private View createAddressStep() {
+        // Here we generate programmatically the view that will be added by the system to the step content layout
+        address_text = new EditText(getActivity());
+        address_text.setSingleLine(true);
+        address_text.setHint("address");
+        address_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        return address_text;
+    }
+
 
     @Override
     public void onStepOpening(int stepNumber) {
@@ -177,40 +221,46 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                 verticalStepperForm.setActiveStepAsCompleted();
                 break;
             case 2:
-                // As soon as the phone number step is open, we mark it as completed in order to show the "Continue"
-                // button (We do it because this field is optional, so the user can skip it without giving any info)
-                verticalStepperForm.setStepAsCompleted(2);
-                // In this case, the instruction above is equivalent to:
-                // verticalStepperForm.setActiveStepAsCompleted();
+                verticalStepperForm.setActiveStepAsCompleted();
+                break;
+            case 3:
+                verticalStepperForm.setActiveStepAsCompleted();
+                break;
+            case 4:
+                verticalStepperForm.setActiveStepAsCompleted();
+                break;
+            case 5:
+                verticalStepperForm.setActiveStepAsCompleted();
                 break;
         }
     }
 
     @Override
     public void sendData() {
-        String siringa = email_text.getText().toString();
-        String siringona = name.getText().toString();
-        // database send data
-        drugDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-        drugDO.setName(siringa);
-        drugDO.setMinqty(5.2);
-        drugDO.setNotes(siringona);
-        drugDO.setQuantity(5.2);
-        drugDO.setType("type");
-        drugDO.setWeight(5.2);
+        String tmp;
+
+        docDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+        docDO.setName(name_text.getText().toString());
+        docDO.setSurname(surname_text.getText().toString());
+        docDO.setEmail(email_text.getText().toString());
+        // TODO FIX
+        docDO.setActive(Boolean.TRUE);
+        tmp = phoneNumber_text.getText().toString();
+        docDO.setPhoneNumber(Double.parseDouble(tmp));
+        docDO.setAddress(address_text.getText().toString());
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    mapper.save(drugDO);
+                    mapper.save(docDO);
                 } catch (final AmazonClientException ex) {
                     Log.e("ASD", "Failed saving item : " + ex.getMessage(), ex);
                 }
             }
         }).start();
 
-        Fragment fragment = DocFragment.newInstance();
+        Fragment fragment = DocListFragment.newInstance();
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportFragmentManager()
                 .beginTransaction()
