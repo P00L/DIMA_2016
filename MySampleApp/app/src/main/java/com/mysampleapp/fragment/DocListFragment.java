@@ -44,6 +44,8 @@ public class DocListFragment extends Fragment {
         final AppCompatActivity activity = (AppCompatActivity) getActivity();
 
         FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
+        if (!fab.isShown())
+            fab.show();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

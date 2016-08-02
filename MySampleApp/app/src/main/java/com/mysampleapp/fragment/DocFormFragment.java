@@ -3,6 +3,7 @@ package com.mysampleapp.fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -70,9 +71,11 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_doc_form, container, false);
-
+        final AppCompatActivity activity = (AppCompatActivity) getActivity();
+        FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
         docDO = new DoctorDO();
+
         String[] mySteps = {"Name", "Surname", "e-mail", "Active", "Phone number", "Address"};
         int colorPrimary = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
         int colorPrimaryDark = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
@@ -86,6 +89,10 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                 .primaryDarkColor(colorPrimaryDark)
                 .displayBottomNavigation(true) // It is true by default, so in this case this line is not necessary
                 .init();
+
+        if (fab.isShown())
+            fab.hide();
+
         return view;
     }
 

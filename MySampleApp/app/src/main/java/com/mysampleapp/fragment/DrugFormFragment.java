@@ -3,6 +3,7 @@ package com.mysampleapp.fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -71,6 +72,9 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
 
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
         drugDO = new DrugDO();
+        final AppCompatActivity activity = (AppCompatActivity) getActivity();
+        FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
+
         String[] mySteps = {"Name", "Type", "Quantity", "Weight", "Sottoscorta", "Notes"};
         int colorPrimary = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
         int colorPrimaryDark = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
@@ -84,6 +88,10 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                 .primaryDarkColor(colorPrimaryDark)
                 .displayBottomNavigation(true) // It is true by default, so in this case this line is not necessary
                 .init();
+
+        if (fab.isShown())
+            fab.hide();
+
         return view;
     }
 
