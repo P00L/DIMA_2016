@@ -175,5 +175,6 @@
     <string name="add_doc">add doctor</string>
     <string name="drug">drug</string>
     <string name="home">home</string>
+    <string name="doctor">doctor</string>
 
 </resources>

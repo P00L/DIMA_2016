@@ -55,11 +55,11 @@ public class DrugListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =inflater.inflate(R.layout.fragment_drug_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_drug_list, container, false);
         final Fragment fragment = DrugFormFragment.newInstance();
         final AppCompatActivity activity = (AppCompatActivity) getActivity();
 
-        FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
         if (!fab.isShown())
             fab.show();
         fab.setOnClickListener(new View.OnClickListener() {
@@ -72,9 +72,10 @@ public class DrugListFragment extends Fragment {
                         .addToBackStack(null)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
-                activity.getSupportActionBar().setTitle(R.string.add_drug);
             }
         });
+
+        activity.getSupportActionBar().setTitle(R.string.drugs);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -96,7 +97,7 @@ public class DrugListFragment extends Fragment {
             items[count] = item;
         }
 
-        mAdapter = new DrugAdapter(getContext(),items);
+        mAdapter = new DrugAdapter(getContext(), items);
         mRecyclerView.setAdapter(mAdapter);
 
         return view;

@@ -93,6 +93,8 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         if (fab.isShown())
             fab.hide();
 
+        activity.getSupportActionBar().setTitle(R.string.add_doc);
+
         return view;
     }
 
@@ -275,6 +277,5 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                 .addToBackStack(null)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
-        activity.getSupportActionBar().setTitle(R.string.doctors);
     }
 }

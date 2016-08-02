@@ -72,6 +72,8 @@ public class DocFragment extends Fragment {
         FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
         if (fab.isShown())
             fab.hide();
+
+        activity.getSupportActionBar().setTitle(R.string.doctor);
         return view;
     }
 

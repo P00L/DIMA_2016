@@ -57,6 +57,9 @@ public class HomeFragment extends Fragment {
                 // Click action
             }
         });
+
+        activity.getSupportActionBar().setTitle(R.string.home);
+
         return view;
     }
 

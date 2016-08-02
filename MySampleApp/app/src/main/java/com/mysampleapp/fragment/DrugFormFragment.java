@@ -92,6 +92,8 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         if (fab.isShown())
             fab.hide();
 
+        activity.getSupportActionBar().setTitle(R.string.add_drug);
+
         return view;
     }
 
@@ -277,7 +279,6 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                 .addToBackStack(null)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
-        activity.getSupportActionBar().setTitle(R.string.drugs);
 
     }
 }

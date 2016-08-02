@@ -55,9 +55,10 @@ public class DocListFragment extends Fragment {
                         .addToBackStack(null)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
-                activity.getSupportActionBar().setTitle(R.string.add_doc);
             }
         });
+
+        activity.getSupportActionBar().setTitle(R.string.doctors);
 
         return view;
     }

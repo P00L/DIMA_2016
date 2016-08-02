@@ -65,7 +65,6 @@ public class HomeActivity extends AppCompatActivity
                         .addToBackStack(null)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
-                activity.getSupportActionBar().setTitle(R.string.home);
                 navigationView.setCheckedItem(R.id.nav_gallery);
                 break;
         }
@@ -122,7 +121,6 @@ public class HomeActivity extends AppCompatActivity
                         .addToBackStack(null)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
-                activity.getSupportActionBar().setTitle(R.string.doctors);
                 break;
             case R.id.drug_menu:
                 fragment = DrugListFragment.newInstance();
@@ -132,7 +130,6 @@ public class HomeActivity extends AppCompatActivity
                         .addToBackStack(null)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
-                activity.getSupportActionBar().setTitle(R.string.drugs);
                 break;
             case R.id.nav_camera:
                 final DemoConfiguration.DemoItem demo_item = new DemoConfiguration.DemoItem(R.string.main_fragment_title_nosql_database, R.mipmap.database,
@@ -144,7 +141,6 @@ public class HomeActivity extends AppCompatActivity
                         .addToBackStack(null)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
-                activity.getSupportActionBar().setTitle(demo_item.titleResId);
                 break;
             case R.id.nav_gallery:
                 fragment = HomeFragment.newInstance();
@@ -154,7 +150,6 @@ public class HomeActivity extends AppCompatActivity
                         .addToBackStack(null)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
-                activity.getSupportActionBar().setTitle(R.string.home);
                 break;
         }
 
