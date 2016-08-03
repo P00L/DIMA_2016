@@ -12,6 +12,7 @@ import android.support.v4.widget.Space;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -33,7 +34,7 @@ public class HomeActivity extends AppCompatActivity
         DrugFormFragment.OnFragmentInteractionListener,
         DocFormFragment.OnFragmentInteractionListener,
         DrugFragment.OnFragmentInteractionListener,
-        HomeFragment.OnFragmentInteractionListener{
+        HomeFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,17 +57,22 @@ public class HomeActivity extends AppCompatActivity
         String message = intent.getStringExtra(SplashActivity.FRAGMENT_MESSAGE);
         Fragment fragment;
         AppCompatActivity activity = this;
-        switch (message){
-            case "fragment_home":
-                fragment = HomeFragment.newInstance();
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content_frame, fragment)
-                        .addToBackStack(null)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-                navigationView.setCheckedItem(R.id.nav_gallery);
-                break;
+        if (savedInstanceState == null) {
+            // se e' la prima volta che apriamo l'activity creaiamo il tutto come nuovo in base a cosa si vuole aprire
+            switch (message) {
+                case "fragment_home":
+                    fragment = HomeFragment.newInstance();
+                    activity.getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content_frame, fragment)
+                            .addToBackStack(null)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit();
+                    navigationView.setCheckedItem(R.id.nav_gallery);
+                    break;
+            }
+        } else {
+            // se si arriva da una rotazione dello schermo.... allora non facciamo nulla e riprende la vecchia roba dal back stack
         }
     }
 
@@ -112,7 +118,7 @@ public class HomeActivity extends AppCompatActivity
         AppCompatActivity activity = this;
         Fragment fragment;
 
-        switch (id){
+        switch (id) {
             case R.id.doc_menu:
                 fragment = DocListFragment.newInstance();
                 activity.getSupportFragmentManager()
@@ -154,13 +160,12 @@ public class HomeActivity extends AppCompatActivity
         }
 
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    public void onFragmentInteraction(Uri uri){
+    public void onFragmentInteraction(Uri uri) {
 
     }
 }

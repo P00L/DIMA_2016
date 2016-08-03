@@ -52,7 +52,6 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
                             .addToBackStack(null)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                             .commit();
-                    activity.getSupportActionBar().setTitle(R.string.drug);
                 }
             }
         });
