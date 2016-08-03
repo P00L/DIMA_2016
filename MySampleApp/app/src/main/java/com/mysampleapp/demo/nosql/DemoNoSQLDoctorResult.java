@@ -200,4 +200,8 @@ public class DemoNoSQLDoctorResult implements DemoNoSQLResult {
         surnameValueTextView.setText(result.getSurname());
         return layout;
     }
+
+    public DoctorDO getResult(){
+        return result;
+    }
 }

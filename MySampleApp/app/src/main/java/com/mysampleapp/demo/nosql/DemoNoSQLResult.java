@@ -15,4 +15,5 @@ public interface DemoNoSQLResult {
     void deleteItem();
 
     View getView(Context context, final View convertView, int position);
+
 }

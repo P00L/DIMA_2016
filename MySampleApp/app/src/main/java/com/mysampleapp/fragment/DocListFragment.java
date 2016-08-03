@@ -126,10 +126,23 @@ public class DocListFragment extends Fragment {
         // set the adapter.
         resultsList.setAdapter(resultsListAdapter);
 
+        final DocFragment fragment = new DocFragment();
+        final AppCompatActivity activity = (AppCompatActivity) getActivity();
+
         resultsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-                resultsList.showContextMenuForChild(view);
+
+                DemoNoSQLResultListAdapter listAdapter = (DemoNoSQLResultListAdapter) resultsList.getAdapter();
+                DemoNoSQLResult result = listAdapter.getItem(position);
+                // listener click item on the list
+                fragment.setResult(result);
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
             }
         });
 

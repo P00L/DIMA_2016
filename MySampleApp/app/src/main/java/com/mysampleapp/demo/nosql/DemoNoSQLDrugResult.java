@@ -200,4 +200,8 @@ public class DemoNoSQLDrugResult implements DemoNoSQLResult {
         weightValueTextView.setText("" + result.getWeight().longValue());
         return layout;
     }
+
+    public DrugDO getResult(){
+        return result;
+    }
 }

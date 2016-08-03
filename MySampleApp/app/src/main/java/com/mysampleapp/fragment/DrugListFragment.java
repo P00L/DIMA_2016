@@ -100,6 +100,7 @@ public class DrugListFragment extends Fragment {
 
         mAdapter = new DrugAdapter(getContext(), items);
         mRecyclerView.setAdapter(mAdapter);
+
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.drug_menu);
 

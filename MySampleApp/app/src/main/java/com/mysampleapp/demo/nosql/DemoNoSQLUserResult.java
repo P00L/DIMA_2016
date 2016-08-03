@@ -200,4 +200,8 @@ public class DemoNoSQLUserResult implements DemoNoSQLResult {
         surnameValueTextView.setText(result.getSurname());
         return layout;
     }
+
+    public UserDO getResult(){
+        return result;
+    }
 }
