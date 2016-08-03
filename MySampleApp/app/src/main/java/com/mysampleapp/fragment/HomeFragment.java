@@ -26,6 +26,7 @@ import com.mysampleapp.R;
 public class HomeFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private AppCompatActivity activity;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -47,9 +48,13 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        final AppCompatActivity activity = (AppCompatActivity) getActivity();
+
+        return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+    @Override
+    public void onViewCreated(final View view, final Bundle savedInstanceState) {
+        activity = (AppCompatActivity) getActivity();
         final FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
         if (!fab.isShown())
             fab.show();
@@ -63,8 +68,6 @@ public class HomeFragment extends Fragment {
         activity.getSupportActionBar().setTitle(R.string.home);
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_gallery);
-
-        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

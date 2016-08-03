@@ -22,6 +22,8 @@ public class DocFragment extends Fragment {
 
     private DemoNoSQLResult result;
 
+    private AppCompatActivity activity;
+
     public DocFragment() {
         // Required empty public constructor
     }
@@ -44,7 +46,15 @@ public class DocFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_doc, container, false);
-        final AppCompatActivity activity = (AppCompatActivity) getActivity();
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(final View view, final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
         // TODO na io lo userei per la modifica con la matitina
         if (fab.isShown())
@@ -55,12 +65,6 @@ public class DocFragment extends Fragment {
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.doc_menu);
 
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         DoctorDO doctorDO = ((DemoNoSQLDoctorResult)result).getResult();
 
         TextView textView = (TextView) view.findViewById(R.id.doc_name);

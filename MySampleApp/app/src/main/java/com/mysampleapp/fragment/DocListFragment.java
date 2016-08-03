@@ -48,22 +48,28 @@ public class DocListFragment extends Fragment {
 
     private DemoNoSQLResultListAdapter resultsListAdapter;
 
+    private AppCompatActivity activity;
+
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment.
-        final View fragmentView = inflater.inflate(
-                R.layout.fragment_doc_list, container, false);
+        return inflater.inflate(R.layout.fragment_doc_list, container, false);
+    }
 
-        final Fragment fragment = DocFormFragment.newInstance();
-        final AppCompatActivity activity = (AppCompatActivity) getActivity();
+    @Override
+    public void onViewCreated(final View view, final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        activity = (AppCompatActivity) getActivity();
+
+        // on click fab launch form drug
         FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
         if (!fab.isShown())
             fab.show();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Fragment fragment = DocFormFragment.newInstance();
                 activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
@@ -73,11 +79,59 @@ public class DocListFragment extends Fragment {
             }
         });
 
+        // set action bar title
         activity.getSupportActionBar().setTitle(R.string.doctors);
+        // set nav menu item checked
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.doc_menu);
 
-        return fragmentView;
+        // Reset the results in case of screen rotation.
+        noSQLOperation.resetResults();
+
+        // get the list
+        resultsList = (ListView) view.findViewById(R.id.nosql_show_results_list);
+        // create the list adapter
+        resultsListAdapter = new DemoNoSQLResultListAdapter(getContext());
+
+        // set the adapter.
+        resultsList.setAdapter(resultsListAdapter);
+
+        resultsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+
+                DemoNoSQLResultListAdapter listAdapter = (DemoNoSQLResultListAdapter) resultsList.getAdapter();
+                DemoNoSQLResult result = listAdapter.getItem(position);
+                DocFragment fragment = new DocFragment();
+
+                // listener click item on the list
+                fragment.setResult(result);
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+            }
+        });
+
+        // set up a listener to load more items when they scroll to the bottom.
+        resultsList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(final AbsListView view, final int scrollState) {
+            }
+
+            @Override
+            public void onScroll(final AbsListView view, final int firstVisibleItem, final int visibleItemCount, final int totalItemCount) {
+                if (firstVisibleItem + visibleItemCount >= totalItemCount) {
+                    getNextResults();
+                }
+            }
+        });
+
+        resultsList.setOnCreateContextMenuListener(this);
+
+        getNextResults();
     }
 
     private void getNextResults() {
@@ -111,59 +165,6 @@ public class DocListFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        // Reset the results in case of screen rotation.
-        noSQLOperation.resetResults();
-
-        // get the list
-        resultsList = (ListView) view.findViewById(R.id.nosql_show_results_list);
-        // create the list adapter
-        resultsListAdapter = new DemoNoSQLResultListAdapter(getContext());
-
-        // set the adapter.
-        resultsList.setAdapter(resultsListAdapter);
-
-        final DocFragment fragment = new DocFragment();
-        final AppCompatActivity activity = (AppCompatActivity) getActivity();
-
-        resultsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-
-                DemoNoSQLResultListAdapter listAdapter = (DemoNoSQLResultListAdapter) resultsList.getAdapter();
-                DemoNoSQLResult result = listAdapter.getItem(position);
-                // listener click item on the list
-                fragment.setResult(result);
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content_frame, fragment)
-                        .addToBackStack(null)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-            }
-        });
-
-        // set up a listener to load more items when they scroll to the bottom.
-        resultsList.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(final AbsListView view, final int scrollState) {
-            }
-
-            @Override
-            public void onScroll(final AbsListView view, final int firstVisibleItem, final int visibleItemCount, final int totalItemCount) {
-                if (firstVisibleItem + visibleItemCount >= totalItemCount) {
-                    getNextResults();
-                }
-            }
-        });
-
-        resultsList.setOnCreateContextMenuListener(this);
-
-        getNextResults();
-    }
 
     @Override
     public void onCreateContextMenu(final ContextMenu menu, final View view,

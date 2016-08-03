@@ -48,6 +48,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     private EditText name_text;
     private EditText phoneNumber_text;
     private EditText surname_text;
+    private AppCompatActivity activity;
 
 
     public DocFormFragment() {
@@ -72,7 +73,13 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_doc_form, container, false);
-        final AppCompatActivity activity = (AppCompatActivity) getActivity();
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(final View view, final Bundle savedInstanceState) {
+        activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
         docDO = new DoctorDO();
@@ -97,10 +104,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         activity.getSupportActionBar().setTitle(R.string.add_doc);
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.doc_menu);
-
-        return view;
     }
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -190,12 +194,13 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         // Here we generate programmatically the view that will be added by the system to the step content layout
         surname_text = new EditText(getActivity());
         surname_text.setSingleLine(true);
-        surname_text.setHint("surname");
-        surname_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        surname_text.setHint("email");
+        surname_text.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         return surname_text;
     }
 
     private View createActiveStep() {
+        //TODO convertire a checkbox o simile
         // Here we generate programmatically the view that will be added by the system to the step content layout
         email_text = new EditText(getActivity());
         email_text.setSingleLine(true);
@@ -209,7 +214,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         phoneNumber_text = new EditText(getActivity());
         phoneNumber_text.setSingleLine(true);
         phoneNumber_text.setHint("phone number");
-        phoneNumber_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        phoneNumber_text.setInputType(InputType.TYPE_CLASS_PHONE);
         return phoneNumber_text;
     }
 

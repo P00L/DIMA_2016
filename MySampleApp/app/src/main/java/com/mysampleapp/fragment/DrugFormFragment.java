@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
     private EditText qty_text;
     private EditText type_text;
     private EditText weight_text;
+    private AppCompatActivity activity;
 
 
     public DrugFormFragment() {
@@ -71,9 +73,15 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_drug_form, container, false);
 
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(final View view, final Bundle savedInstanceState) {
+
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
         drugDO = new DrugDO();
-        final AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
 
         String[] mySteps = {"Name", "Type", "Quantity", "Weight", "Sottoscorta", "Notes"};
@@ -98,9 +106,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.drug_menu);
 
-        return view;
     }
-
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -215,8 +221,12 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
     private View createNotesStep() {
         // Here we generate programmatically the view that will be added by the system to the step content layout
         notes_text = new EditText(getActivity());
-        notes_text.setHint("weight");
-        notes_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        notes_text.setHint("notes");
+        notes_text.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        notes_text.setMinLines(3);
+        notes_text.setMaxLines(7);
+        notes_text.setLines(5);
+        notes_text.setGravity(Gravity.LEFT | Gravity.BOTTOM);
         return notes_text;
     }
 
