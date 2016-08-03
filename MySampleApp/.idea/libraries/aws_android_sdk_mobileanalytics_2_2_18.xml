@@ -6,7 +6,6 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-mobileanalytics/2.2.18/25559bf7cb238715fa1bbf7314769a611038f1a8/aws-android-sdk-mobileanalytics-2.2.18-sources.jar!/" />
-      <root url="jar://$USER_HOME$/DIMAndroidStudioProject/DIMA_2016/MyFirstApp/gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-mobileanalytics/2.2.18/25559bf7cb238715fa1bbf7314769a611038f1a8/aws-android-sdk-mobileanalytics-2.2.18-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

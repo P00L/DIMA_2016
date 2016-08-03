@@ -68,4 +68,6 @@ public abstract class DemoNoSQLTableBase {
      * @return a list of support get, query, and scan operations.
      */
     public abstract void getSupportedDemoOperations(Context context, SupportedDemoOperationsHandler opsHandler);
+
+    public abstract DemoNoSQLOperationListItem getOperationByName(Context context,String operation);
 }

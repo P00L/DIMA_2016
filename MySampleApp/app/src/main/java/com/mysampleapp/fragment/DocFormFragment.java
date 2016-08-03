@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -94,6 +95,8 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             fab.hide();
 
         activity.getSupportActionBar().setTitle(R.string.add_doc);
+        NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(R.id.doc_menu);
 
         return view;
     }
@@ -269,7 +272,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             }
         }).start();
 
-        Fragment fragment = DocListFragment.newInstance();
+        Fragment fragment = new DocListFragment();
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportFragmentManager()
                 .beginTransaction()

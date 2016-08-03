@@ -363,4 +363,8 @@ public class DemoNoSQLTableUser extends DemoNoSQLTableBase {
             }
         }).start();
     }
+
+    public DemoNoSQLOperationListItem getOperationByName(Context context,String operation){
+        return new DemoGetWithPartitionKey(context);
+    }
 }

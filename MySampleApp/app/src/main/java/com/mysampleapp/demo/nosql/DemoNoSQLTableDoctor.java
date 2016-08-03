@@ -579,4 +579,8 @@ public class DemoNoSQLTableDoctor extends DemoNoSQLTableBase {
             }
         }).start();
     }
+
+    public DemoNoSQLOperationListItem getOperationByName(Context context,String operation){
+        return new DemoQueryWithPartitionKeyOnly(context);
+    }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -74,6 +75,8 @@ public class DrugFragment extends Fragment {
             fab.hide();
 
         activity.getSupportActionBar().setTitle(R.string.drug);
+        NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(R.id.drug_menu);
 
         return view;
     }
