@@ -19,19 +19,16 @@ public class DemoNoSQLDoctorResult implements DemoNoSQLResult {
     private static final int KEY_TEXT_COLOR = 0xFF333333;
     private final DoctorDO result;
 
-    DemoNoSQLDoctorResult(final DoctorDO result) {
+    public DemoNoSQLDoctorResult(final DoctorDO result) {
         this.result = result;
     }
     @Override
     public void updateItem() {
         final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-        final String originalValue = result.getAddress();
-        result.setAddress(DemoSampleDataGenerator.getRandomSampleString("address"));
         try {
             mapper.save(result);
         } catch (final AmazonClientException ex) {
             // Restore original data if save fails, and re-throw.
-            result.setAddress(originalValue);
             throw ex;
         }
     }

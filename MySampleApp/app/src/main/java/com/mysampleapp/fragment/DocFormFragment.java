@@ -286,4 +286,8 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
     }
+
+    public void setDoctor(DoctorDO doctor){
+        this.docDO = doctor;
+    }
 }

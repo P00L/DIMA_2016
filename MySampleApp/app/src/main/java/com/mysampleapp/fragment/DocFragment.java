@@ -6,21 +6,26 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.mobile.util.ThreadUtils;
 import com.mysampleapp.R;
 import com.mysampleapp.demo.nosql.DemoNoSQLDoctorResult;
 import com.mysampleapp.demo.nosql.DemoNoSQLResult;
 import com.mysampleapp.demo.nosql.DoctorDO;
+import com.mysampleapp.demo.nosql.DynamoDBUtils;
 
 
 public class DocFragment extends Fragment {
 
-    private DemoNoSQLResult result;
+    private DoctorDO doctorDO;
 
     private AppCompatActivity activity;
 
@@ -53,19 +58,31 @@ public class DocFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        if (savedInstanceState != null){
+           doctorDO = savedInstanceState.getParcelable("doctorDoParc");
+        }
         activity = (AppCompatActivity) getActivity();
-        FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
-        // TODO na io lo userei per la modifica con la matitina
-        if (fab.isShown())
-            fab.hide();
+        FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+        if (!fab.isShown())
+            fab.show();
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DocFormFragment fragment = DocFormFragment.newInstance();
+                fragment.setDoctor(doctorDO);
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+            }
+        });
 
         activity.getSupportActionBar().setTitle(R.string.doctor);
 
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.doc_menu);
-
-        DoctorDO doctorDO = ((DemoNoSQLDoctorResult)result).getResult();
 
         TextView textView = (TextView) view.findViewById(R.id.doc_name);
         textView.setText(doctorDO.getName());
@@ -81,6 +98,16 @@ public class DocFragment extends Fragment {
     }
 
     public void setResult(final DemoNoSQLResult result) {
-        this.result = result;
+        this.doctorDO = ((DemoNoSQLDoctorResult) result).getResult();
     }
+
+    @Override
+
+    public void onSaveInstanceState(Bundle outState) {
+
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("doctorDoParc", doctorDO);
+
+    }
+
 }

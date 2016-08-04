@@ -9,9 +9,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.mysampleapp.R;
 
@@ -27,6 +30,7 @@ public class HomeFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private AppCompatActivity activity;
+    private EditText address_text;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -48,8 +52,8 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        return view;
     }
 
     @Override
@@ -68,6 +72,7 @@ public class HomeFragment extends Fragment {
         activity.getSupportActionBar().setTitle(R.string.home);
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_gallery);
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
