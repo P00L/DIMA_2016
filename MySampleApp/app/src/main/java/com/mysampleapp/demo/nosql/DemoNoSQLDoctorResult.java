@@ -89,6 +89,7 @@ public class DemoNoSQLDoctorResult implements DemoNoSQLResult {
 
     @Override
     public View getView(final Context context, final View convertView, int position) {
+        // TODO fixare con nostro layout
         final LinearLayout layout;
         final TextView resultNumberTextView;
         final TextView userIdKeyTextView;

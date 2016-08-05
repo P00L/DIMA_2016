@@ -44,7 +44,8 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
                     Toast.makeText(mContext, "#" + position + " - " + mList[position] + " (Long click)", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(mContext, "#" + position + " - " + mList[position], Toast.LENGTH_SHORT).show();
-                    Fragment fragment = DrugFragment.newInstance(""+position,"asd");
+                    DrugFragment fragment = DrugFragment.newInstance(""+position,"asd");
+                    fragment.setResult(mList[position]);
                     AppCompatActivity activity = (AppCompatActivity) mContext;
                     activity.getSupportFragmentManager()
                             .beginTransaction()

@@ -4,13 +4,21 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.mysampleapp.R;
+import com.mysampleapp.demo.nosql.DemoNoSQLDoctorResult;
+import com.mysampleapp.demo.nosql.DemoNoSQLDrugResult;
+import com.mysampleapp.demo.nosql.DemoNoSQLResult;
+import com.mysampleapp.demo.nosql.DoctorDO;
+import com.mysampleapp.demo.nosql.DrugDO;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,31 +30,17 @@ import com.mysampleapp.R;
  *
  */
 public class DrugFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private DrugDO drugDO;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DrugFragment.
-     */
+    private AppCompatActivity activity;
+
+
     // TODO: Rename and change types and number of parameters
     public static DrugFragment newInstance(String param1, String param2) {
         DrugFragment fragment = new DrugFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,10 +51,6 @@ public class DrugFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -68,14 +58,40 @@ public class DrugFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_drug, container, false);
-        final AppCompatActivity activity = (AppCompatActivity) getActivity();
-        FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
-        if (fab.isShown())
-            fab.hide();
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(final View view, final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState != null){
+            drugDO = savedInstanceState.getParcelable("drugDoParc");
+        }
+        activity = (AppCompatActivity) getActivity();
+        FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+        if (!fab.isShown())
+            fab.show();
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DrugFormFragment fragment = DrugFormFragment.newInstance();
+                fragment.setDrug(drugDO);
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+            }
+        });
 
         activity.getSupportActionBar().setTitle(R.string.drug);
 
-        return view;
+        NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(R.id.drug_menu);
+
+        TextView textView = (TextView) view.findViewById(R.id.drug_name);
+        textView.setText(drugDO.getName());
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -116,4 +132,18 @@ public class DrugFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    public void setResult(final DrugDO result) {
+        this.drugDO = result;
+    }
+
+    @Override
+
+    public void onSaveInstanceState(Bundle outState) {
+
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("drugDoParc", drugDO);
+
+    }
+
 }

@@ -22,6 +22,7 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.mysampleapp.R;
+import com.mysampleapp.demo.nosql.DoctorDO;
 import com.mysampleapp.demo.nosql.DrugDO;
 
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormLayout;
@@ -294,5 +295,9 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
 
+    }
+
+    public void setDrug(DrugDO drug){
+        this.drugDO = drug;
     }
 }

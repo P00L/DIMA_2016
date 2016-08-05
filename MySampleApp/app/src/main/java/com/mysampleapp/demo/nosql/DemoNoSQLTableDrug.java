@@ -161,6 +161,10 @@ public class DemoNoSQLTableDrug extends DemoNoSQLTableBase {
             return false;
         }
 
+        public DrugDO[] getResultArray(){
+            return results.toArray(new DrugDO[0]);
+        }
+
         @Override
         public List<DemoNoSQLResult> getNextResultGroup() {
             return getNextResultsGroupFromIterator(resultsIterator);
