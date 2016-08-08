@@ -176,5 +176,6 @@
     <string name="drug">drug</string>
     <string name="home">home</string>
     <string name="doctor">doctor</string>
+    <string name="title_activity_doc_list">DocListActivity</string>
 
 </resources>

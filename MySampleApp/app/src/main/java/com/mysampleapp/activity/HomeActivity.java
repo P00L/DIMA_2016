@@ -1,7 +1,10 @@
 package com.mysampleapp.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,7 +16,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.amazonaws.mobile.AWSMobileClient;
+import com.amazonaws.mobile.user.IdentityManager;
+import com.amazonaws.mobile.user.IdentityProvider;
 import com.mysampleapp.R;
 import com.mysampleapp.demo.DemoConfiguration;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
@@ -32,10 +42,12 @@ public class HomeActivity extends AppCompatActivity
         DrugFormFragment.OnFragmentInteractionListener,
         DocFormFragment.OnFragmentInteractionListener,
         DrugFragment.OnFragmentInteractionListener,
-        HomeFragment.OnFragmentInteractionListener {
+        HomeFragment.OnFragmentInteractionListener,
+        View.OnClickListener{
 
-    /** The NoSQL Table demo operations will be run against. */
-    private DemoNoSQLTableBase demoTable;
+    private Button signOutButton;
+    private Button signInButton;
+    private IdentityManager identityManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +56,11 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        AWSMobileClient.initializeMobileClientIfNecessary(this);
+        final AWSMobileClient awsMobileClient = AWSMobileClient.defaultMobileClient();
+        // Obtain a reference to the identity manager.
+        identityManager = awsMobileClient.getIdentityManager();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -58,8 +75,11 @@ public class HomeActivity extends AppCompatActivity
         String message = intent.getStringExtra(SplashActivity.FRAGMENT_MESSAGE);
         Fragment fragment;
         AppCompatActivity activity = this;
-        demoTable = DemoNoSQLTableFactory.instance(getApplicationContext())
-                .getNoSQLTableByTableName("Doctor");
+
+        setupSignInButtons();
+        updateUserImage();
+        updateUserName();
+
 
         if (savedInstanceState == null) {
             // se e' la prima volta che apriamo l'activity creaiamo il tutto come nuovo in base a cosa si vuole aprire
@@ -167,6 +187,98 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onClick(final View view) {
+        if (view == signOutButton) {
+            // The user is currently signed in with a provider. Sign out of that provider.
+            identityManager.signOut();
+            // Show the sign-in button and hide the sign-out button.
+            signOutButton.setVisibility(View.INVISIBLE);
+            signInButton.setVisibility(View.VISIBLE);
+
+            return;
+        }
+        if (view == signInButton) {
+            // Start the sign-in activity. Do not finish this activity to allow the user to navigate back.
+            startActivity(new Intent(this, SignInActivity.class));
+            return;
+        }
+
+        // ... add any other button handling code here ...
+
+    }
+
+    private void setupSignInButtons() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+
+        signOutButton = (Button) header.findViewById(R.id.button_signout);
+        signOutButton.setOnClickListener(this);
+
+        signInButton = (Button) header.findViewById(R.id.button_signin);
+        signInButton.setOnClickListener(this);
+
+        final boolean isUserSignedIn = identityManager.isUserSignedIn();
+        signOutButton.setVisibility(isUserSignedIn ? View.VISIBLE : View.INVISIBLE);
+        signInButton.setVisibility(!isUserSignedIn ? View.VISIBLE : View.INVISIBLE);
+
+    }
+
+    private void updateUserName() {
+        final IdentityManager identityManager =
+                AWSMobileClient.defaultMobileClient().getIdentityManager();
+        final IdentityProvider identityProvider =
+                identityManager.getCurrentIdentityProvider();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+
+        final TextView userNameView = (TextView) header.findViewById(R.id.userName);
+
+        if (identityProvider == null) {
+            // Not signed in
+            userNameView.setText("NOT SIGNED IN");
+            return;
+        }
+
+        final String userName =
+                identityProvider.getUserName();
+
+        if (userName != null) {
+            userNameView.setText(userName);
+        }
+    }
+
+
+    private void updateUserImage() {
+
+        final IdentityManager identityManager =
+                AWSMobileClient.defaultMobileClient().getIdentityManager();
+        final IdentityProvider identityProvider =
+                identityManager.getCurrentIdentityProvider();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+
+        final ImageView imageView =
+                (ImageView)header.findViewById(R.id.userImage);
+
+        if (identityProvider == null) {
+            // Not signed in
+            if (Build.VERSION.SDK_INT < 22) {
+                imageView.setImageBitmap(BitmapFactory.decodeResource(this.getResources(), R.mipmap.user));
+            }
+            else {
+                imageView.setImageDrawable(this.getDrawable(R.mipmap.user));
+            }
+
+            return;
+        }
+
+        final Bitmap userImage = identityManager.getUserImage();
+        if (userImage != null) {
+            imageView.setImageBitmap(userImage);
+        }
     }
 
     public void onFragmentInteraction(Uri uri) {}

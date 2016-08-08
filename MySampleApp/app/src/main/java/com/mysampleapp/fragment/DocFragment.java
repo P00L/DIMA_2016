@@ -97,8 +97,8 @@ public class DocFragment extends Fragment {
         super.onDetach();
     }
 
-    public void setResult(final DemoNoSQLResult result) {
-        this.doctorDO = ((DemoNoSQLDoctorResult) result).getResult();
+    public void setResult(final DoctorDO result) {
+        this.doctorDO = result;
     }
 
     @Override

@@ -19,6 +19,7 @@ import com.mysampleapp.R;
 public class SignInActivity extends Activity {
     private final static String LOG_TAG = SignInActivity.class.getSimpleName();
     private SignInManager signInManager;
+    public final static String FRAGMENT_MESSAGE = "fragment_string";
 
     /** Permission Request Code (Must be < 256). */
     private static final int GET_ACCOUNTS_PERMISSION_REQUEST_CODE = 93;
@@ -52,8 +53,9 @@ public class SignInActivity extends Activity {
                 @Override
                 public void run() {
                     Log.d(LOG_TAG, "Launching Main Activity...");
-                    startActivity(new Intent(SignInActivity.this, MainActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+                    intent.putExtra(FRAGMENT_MESSAGE, "fragment_home");
+                    startActivity(intent);
                     // finish should always be called on the main thread.
                     finish();
                 }
