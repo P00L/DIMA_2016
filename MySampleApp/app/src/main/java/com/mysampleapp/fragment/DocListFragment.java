@@ -1,68 +1,72 @@
 package com.mysampleapp.fragment;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.ContextMenu;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListView;
-
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.mobile.util.ThreadUtils;
 import com.mysampleapp.R;
-import com.mysampleapp.demo.DemoFragmentBase;
+import com.mysampleapp.adapter.DocAdapter;
 import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
-import com.mysampleapp.demo.nosql.DemoNoSQLResult;
-import com.mysampleapp.demo.nosql.DemoNoSQLResultListAdapter;
-import com.mysampleapp.demo.nosql.DynamoDBUtils;
-
-import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
+import com.mysampleapp.demo.nosql.DemoNoSQLTableDoctor;
+import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
+import com.mysampleapp.demo.nosql.DoctorDO;
 
 public class DocListFragment extends Fragment {
-    private static final String LOG_TAG = DocListFragment.class.getSimpleName();
 
-    /** The NoSQL Operation that was performed. */
-    private static DemoNoSQLOperation noSQLOperation;
-
-    /** An executor to handle getting more results in the background. */
-    private final Executor singleThreadedExecutor = Executors.newSingleThreadExecutor();
-
-    /** A flag indicating all results have been retrieved. */
-    private volatile boolean doneRetrievingResults = false;
-
-    /** The list view showing the results. */
-    private ListView resultsList;
-
-    private DemoNoSQLResultListAdapter resultsListAdapter;
-
+    private OnFragmentInteractionListener mListener;
+    RecyclerView mRecyclerView;
+    RecyclerView.Adapter mAdapter;
+    RecyclerView.LayoutManager mLayoutManager;
+    DoctorDO[] items;
     private AppCompatActivity activity;
+    ProgressDialog mProgressDialog;
+    DemoNoSQLOperation operation;
+
+    public DocListFragment() {
+        // Required empty public constructor
+    }
+
+    public static DocListFragment newInstance() {
+        DocListFragment fragment = new DocListFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_doc_list, container, false);
+        activity = (AppCompatActivity) getActivity();
+        DemoNoSQLTableBase demoTable= DemoNoSQLTableFactory.instance(getContext())
+                .getNoSQLTableByTableName("Doctor");
+        operation = (DemoNoSQLOperation)demoTable.getOperationByName(getContext(),"ASD");
 
-        return inflater.inflate(R.layout.fragment_doc_list, container, false);
+        new MyAsyncTask().execute();
+
+        return view;
     }
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        activity = (AppCompatActivity) getActivity();
-
-        // on click fab launch form drug
+        // on click fab launch form doc
         FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
         if (!fab.isShown())
             fab.show();
@@ -85,186 +89,73 @@ public class DocListFragment extends Fragment {
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.doc_menu);
 
-        // Reset the results in case of screen rotation.
-        noSQLOperation.resetResults();
-
-        // get the list
-        resultsList = (ListView) view.findViewById(R.id.nosql_show_results_list);
-        // create the list adapter
-        resultsListAdapter = new DemoNoSQLResultListAdapter(getContext());
-
-        // set the adapter.
-        resultsList.setAdapter(resultsListAdapter);
-
-        resultsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-
-                DemoNoSQLResultListAdapter listAdapter = (DemoNoSQLResultListAdapter) resultsList.getAdapter();
-                DemoNoSQLResult result = listAdapter.getItem(position);
-                DocFragment fragment = new DocFragment();
-
-                // listener click item on the list
-                fragment.setResult(result);
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content_frame, fragment)
-                        .addToBackStack(null)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-            }
-        });
-
-        // set up a listener to load more items when they scroll to the bottom.
-        resultsList.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(final AbsListView view, final int scrollState) {
-            }
-
-            @Override
-            public void onScroll(final AbsListView view, final int firstVisibleItem, final int visibleItemCount, final int totalItemCount) {
-                if (firstVisibleItem + visibleItemCount >= totalItemCount) {
-                    getNextResults();
-                }
-            }
-        });
-
-        resultsList.setOnCreateContextMenuListener(this);
-
-        getNextResults();
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
     }
 
-    private void getNextResults() {
-        // if there are more results to retrieve.
-        if (!doneRetrievingResults) {
-            doneRetrievingResults = true;
-            // Get next results group in the background.
-            singleThreadedExecutor.execute(new Runnable() {
-                List<DemoNoSQLResult> results = null;
-                @Override
-                public void run() {
-                    try {
-                        results = noSQLOperation.getNextResultGroup();
-                    } catch (final AmazonClientException ex) {
-                        Log.e(LOG_TAG, "Failed loading additional results.", ex);
-                        DynamoDBUtils.showErrorDialogForServiceException(getActivity(),
-                                getString(R.string.nosql_dialog_title_failed_loading_more_results), ex);
-                    }
-                    if (results == null) {
-                        return;
-                    }
-                    ThreadUtils.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            doneRetrievingResults = false;
-                            resultsListAdapter.addAll(results);
-                        }
-                    });
-                }
-            });
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
         }
     }
 
-
     @Override
-    public void onCreateContextMenu(final ContextMenu menu, final View view,
-                                    final ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, view, menuInfo);
-
-        menu.add(0, R.id.nosql_context_menu_entry_update, 0, R.string.nosql_context_menu_entry_update_item_text);
-        menu.add(0, R.id.nosql_context_menu_entry_delete, 0, R.string.nosql_context_menu_entry_delete_item_text);
-
-        menu.setHeaderTitle(R.string.nosql_context_menu_title_for_results_text);
-    }
-
-    void promptToDeleteItemAt(int position) {
-        final DemoNoSQLResultListAdapter listAdapter = (DemoNoSQLResultListAdapter) resultsList.getAdapter();
-        final DemoNoSQLResult result = listAdapter.getItem(position);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.nosql_dialog_title_confirm_delete_item_text)
-                .setNegativeButton(android.R.string.cancel, null);
-        builder.setMessage(R.string.nosql_dialog_message_confirm_delete_item_text);
-
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, final int which) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            result.deleteItem();
-
-                            ThreadUtils.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    listAdapter.remove(result);
-                                    listAdapter.notifyDataSetChanged();
-                                }
-                            });
-                        } catch (final AmazonClientException ex) {
-                            Log.e(LOG_TAG, "Failed deleting item.", ex);
-                            DynamoDBUtils.showErrorDialogForServiceException(getActivity(),
-                                    getString(R.string.nosql_dialog_title_failed_delete_item_text), ex);
-                        }
-                    }
-                }).start();
-            }
-        });
-        builder.show();
-    }
-
-    void promptToUpdateItemAt(int position) {
-        final DemoNoSQLResultListAdapter listAdapter = (DemoNoSQLResultListAdapter) resultsList.getAdapter();
-        final DemoNoSQLResult result = listAdapter.getItem(position);
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.nosql_dialog_title_confirm_update_item_text)
-                .setNegativeButton(android.R.string.cancel, null);
-        builder.setMessage(R.string.nosql_dialog_message_confirm_update_item_text);
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, final int which) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            result.updateItem();
-
-                            ThreadUtils.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    listAdapter.notifyDataSetChanged();
-                                }
-                            });
-                        } catch (final AmazonClientException ex) {
-                            Log.e(LOG_TAG, "Failed saving updated item.", ex);
-                            DynamoDBUtils.showErrorDialogForServiceException(getActivity(),
-                                    getString(R.string.nosql_dialog_title_failed_update_item_text), ex);
-                        }
-                    }
-                }).start();
-            }
-        });
-        builder.show();
-    }
-
-    @Override
-    public boolean onContextItemSelected(final MenuItem item) {
-        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        if (item.getItemId() == R.id.nosql_context_menu_entry_update) {
-            promptToUpdateItemAt(info.position);
-            return true;
-
-        } else if (item.getItemId() == R.id.nosql_context_menu_entry_delete) {
-            // pop confirmation dialog.
-            promptToDeleteItemAt(info.position);
-            return true;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
-        return false;
     }
 
-    public void setOperation(final DemoNoSQLOperation operation) {
-        noSQLOperation = operation;
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
+    private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        public MyAsyncTask() {
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Create a progressdialog
+            mProgressDialog = new ProgressDialog(getActivity());
+            // Set progressdialog title
+            mProgressDialog.setTitle("We are working for you");
+            // Set progressdialog message
+            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setIndeterminate(false);
+            // Show progressdialog
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            operation.executeOperation();
+            items = ((DemoNoSQLTableDoctor.DemoQueryWithPartitionKeyOnly)operation).getResultArray();
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void args) {
+
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mAdapter = new DocAdapter(getContext(), items);
+            mRecyclerView.setAdapter(mAdapter);
+            mProgressDialog.dismiss();
+        }
     }
 }

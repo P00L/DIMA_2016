@@ -2,16 +2,13 @@ package com.mysampleapp.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.amazonaws.mobile.AWSMobileClient;
 import com.mysampleapp.R;
 import com.mysampleapp.adapter.DrugAdapter;
 import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
@@ -101,6 +97,10 @@ public class DrugListFragment extends Fragment  {
         });
 
         activity.getSupportActionBar().setTitle(R.string.drugs);
+
+        // set nav menu item checked
+        NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(R.id.drug_menu);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);

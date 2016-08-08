@@ -16,7 +16,6 @@ import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
 import com.mysampleapp.R;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -161,6 +160,9 @@ public class DemoNoSQLTableDoctor extends DemoNoSQLTableBase {
             return false;
         }
 
+        public DoctorDO[] getResultArray(){
+            return results.toArray(new DoctorDO[0]);
+        }
         @Override
         public List<DemoNoSQLResult> getNextResultGroup() {
             return getNextResultsGroupFromIterator(resultsIterator);

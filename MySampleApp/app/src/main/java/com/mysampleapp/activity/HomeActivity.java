@@ -1,45 +1,29 @@
 package com.mysampleapp.activity;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.Space;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.mobile.util.ThreadUtils;
-import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
-import com.mysampleapp.demo.nosql.DemoNoSQLOperationListItem;
+import com.mysampleapp.R;
+import com.mysampleapp.demo.DemoConfiguration;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
-import com.mysampleapp.demo.nosql.DynamoDBUtils;
-import com.mysampleapp.demo.nosql.NoSQLShowResultsDemoFragment;
+import com.mysampleapp.demo.nosql.NoSQLSelectTableDemoFragment;
 import com.mysampleapp.fragment.DocFormFragment;
 import com.mysampleapp.fragment.DocListFragment;
 import com.mysampleapp.fragment.DrugFormFragment;
 import com.mysampleapp.fragment.DrugFragment;
 import com.mysampleapp.fragment.DrugListFragment;
-import com.mysampleapp.R;
-import com.mysampleapp.demo.DemoConfiguration;
-import com.mysampleapp.demo.nosql.NoSQLSelectTableDemoFragment;
 import com.mysampleapp.fragment.HomeFragment;
 
 public class HomeActivity extends AppCompatActivity
@@ -140,47 +124,13 @@ public class HomeActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.doc_menu:
-
-                final DemoNoSQLOperation operation = (DemoNoSQLOperation)demoTable.getOperationByName(getApplicationContext(),"ASD");
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        boolean foundResults = false;
-                        try {
-                            foundResults = operation.executeOperation();
-                        } catch (final AmazonClientException ex) {
-                            ThreadUtils.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Log.e("ASD",
-                                            String.format("Failed executing selected DynamoDB table (%s) operation (%s) : %s",
-                                                    demoTable.getTableName(), operation.getTitle(), ex.getMessage()), ex);
-                                }
-                            });
-                            return;
-                        }
-
-                        ThreadUtils.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (operation.isScan()) {
-                                    final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getApplicationContext());
-                                    dialogBuilder.setTitle(R.string.nosql_dialog_title_scan_warning_text);
-                                    dialogBuilder.setMessage(R.string.nosql_dialog_message_scan_warning_text);
-                                    dialogBuilder.setNegativeButton(R.string.nosql_dialog_ok_text, null);
-                                    dialogBuilder.show();
-                                }
-                            }
-                        });
-
-                        if (!foundResults) {
-                            handleNoResultsFound();
-                        } else {
-                            showResultsForOperation(operation);
-                        }
-                    }
-                }).start();
+                fragment = DocListFragment.newInstance();
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
                 break;
             case R.id.drug_menu:
                 fragment = DrugListFragment.newInstance();
@@ -221,34 +171,4 @@ public class HomeActivity extends AppCompatActivity
 
     public void onFragmentInteraction(Uri uri) {}
 
-
-    private void handleNoResultsFound() {
-        //TODO far partire fragment doctor con no data found
-        ThreadUtils.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(HomeActivity.this);
-                dialogBuilder.setTitle(R.string.nosql_dialog_title_no_results_text);
-                dialogBuilder.setMessage(R.string.nosql_dialog_message_no_results_text);
-                dialogBuilder.setNegativeButton(R.string.nosql_dialog_ok_text, null);
-                dialogBuilder.show();
-            }
-        });
-    }
-
-    private void showResultsForOperation(final DemoNoSQLOperation operation) {
-        // On execution complete, open the NoSQLShowResultsDemoFragment.
-        final DocListFragment resultsDemoFragment = new DocListFragment();
-        resultsDemoFragment.setOperation(operation);
-
-        final FragmentActivity fragmentActivity = this;
-
-        if (fragmentActivity != null) {
-            fragmentActivity.getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.content_frame, resultsDemoFragment)
-                    .addToBackStack(null)
-                    .commitAllowingStateLoss();
-        }
-    }
 }
