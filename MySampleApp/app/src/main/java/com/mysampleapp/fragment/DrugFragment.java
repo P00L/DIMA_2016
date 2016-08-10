@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mysampleapp.R;
+import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DemoNoSQLDoctorResult;
 import com.mysampleapp.demo.nosql.DemoNoSQLDrugResult;
 import com.mysampleapp.demo.nosql.DemoNoSQLResult;
@@ -89,6 +91,24 @@ public class DrugFragment extends Fragment {
 
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.drug_menu);
+
+        DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        ((HomeActivity)activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
+        ((HomeActivity)activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // handle toolbar home button click
+                Fragment fragment = DrugListFragment.newInstance();
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+
+            }
+        });
 
         TextView textView = (TextView) view.findViewById(R.id.drug_name);
         textView.setText(drugDO.getName());

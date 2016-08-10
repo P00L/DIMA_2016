@@ -8,12 +8,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,8 +29,6 @@ import com.amazonaws.mobile.user.IdentityManager;
 import com.amazonaws.mobile.user.IdentityProvider;
 import com.mysampleapp.R;
 import com.mysampleapp.demo.DemoConfiguration;
-import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
-import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
 import com.mysampleapp.demo.nosql.NoSQLSelectTableDemoFragment;
 import com.mysampleapp.fragment.DocFormFragment;
 import com.mysampleapp.fragment.DocListFragment;
@@ -39,54 +40,80 @@ import com.mysampleapp.fragment.HomeFragment;
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         DrugListFragment.OnFragmentInteractionListener,
+        DocListFragment.OnFragmentInteractionListener,
         DrugFormFragment.OnFragmentInteractionListener,
         DocFormFragment.OnFragmentInteractionListener,
         DrugFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
-        View.OnClickListener{
+        View.OnClickListener {
 
     private Button signOutButton;
     private Button signInButton;
     private IdentityManager identityManager;
+    Toolbar toolbar;
+    DrawerLayout drawer;
+    ActionBarDrawerToggle toggle;
+    NavigationView navigationView;
+    Fragment fragment;
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        AWSMobileClient.initializeMobileClientIfNecessary(this);
-        final AWSMobileClient awsMobileClient = AWSMobileClient.defaultMobileClient();
-        // Obtain a reference to the identity manager.
-        identityManager = awsMobileClient.getIdentityManager();
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // enable change toolbar icon
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDefaultDisplayHomeAsUpEnabled(false);
+        toggle.setDrawerIndicatorEnabled(false);
+        toggle.setHomeAsUpIndicator(R.drawable.ic_action_hamburger);
+
+        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // handle toolbar home button click
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                } else {
+                    drawer.openDrawer(GravityCompat.START);
+                }
+            }
+        });
+
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+        //getting the intent to know wich fragment start
         Intent intent = getIntent();
         String message = intent.getStringExtra(SplashActivity.FRAGMENT_MESSAGE);
-        Fragment fragment;
-        AppCompatActivity activity = this;
 
+        // sign in functionality
+        AWSMobileClient.initializeMobileClientIfNecessary(this);
+        final AWSMobileClient awsMobileClient = AWSMobileClient.defaultMobileClient();
+        identityManager = awsMobileClient.getIdentityManager();
         setupSignInButtons();
         updateUserImage();
         updateUserName();
-
 
         if (savedInstanceState == null) {
             // se e' la prima volta che apriamo l'activity creaiamo il tutto come nuovo in base a cosa si vuole aprire
             switch (message) {
                 case "fragment_home":
                     fragment = HomeFragment.newInstance();
-                    activity.getSupportFragmentManager()
+                    getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.content_frame, fragment)
                             .addToBackStack(null)
@@ -122,13 +149,11 @@ public class HomeActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                Log.w("ACTIVITY","premuto settings");
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -137,15 +162,13 @@ public class HomeActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        android.app.FragmentManager fragmentManager = getFragmentManager();
-        AppCompatActivity activity = this;
-        Fragment fragment;
+        android.support.v4.app.FragmentManager supportFragmentManager = getSupportFragmentManager();
+        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         switch (id) {
             case R.id.doc_menu:
                 fragment = DocListFragment.newInstance();
-                activity.getSupportFragmentManager()
+                supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
                         .addToBackStack(null)
@@ -154,7 +177,7 @@ public class HomeActivity extends AppCompatActivity
                 break;
             case R.id.drug_menu:
                 fragment = DrugListFragment.newInstance();
-                activity.getSupportFragmentManager()
+                supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
                         .addToBackStack(null)
@@ -165,7 +188,7 @@ public class HomeActivity extends AppCompatActivity
                 final DemoConfiguration.DemoItem demo_item = new DemoConfiguration.DemoItem(R.string.main_fragment_title_nosql_database, R.mipmap.database,
                         R.string.feature_nosql_database_demo_button, NoSQLSelectTableDemoFragment.class);
                 fragment = Fragment.instantiate(this, demo_item.fragmentClassName);
-                activity.getSupportFragmentManager()
+                supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment, demo_item.fragmentClassName)
                         .addToBackStack(null)
@@ -174,7 +197,7 @@ public class HomeActivity extends AppCompatActivity
                 break;
             case R.id.nav_gallery:
                 fragment = HomeFragment.newInstance();
-                activity.getSupportFragmentManager()
+                supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
                         .addToBackStack(null)
@@ -182,7 +205,6 @@ public class HomeActivity extends AppCompatActivity
                         .commit();
                 break;
         }
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -197,6 +219,8 @@ public class HomeActivity extends AppCompatActivity
             // Show the sign-in button and hide the sign-out button.
             signOutButton.setVisibility(View.INVISIBLE);
             signInButton.setVisibility(View.VISIBLE);
+            updateUserImage();
+            updateUserName();
 
             return;
         }
@@ -261,14 +285,13 @@ public class HomeActivity extends AppCompatActivity
         View header = navigationView.getHeaderView(0);
 
         final ImageView imageView =
-                (ImageView)header.findViewById(R.id.userImage);
+                (ImageView) header.findViewById(R.id.userImage);
 
         if (identityProvider == null) {
             // Not signed in
             if (Build.VERSION.SDK_INT < 22) {
                 imageView.setImageBitmap(BitmapFactory.decodeResource(this.getResources(), R.mipmap.user));
-            }
-            else {
+            } else {
                 imageView.setImageDrawable(this.getDrawable(R.mipmap.user));
             }
 
@@ -281,6 +304,15 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public void onFragmentInteraction(Uri uri) {}
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        toggle.syncState();
+    }
 
+    public void onFragmentInteraction(Uri uri) {
+    }
+
+    public ActionBarDrawerToggle getToggle(){
+        return toggle;
+    }
 }
