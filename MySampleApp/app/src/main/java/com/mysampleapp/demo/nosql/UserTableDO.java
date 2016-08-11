@@ -2,21 +2,16 @@ package com.mysampleapp.demo.nosql;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBIndexHashKey;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBIndexRangeKey;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBRangeKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-@DynamoDBTable(tableName = "myfirstapp-mobilehub-1482957139-User")
+@DynamoDBTable(tableName = "myfirstapp-mobilehub-1482957139-UserTable")
 
-public class UserDO {
+public class UserTableDO {
     private String _userId;
     private String _address;
-    private Set<Double> _dateBirth;
+    private Set<Double> _birthdate;
     private String _email;
     private String _name;
     private Double _phone;
@@ -39,13 +34,13 @@ public class UserDO {
     public void setAddress(final String _address) {
         this._address = _address;
     }
-    @DynamoDBAttribute(attributeName = "dateBirth")
-    public Set<Double> getDateBirth() {
-        return _dateBirth;
+    @DynamoDBAttribute(attributeName = "birthdate")
+    public Set<Double> getBirthdate() {
+        return _birthdate;
     }
 
-    public void setDateBirth(final Set<Double> _dateBirth) {
-        this._dateBirth = _dateBirth;
+    public void setBirthdate(final Set<Double> _birthdate) {
+        this._birthdate = _birthdate;
     }
     @DynamoDBAttribute(attributeName = "email")
     public String getEmail() {

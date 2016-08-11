@@ -15,23 +15,23 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 
 import java.util.Set;
 
-public class DemoNoSQLUserResult implements DemoNoSQLResult {
+public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
     private static final int KEY_TEXT_COLOR = 0xFF333333;
-    private final UserDO result;
+    private final ScheduleDrugDO result;
 
-    DemoNoSQLUserResult(final UserDO result) {
+    DemoNoSQLScheduleDrugResult(final ScheduleDrugDO result) {
         this.result = result;
     }
     @Override
     public void updateItem() {
         final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-        final String originalValue = result.getAddress();
-        result.setAddress(DemoSampleDataGenerator.getRandomSampleString("address"));
+        final String originalValue = result.getDrug();
+        result.setDrug(DemoSampleDataGenerator.getRandomSampleString("drug"));
         try {
             mapper.save(result);
         } catch (final AmazonClientException ex) {
             // Restore original data if save fails, and re-throw.
-            result.setAddress(originalValue);
+            result.setDrug(originalValue);
             throw ex;
         }
     }
@@ -96,18 +96,14 @@ public class DemoNoSQLUserResult implements DemoNoSQLResult {
         final TextView resultNumberTextView;
         final TextView userIdKeyTextView;
         final TextView userIdValueTextView;
-        final TextView addressKeyTextView;
-        final TextView addressValueTextView;
-        final TextView dateBirthKeyTextView;
-        final TextView dateBirthValueTextView;
-        final TextView emailKeyTextView;
-        final TextView emailValueTextView;
-        final TextView nameKeyTextView;
-        final TextView nameValueTextView;
-        final TextView phoneKeyTextView;
-        final TextView phoneValueTextView;
-        final TextView surnameKeyTextView;
-        final TextView surnameValueTextView;
+        final TextView dayKeyTextView;
+        final TextView dayValueTextView;
+        final TextView drugKeyTextView;
+        final TextView drugValueTextView;
+        final TextView hourKeyTextView;
+        final TextView hourValueTextView;
+        final TextView notesKeyTextView;
+        final TextView notesValueTextView;
         if (convertView == null) {
             layout = new LinearLayout(context);
             layout.setOrientation(LinearLayout.VERTICAL);
@@ -122,41 +118,29 @@ public class DemoNoSQLUserResult implements DemoNoSQLResult {
             layout.addView(userIdKeyTextView);
             layout.addView(userIdValueTextView);
 
-            addressKeyTextView = new TextView(context);
-            addressValueTextView = new TextView(context);
-            setKeyAndValueTextViewStyles(addressKeyTextView, addressValueTextView);
-            layout.addView(addressKeyTextView);
-            layout.addView(addressValueTextView);
+            dayKeyTextView = new TextView(context);
+            dayValueTextView = new TextView(context);
+            setKeyAndValueTextViewStyles(dayKeyTextView, dayValueTextView);
+            layout.addView(dayKeyTextView);
+            layout.addView(dayValueTextView);
 
-            dateBirthKeyTextView = new TextView(context);
-            dateBirthValueTextView = new TextView(context);
-            setKeyAndValueTextViewStyles(dateBirthKeyTextView, dateBirthValueTextView);
-            layout.addView(dateBirthKeyTextView);
-            layout.addView(dateBirthValueTextView);
+            drugKeyTextView = new TextView(context);
+            drugValueTextView = new TextView(context);
+            setKeyAndValueTextViewStyles(drugKeyTextView, drugValueTextView);
+            layout.addView(drugKeyTextView);
+            layout.addView(drugValueTextView);
 
-            emailKeyTextView = new TextView(context);
-            emailValueTextView = new TextView(context);
-            setKeyAndValueTextViewStyles(emailKeyTextView, emailValueTextView);
-            layout.addView(emailKeyTextView);
-            layout.addView(emailValueTextView);
+            hourKeyTextView = new TextView(context);
+            hourValueTextView = new TextView(context);
+            setKeyAndValueTextViewStyles(hourKeyTextView, hourValueTextView);
+            layout.addView(hourKeyTextView);
+            layout.addView(hourValueTextView);
 
-            nameKeyTextView = new TextView(context);
-            nameValueTextView = new TextView(context);
-            setKeyAndValueTextViewStyles(nameKeyTextView, nameValueTextView);
-            layout.addView(nameKeyTextView);
-            layout.addView(nameValueTextView);
-
-            phoneKeyTextView = new TextView(context);
-            phoneValueTextView = new TextView(context);
-            setKeyAndValueTextViewStyles(phoneKeyTextView, phoneValueTextView);
-            layout.addView(phoneKeyTextView);
-            layout.addView(phoneValueTextView);
-
-            surnameKeyTextView = new TextView(context);
-            surnameValueTextView = new TextView(context);
-            setKeyAndValueTextViewStyles(surnameKeyTextView, surnameValueTextView);
-            layout.addView(surnameKeyTextView);
-            layout.addView(surnameValueTextView);
+            notesKeyTextView = new TextView(context);
+            notesValueTextView = new TextView(context);
+            setKeyAndValueTextViewStyles(notesKeyTextView, notesValueTextView);
+            layout.addView(notesKeyTextView);
+            layout.addView(notesValueTextView);
         } else {
             layout = (LinearLayout) convertView;
             resultNumberTextView = (TextView) layout.getChildAt(0);
@@ -164,44 +148,30 @@ public class DemoNoSQLUserResult implements DemoNoSQLResult {
             userIdKeyTextView = (TextView) layout.getChildAt(1);
             userIdValueTextView = (TextView) layout.getChildAt(2);
 
-            addressKeyTextView = (TextView) layout.getChildAt(3);
-            addressValueTextView = (TextView) layout.getChildAt(4);
+            dayKeyTextView = (TextView) layout.getChildAt(3);
+            dayValueTextView = (TextView) layout.getChildAt(4);
 
-            dateBirthKeyTextView = (TextView) layout.getChildAt(5);
-            dateBirthValueTextView = (TextView) layout.getChildAt(6);
+            drugKeyTextView = (TextView) layout.getChildAt(5);
+            drugValueTextView = (TextView) layout.getChildAt(6);
 
-            emailKeyTextView = (TextView) layout.getChildAt(7);
-            emailValueTextView = (TextView) layout.getChildAt(8);
+            hourKeyTextView = (TextView) layout.getChildAt(7);
+            hourValueTextView = (TextView) layout.getChildAt(8);
 
-            nameKeyTextView = (TextView) layout.getChildAt(9);
-            nameValueTextView = (TextView) layout.getChildAt(10);
-
-            phoneKeyTextView = (TextView) layout.getChildAt(11);
-            phoneValueTextView = (TextView) layout.getChildAt(12);
-
-            surnameKeyTextView = (TextView) layout.getChildAt(13);
-            surnameValueTextView = (TextView) layout.getChildAt(14);
+            notesKeyTextView = (TextView) layout.getChildAt(9);
+            notesValueTextView = (TextView) layout.getChildAt(10);
         }
 
         resultNumberTextView.setText(String.format("#%d", + position+1));
         userIdKeyTextView.setText("userId");
         userIdValueTextView.setText(result.getUserId());
-        addressKeyTextView.setText("address");
-        addressValueTextView.setText(result.getAddress());
-        dateBirthKeyTextView.setText("dateBirth");
-        dateBirthValueTextView.setText(result.getDateBirth().toString());
-        emailKeyTextView.setText("email");
-        emailValueTextView.setText(result.getEmail());
-        nameKeyTextView.setText("name");
-        nameValueTextView.setText(result.getName());
-        phoneKeyTextView.setText("phone");
-        phoneValueTextView.setText("" + result.getPhone().longValue());
-        surnameKeyTextView.setText("surname");
-        surnameValueTextView.setText(result.getSurname());
+        dayKeyTextView.setText("day");
+        dayValueTextView.setText(result.getDay().toString());
+        drugKeyTextView.setText("drug");
+        drugValueTextView.setText(result.getDrug());
+        hourKeyTextView.setText("hour");
+        hourValueTextView.setText(result.getHour().toString());
+        notesKeyTextView.setText("notes");
+        notesValueTextView.setText(result.getNotes());
         return layout;
-    }
-
-    public UserDO getResult(){
-        return result;
     }
 }
