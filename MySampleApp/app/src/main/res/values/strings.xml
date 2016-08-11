@@ -166,6 +166,11 @@
     <string name="form_hint_title">form_int_title</string>
     <string name="form_hint_description">form_int_des</string>
     <string name="error_title_min_characters">error_title_min</string>
+    <string name="error_has_numbers">error_has_numbers</string>
+    <string name="error_not_a_number">error_not_a_number</string>
+    <string name="error_email">incorrect_email</string>
+    <string name="error_phone_number">incorrect_phone_number</string>
+    <string name="error_empty_content">cannot_be_empty</string>
     <string name="main_activity_explanation">asd</string>
     <string name="main_activity_explanation_disclaimer">asd</string>
     <string name="add_alarm">Add New Alarm</string>

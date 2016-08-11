@@ -9,20 +9,22 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.mysampleapp.R;
-import com.mysampleapp.demo.nosql.DoctorDO;
 import com.mysampleapp.demo.nosql.DrugDO;
 
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormLayout;
@@ -43,12 +45,19 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
     private VerticalStepperFormLayout verticalStepperForm;
     private DynamoDBMapper mapper;
     private DrugDO drugDO;
+
+    private final static int NAME_STEP = 0;
     private EditText name_text;
-    private EditText notes_text;
-    private EditText minqty_text;
-    private EditText qty_text;
+    private final static int TYPE_STEP = 1;
     private EditText type_text;
+    private final static int QTY_STEP = 2;
+    private EditText qty_text;
+    private final static int WEIGHT_STEP = 3;
     private EditText weight_text;
+    private final static int MINQTY_STEP = 4;
+    private EditText minqty_text;
+    private final static int NOTES_STEP = 5;
+    private EditText notes_text;
     private AppCompatActivity activity;
 
 
@@ -73,7 +82,15 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_drug_form, container, false);
-
+        //#####################################################################
+        if (savedInstanceState != null){
+            Log.w("entrato", "entrato");
+            drugDO = savedInstanceState.getParcelable("drugDoParc");
+        }
+        else{
+            drugDO = new DrugDO();
+        }
+        //#####################################################################
         return view;
     }
 
@@ -81,7 +98,6 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
 
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-        drugDO = new DrugDO();
         activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
 
@@ -152,43 +168,92 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
     public View createStepContentView(int stepNumber) {
         View view = null;
         switch (stepNumber) {
-            case 0:
+            case NAME_STEP:
                 view = createNameStep();
                 break;
-            case 1:
+            case TYPE_STEP:
                 view = createTypeStep();
                 break;
-            case 2:
+            case QTY_STEP:
                 view = createQuantityStep();
                 break;
-            case 3:
+            case WEIGHT_STEP:
                 view = createWeightStep();
                 break;
-            case 4:
+            case MINQTY_STEP:
                 view = createSottoscortaStep();
                 break;
-            case 5:
+            case NOTES_STEP:
                 view = createNotesStep();
                 break;
         }
         return view;
     }
 
+    //no check
     private View createNameStep() {
         // Here we generate programmatically the view that will be added by the system to the step content layout
         name_text = new EditText(getActivity());
         name_text.setSingleLine(true);
         name_text.setHint("name");
         name_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        if(drugDO.getName()!=null)
+            name_text.setText(drugDO.getName());
+
+        name_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isEmpty(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        name_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(!isEmpty(v.getText().toString())) {
+                    verticalStepperForm.goToNextStep();
+                }
+                return false;
+            }
+        });
         return name_text;
     }
 
+    //check no numbers
     private View createTypeStep() {
         // In this case we generate the view by inflating a XML file
         type_text = new EditText(getActivity());
         type_text.setSingleLine(true);
         type_text.setHint("type");
         type_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        if(drugDO.getType()!=null)
+            type_text.setText(drugDO.getType());
+        type_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                hasNoNumbers(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        name_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(hasNoNumbers(v.getText().toString())) {
+                    verticalStepperForm.goToNextStep();
+                }
+                return false;
+            }
+        });
         return type_text;
     }
 
@@ -198,6 +263,29 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         qty_text.setSingleLine(true);
         qty_text.setHint("quantity");
         qty_text.setInputType(InputType.TYPE_CLASS_NUMBER);
+        if(drugDO.getQuantity()!=null)
+            qty_text.setText(String.valueOf(drugDO.getQuantity().intValue()));
+        qty_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isValidQtyWeigh(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        qty_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(isValidQtyWeigh(v.getText().toString())) {
+                    verticalStepperForm.goToNextStep();
+                }
+                return false;
+            }
+        });
         return qty_text;
     }
 
@@ -207,6 +295,29 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         weight_text.setSingleLine(true);
         weight_text.setHint("weight");
         weight_text.setInputType(InputType.TYPE_CLASS_NUMBER);
+        if(drugDO.getWeight()!=null)
+            weight_text.setText(String.valueOf(drugDO.getWeight().intValue()));
+        weight_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isValidQtyWeigh(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        weight_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(isValidQtyWeigh(v.getText().toString())) {
+                    verticalStepperForm.goToNextStep();
+                }
+                return false;
+            }
+        });
         return weight_text;
     }
 
@@ -216,6 +327,29 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         minqty_text.setSingleLine(true);
         minqty_text.setHint("sottoscorta");
         minqty_text.setInputType(InputType.TYPE_CLASS_NUMBER);
+        if(drugDO.getMinqty()!=null)
+            minqty_text.setText(String.valueOf(drugDO.getMinqty().intValue()));
+        minqty_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isValidQtyWeigh(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        minqty_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(isValidQtyWeigh(v.getText().toString())) {
+                    verticalStepperForm.goToNextStep();
+                }
+                return false;
+            }
+        });
         return minqty_text;
     }
 
@@ -228,6 +362,8 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         notes_text.setMaxLines(7);
         notes_text.setLines(5);
         notes_text.setGravity(Gravity.LEFT | Gravity.BOTTOM);
+        if(drugDO.getNotes()!=null)
+            notes_text.setText(drugDO.getNotes().toString());
         return notes_text;
     }
 
@@ -236,22 +372,22 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
     public void onStepOpening(int stepNumber) {
         //TODO aggiungere i controlli sui campi
         switch (stepNumber) {
-            case 0:
-                verticalStepperForm.setActiveStepAsCompleted();
+            case NAME_STEP:
+                isEmpty(name_text.getText().toString());
                 break;
-            case 1:
-                verticalStepperForm.setActiveStepAsCompleted();
+            case TYPE_STEP:
+                hasNoNumbers(type_text.getText().toString());
                 break;
-            case 2:
-                verticalStepperForm.setActiveStepAsCompleted();
+            case QTY_STEP:
+                isValidQtyWeigh(qty_text.getText().toString());
                 break;
-            case 3:
-                verticalStepperForm.setActiveStepAsCompleted();
+            case WEIGHT_STEP:
+                isValidQtyWeigh(weight_text.getText().toString());
                 break;
-            case 4:
-                verticalStepperForm.setActiveStepAsCompleted();
+            case MINQTY_STEP:
+                isValidQtyWeigh(minqty_text.getText().toString());
                 break;
-            case 5:
+            case NOTES_STEP:
                 verticalStepperForm.setActiveStepAsCompleted();
                 break;
         }
@@ -295,6 +431,101 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
 
+    }
+
+    public boolean isValidQtyWeigh(String number){
+        boolean onlynumbers = false;
+
+        if(number.matches("[0-9]+")){
+            onlynumbers = true;
+            verticalStepperForm.setActiveStepAsCompleted();
+        }
+        else{
+            String numErrorString;
+            numErrorString = getResources().getString(R.string.error_not_a_number);
+            verticalStepperForm.setActiveStepAsUncompleted(numErrorString);
+        }
+        return onlynumbers;
+    }
+
+    public boolean hasNoNumbers(String type){
+        boolean typeIsCorrect = false;
+
+        //check if correct!!
+        if(type.matches("[a-zA-Z]+")) {
+            typeIsCorrect = true;
+
+            verticalStepperForm.setActiveStepAsCompleted();
+            // Equivalent to: verticalStepperForm.setStepAsCompleted(TITLE_STEP_NUM);
+
+        } else {
+            String typeErrorString;
+            typeErrorString = getResources().getString(R.string.error_has_numbers);
+
+            verticalStepperForm.setActiveStepAsUncompleted(typeErrorString);
+            // Equivalent to: verticalStepperForm.setStepAsUncompleted(TITLE_STEP_NUM, titleError);
+
+        }
+        return typeIsCorrect;
+    }
+
+    private boolean isEmpty(String content){
+        boolean isempty = false;
+        if(!content.isEmpty()){
+            verticalStepperForm.setActiveStepAsCompleted();
+            return isempty;
+        }
+        else{
+            isempty = true;
+            String emptycontent;
+            emptycontent = getResources().getString(R.string.error_empty_content);
+            verticalStepperForm.setActiveStepAsUncompleted(emptycontent);
+        }
+        return isempty;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        drugDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+        // Saving name field
+        if(name_text != null) {
+            if(!name_text.getText().toString().isEmpty())
+                drugDO.setName(name_text.getText().toString());
+        }
+
+        // Saving type field
+        if(type_text != null) {
+            if(!type_text.getText().toString().isEmpty())
+                drugDO.setType(type_text.getText().toString());
+        }
+
+        // Saving quantity field
+        if(qty_text != null) {
+            if(!qty_text.getText().toString().isEmpty())
+                drugDO.setQuantity(Double.parseDouble(qty_text.getText().toString()));
+        }
+        // Saving weight field
+        if(weight_text != null) {
+            if(!qty_text.getText().toString().isEmpty())
+                drugDO.setWeight(Double.parseDouble(weight_text.getText().toString()));
+        }
+
+        // Saving sottoscorta field
+        if(minqty_text != null) {
+            if(!minqty_text.getText().toString().isEmpty())
+                drugDO.setMinqty(Double.parseDouble(minqty_text.getText().toString()));
+        }
+
+        // Saving notes field
+        if(notes_text != null) {
+            if(!notes_text.getText().toString().isEmpty())
+               drugDO.setNotes(notes_text.getText().toString());
+        }
+
+        savedInstanceState.putParcelable("drugDoParc", drugDO);
+        // The call to super method must be at the end here
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     public void setDrug(DrugDO drug){

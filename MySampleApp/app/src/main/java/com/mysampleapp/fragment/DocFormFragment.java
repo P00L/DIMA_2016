@@ -9,20 +9,25 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.mysampleapp.R;
 import com.mysampleapp.demo.nosql.DoctorDO;
-import com.mysampleapp.demo.nosql.DrugDO;
+
+import java.util.regex.Pattern;
 
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormLayout;
 import ernestoyaquello.com.verticalstepperform.interfaces.VerticalStepperForm;
@@ -37,17 +42,28 @@ import ernestoyaquello.com.verticalstepperform.interfaces.VerticalStepperForm;
  */
 public class DocFormFragment extends Fragment implements VerticalStepperForm {
 
+    private static final int MIN_NAME_LENGTH = 3;
+
     private OnFragmentInteractionListener mListener;
 
     private VerticalStepperFormLayout verticalStepperForm;
     private DynamoDBMapper mapper;
     private DoctorDO docDO;
-    private EditText email_text;
-    private EditText active_text;
-    private EditText address_text;
+
+    private static final int NAME_STEP = 0;
     private EditText name_text;
-    private EditText phoneNumber_text;
+    private static final int SURNAME_STEP = 1;
     private EditText surname_text;
+    private final static int EMAIL_STEP = 2;
+    private EditText email_text;
+    // diventa una checkbox
+    private final static int ACTIVE_STEP = 3;
+    private EditText active_text;
+    private final static int PHONE_NUMBER_STEP = 4;
+    private EditText phoneNumber_text;
+    private final static int ADDRESS_STEP = 5;
+    private EditText address_text;
+
     private AppCompatActivity activity;
 
 
@@ -73,7 +89,15 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_doc_form, container, false);
-
+        //#####################################################################
+        if (savedInstanceState != null){
+            Log.w("entrato", "entrato");
+            docDO = savedInstanceState.getParcelable("doctorDoParc");
+        }
+        else{
+            docDO = new DoctorDO();
+        }
+        //#####################################################################
         return view;
     }
 
@@ -82,7 +106,6 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-        docDO = new DoctorDO();
 
         String[] mySteps = {"Name", "Surname", "e-mail", "Active", "Phone number", "Address"};
         int colorPrimary = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
@@ -98,8 +121,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                 .displayBottomNavigation(true) // It is true by default, so in this case this line is not necessary
                 .init();
 
-        if (fab.isShown())
-            fab.hide();
+        fab.hide();
 
         activity.getSupportActionBar().setTitle(R.string.add_doc);
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
@@ -150,22 +172,22 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     public View createStepContentView(int stepNumber) {
         View view = null;
         switch (stepNumber) {
-            case 0:
+            case NAME_STEP:
                 view = createNameStep();
                 break;
-            case 1:
+            case SURNAME_STEP:
                 view = createSurnameStep();
                 break;
-            case 2:
+            case EMAIL_STEP:
                 view = createEmailStep();
                 break;
-            case 3:
+            case ACTIVE_STEP:
                 view = createActiveStep();
                 break;
-            case 4:
+            case PHONE_NUMBER_STEP:
                 view = createSPhoneNumberStep();
                 break;
-            case 5:
+            case ADDRESS_STEP:
                 view = createAddressStep();
                 break;
         }
@@ -178,6 +200,31 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         name_text.setSingleLine(true);
         name_text.setHint("name");
         name_text.setInputType(InputType.TYPE_CLASS_TEXT);
+
+        if(docDO.getName()!=null)
+                name_text.setText(docDO.getName());
+
+        name_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkNameSurnameStep(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        name_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(checkNameSurnameStep(v.getText().toString())) {
+                    verticalStepperForm.goToNextStep();
+                }
+                return false;
+            }
+        });
         return name_text;
     }
 
@@ -187,26 +234,77 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         surname_text.setSingleLine(true);
         surname_text.setHint("surname");
         surname_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        if (docDO.getSurname()!=null)
+            surname_text.setText(docDO.getSurname());
+        surname_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkNameSurnameStep(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        surname_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(checkNameSurnameStep(v.getText().toString())) {
+                    verticalStepperForm.goToNextStep();
+                }
+                return false;
+            }
+        });
+
         return surname_text;
     }
 
     private View createEmailStep() {
         // Here we generate programmatically the view that will be added by the system to the step content layout
-        surname_text = new EditText(getActivity());
-        surname_text.setSingleLine(true);
-        surname_text.setHint("email");
-        surname_text.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        return surname_text;
+        email_text = new EditText(getActivity());
+        email_text.setSingleLine(true);
+        email_text.setHint("email");
+        email_text.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        if(docDO.getEmail()!=null){
+            Log.w("email", docDO.getEmail().toString());
+            email_text.setText(docDO.getEmail());
+        }
+
+        email_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isValidEmail(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        email_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(isValidEmail(v.getText().toString())) {
+                    verticalStepperForm.goToNextStep();
+                }
+                return false;
+            }
+        });
+
+        return email_text;
     }
 
     private View createActiveStep() {
         //TODO convertire a checkbox o simile
         // Here we generate programmatically the view that will be added by the system to the step content layout
-        email_text = new EditText(getActivity());
-        email_text.setSingleLine(true);
-        email_text.setHint("email");
-        email_text.setInputType(InputType.TYPE_CLASS_TEXT);
-        return email_text;
+        active_text = new EditText(getActivity());
+        active_text.setSingleLine(true);
+        active_text.setHint("active");
+        active_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        return active_text;
     }
 
     private View createSPhoneNumberStep() {
@@ -215,15 +313,66 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         phoneNumber_text.setSingleLine(true);
         phoneNumber_text.setHint("phone number");
         phoneNumber_text.setInputType(InputType.TYPE_CLASS_PHONE);
+        if(docDO.getPhoneNumber()!=null)
+            phoneNumber_text.setText(String.valueOf(docDO.getPhoneNumber().intValue()));
+        phoneNumber_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isValidCellPhone(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        phoneNumber_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(isValidCellPhone(v.getText().toString())) {
+                    verticalStepperForm.goToNextStep();
+                }
+                return false;
+            }
+        });
+
         return phoneNumber_text;
     }
 
+    // no check su address!
     private View createAddressStep() {
         // Here we generate programmatically the view that will be added by the system to the step content layout
         address_text = new EditText(getActivity());
         address_text.setSingleLine(true);
         address_text.setHint("address");
         address_text.setInputType(InputType.TYPE_CLASS_TEXT);
+
+        if(docDO.getAddress()!=null)
+            address_text.setText(docDO.getAddress());
+
+        address_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isEmpty(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        address_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(!isEmpty(v.getText().toString())) {
+                    verticalStepperForm.goToNextStep();
+                }
+                return false;
+            }
+        });
+
         return address_text;
     }
 
@@ -231,23 +380,23 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     @Override
     public void onStepOpening(int stepNumber) {
         switch (stepNumber) {
-            case 0:
+            case NAME_STEP:
+                checkNameSurnameStep(name_text.getText().toString());
+                break;
+            case SURNAME_STEP:
+                checkNameSurnameStep(surname_text.getText().toString());
+                break;
+            case EMAIL_STEP:
+                isValidEmail(email_text.getText().toString());
+                break;
+            case ACTIVE_STEP:
                 verticalStepperForm.setActiveStepAsCompleted();
                 break;
-            case 1:
-                verticalStepperForm.setActiveStepAsCompleted();
+            case PHONE_NUMBER_STEP:
+                isValidCellPhone(phoneNumber_text.getText().toString());
                 break;
-            case 2:
-                verticalStepperForm.setActiveStepAsCompleted();
-                break;
-            case 3:
-                verticalStepperForm.setActiveStepAsCompleted();
-                break;
-            case 4:
-                verticalStepperForm.setActiveStepAsCompleted();
-                break;
-            case 5:
-                verticalStepperForm.setActiveStepAsCompleted();
+            case ADDRESS_STEP:
+                isEmpty(address_text.getText().toString());
                 break;
         }
     }
@@ -260,6 +409,8 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         docDO.setName(name_text.getText().toString());
         docDO.setSurname(surname_text.getText().toString());
         docDO.setEmail(email_text.getText().toString());
+        Log.w("emailtextvalue", email_text.getText().toString());
+        Log.w("emailvalue", docDO.getEmail().toString());
         // TODO FIX
         docDO.setActive(Boolean.TRUE);
         tmp = phoneNumber_text.getText().toString();
@@ -270,6 +421,8 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             @Override
             public void run() {
                 try {
+                    //#####################################################################
+                    //errore Null or empty value for key: public java.lang.String com.mysampleapp.demo.nosql.DoctorDO.getEmail()
                     mapper.save(docDO);
                 } catch (final AmazonClientException ex) {
                     Log.e("ASD", "Failed saving item : " + ex.getMessage(), ex);
@@ -286,6 +439,128 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
     }
+
+    // name/surname checker
+    private boolean checkNameSurnameStep(String word) {
+        boolean wordIsCorrect = false;
+
+        //check if correct!!
+        if(word.length() >= MIN_NAME_LENGTH && word.matches("[a-zA-Z]+")) {
+            wordIsCorrect = true;
+
+            verticalStepperForm.setActiveStepAsCompleted();
+            // Equivalent to: verticalStepperForm.setStepAsCompleted(TITLE_STEP_NUM);
+
+        } else {
+            String wordErrorString;
+            if(word.length() < MIN_NAME_LENGTH)
+                wordErrorString = getResources().getString(R.string.error_title_min_characters);
+            else
+                wordErrorString = getResources().getString(R.string.error_has_numbers);
+
+            verticalStepperForm.setActiveStepAsUncompleted(wordErrorString);
+            // Equivalent to: verticalStepperForm.setStepAsUncompleted(TITLE_STEP_NUM, titleError);
+
+        }
+
+        return wordIsCorrect;
+    }
+    // email checker
+    private boolean isValidEmail(String email) {
+        Pattern pattern = Patterns.EMAIL_ADDRESS;
+
+        if(pattern.matcher(email).matches()){
+            verticalStepperForm.setActiveStepAsCompleted();
+        }
+        else{
+            String emailerror = getResources().getString(R.string.error_email);
+            verticalStepperForm.setActiveStepAsUncompleted(emailerror);
+        }
+        return pattern.matcher(email).matches();
+    }
+    // phone number checker
+    private boolean isValidCellPhone(String number) {
+        Pattern pattern = Patterns.PHONE;
+
+        if(pattern.matcher(number).matches()){
+            verticalStepperForm.setActiveStepAsCompleted();
+        }
+        else{
+            String numbererror = getResources().getString(R.string.error_phone_number);
+            verticalStepperForm.setActiveStepAsUncompleted(numbererror);
+        }
+        return pattern.matcher(number).matches();
+    }
+
+    private boolean isEmpty(String content){
+        boolean isempty = false;
+        if(!content.isEmpty()){
+            verticalStepperForm.setActiveStepAsCompleted();
+            return isempty;
+        }
+        else{
+            isempty = true;
+            String emptycontent;
+            emptycontent = getResources().getString(R.string.error_empty_content);
+            verticalStepperForm.setActiveStepAsUncompleted(emptycontent);
+        }
+        return isempty;
+    }
+
+    // SAVING THE STATE
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        docDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+        // Saving name field
+        if(name_text != null) {
+            if(!name_text.getText().toString().isEmpty())
+                docDO.setName(name_text.getText().toString());
+            //savedInstanceState.putString(STATE_NAME, name_text.getText().toString());
+        }
+
+        // Saving surname field
+        if(surname_text != null) {
+            if(!surname_text.getText().toString().isEmpty())
+                docDO.setSurname(surname_text.getText().toString());
+            //savedInstanceState.putString(STATE_SURNAME, surname_text.getText().toString());
+        }
+
+        // Saving email field
+        if(email_text != null) {
+            Log.w("emailnotnull", email_text.getText().toString());
+            if(!email_text.getText().toString().isEmpty()){
+                docDO.setEmail(email_text.getText().toString());
+                Log.w("docdoval", docDO.getEmail().toString());
+            }
+            //savedInstanceState.putString(STATE_EMAIL, email_text.getText().toString());
+        }
+        // TODO:checkbox
+        // Saving active field
+        if(active_text != null) {
+            //savedInstanceState.putBoolean(STATE_ACTIVE, active_text);
+        }
+
+        // Saving phone_number field
+        if(phoneNumber_text != null) {
+            if(!phoneNumber_text.getText().toString().isEmpty())
+                docDO.setPhoneNumber(Double.parseDouble(phoneNumber_text.getText().toString()));
+            //savedInstanceState.putString(STATE_PHONE_NUMBER, phoneNumber_text.getText().toString());
+        }
+
+        // Saving address field
+        if(address_text != null) {
+            if(!address_text.getText().toString().isEmpty())
+                docDO.setAddress(address_text.getText().toString());
+            //savedInstanceState.putString(STATE_ADDRESS, address_text.getText().toString());
+        }
+
+        savedInstanceState.putParcelable("doctorDoParc", docDO);
+        // The call to super method must be at the end here
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
 
     public void setDoctor(DoctorDO doctor){
         this.docDO = doctor;
