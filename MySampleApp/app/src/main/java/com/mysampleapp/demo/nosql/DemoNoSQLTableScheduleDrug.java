@@ -79,6 +79,209 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
 
     /* ******** Secondary Named Index Query Inner Classes ******** */
 
+    public class DemoUserIdAlarmIdQueryWithPartitionKeyAndSortKeyCondition extends DemoNoSQLOperationBase {
+
+        private PaginatedQueryList<ScheduleDrugDO> results;
+        private Iterator<ScheduleDrugDO> resultsIterator;
+        DemoUserIdAlarmIdQueryWithPartitionKeyAndSortKeyCondition (final Context context) {
+            super(
+                context.getString(R.string.nosql_operation_title_index_query_by_partition_and_sort_condition_text),
+                context.getString(R.string.nosql_operation_example_index_query_by_partition_and_sort_condition_text,
+                    "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(),
+                    "alarmId", "1111500000"));
+        }
+
+        public boolean executeOperation() {
+            // Perform a query using a partition key and sort key condition.
+            final ScheduleDrugDO itemToFind = new ScheduleDrugDO();
+            itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+            final Condition sortKeyCondition = new Condition()
+                .withComparisonOperator(ComparisonOperator.LT.toString())
+
+                .withAttributeValueList(new AttributeValue().withN(Double.toString(1111500000.0)));
+            // Perform get using Partition key and sort key condition
+            DynamoDBQueryExpression<ScheduleDrugDO> queryExpression = new DynamoDBQueryExpression<ScheduleDrugDO>()
+                .withHashKeyValues(itemToFind)
+                .withRangeKeyCondition("alarmId", sortKeyCondition)
+                .withConsistentRead(false);
+            results = mapper.query(ScheduleDrugDO.class, queryExpression);
+            if (results != null) {
+                resultsIterator = results.iterator();
+                if (resultsIterator.hasNext()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public List<DemoNoSQLResult> getNextResultGroup() {
+            return getNextResultsGroupFromIterator(resultsIterator);
+        }
+
+        @Override
+        public void resetResults() {
+            resultsIterator = results.iterator();
+        }
+    }
+
+    public class DemoUserIdAlarmIdQueryWithPartitionKeyOnly extends DemoNoSQLOperationBase {
+
+        private PaginatedQueryList<ScheduleDrugDO> results;
+        private Iterator<ScheduleDrugDO> resultsIterator;
+
+        DemoUserIdAlarmIdQueryWithPartitionKeyOnly(final Context context) {
+            super(
+                context.getString(R.string.nosql_operation_title_index_query_by_partition_text),
+                context.getString(R.string.nosql_operation_example_index_query_by_partition_text,
+                    "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID()));
+        }
+
+        public boolean executeOperation() {
+            // Perform a query using a partition key and filter condition.
+            final ScheduleDrugDO itemToFind = new ScheduleDrugDO();
+            itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+
+            // Perform get using Partition key
+            DynamoDBQueryExpression<ScheduleDrugDO> queryExpression = new DynamoDBQueryExpression<ScheduleDrugDO>()
+                .withHashKeyValues(itemToFind)
+                .withConsistentRead(false);
+            results = mapper.query(ScheduleDrugDO.class, queryExpression);
+            if (results != null) {
+                resultsIterator = results.iterator();
+                if (resultsIterator.hasNext()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public List<DemoNoSQLResult> getNextResultGroup() {
+            return getNextResultsGroupFromIterator(resultsIterator);
+        }
+
+        @Override
+        public void resetResults() {
+            resultsIterator = results.iterator();
+        }
+    }
+
+    public class DemoUserIdAlarmIdQueryWithPartitionKeyAndFilterCondition extends DemoNoSQLOperationBase {
+
+        private PaginatedQueryList<ScheduleDrugDO> results;
+        private Iterator<ScheduleDrugDO> resultsIterator;
+
+        DemoUserIdAlarmIdQueryWithPartitionKeyAndFilterCondition (final Context context) {
+            super(
+                context.getString(R.string.nosql_operation_title_index_query_by_partition_and_filter_text),
+                context.getString(R.string.nosql_operation_example_index_query_by_partition_and_filter_text,
+                    "userId",AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(),
+                    "notes", "demo-notes-500000"));
+        }
+
+        public boolean executeOperation() {
+            // Perform a query using a partition key and filter condition.
+            final ScheduleDrugDO itemToFind = new ScheduleDrugDO();
+            itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+
+            // Use an expression names Map to avoid the potential for attribute names
+            // colliding with DynamoDB reserved words.
+            final Map <String, String> filterExpressionAttributeNames = new HashMap<>();
+            filterExpressionAttributeNames.put("#notes", "notes");
+
+            final Map<String, AttributeValue> filterExpressionAttributeValues = new HashMap<>();
+            filterExpressionAttributeValues.put(":Minnotes",
+                new AttributeValue().withS("demo-notes-500000"));
+
+            // Perform get using Partition key and sort key condition
+            DynamoDBQueryExpression<ScheduleDrugDO> queryExpression = new DynamoDBQueryExpression<ScheduleDrugDO>()
+                .withHashKeyValues(itemToFind)
+                .withFilterExpression("#notes > :Minnotes")
+                .withExpressionAttributeNames(filterExpressionAttributeNames)
+                .withExpressionAttributeValues(filterExpressionAttributeValues)
+                .withConsistentRead(false);
+            results = mapper.query(ScheduleDrugDO.class, queryExpression);
+            if (results != null) {
+                resultsIterator = results.iterator();
+                if (resultsIterator.hasNext()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public List<DemoNoSQLResult> getNextResultGroup() {
+            return getNextResultsGroupFromIterator(resultsIterator);
+        }
+
+        @Override
+        public void resetResults() {
+            resultsIterator = results.iterator();
+        }
+    }
+
+    public class DemoUserIdAlarmIdQueryWithPartitionKeySortKeyAndFilterCondition extends DemoNoSQLOperationBase {
+
+        private PaginatedQueryList<ScheduleDrugDO> results;
+        private Iterator<ScheduleDrugDO> resultsIterator;
+
+        DemoUserIdAlarmIdQueryWithPartitionKeySortKeyAndFilterCondition (final Context context) {
+            super(
+                context.getString(R.string.nosql_operation_title_index_query_by_partition_sort_condition_and_filter_text),
+                context.getString(R.string.nosql_operation_example_index_query_by_partition_sort_condition_and_filter_text,
+                    "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(),
+                    "alarmId", "1111500000",
+                    "notes", "demo-notes-500000"));
+        }
+
+        public boolean executeOperation() {
+            // Perform a query using a partition key, sort condition, and filter.
+            final ScheduleDrugDO itemToFind = new ScheduleDrugDO();
+            itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+            final Condition sortKeyCondition = new Condition()
+                .withComparisonOperator(ComparisonOperator.LT.toString())
+                .withAttributeValueList(new AttributeValue().withN(Double.toString(1111500000.0)));
+
+            // Use a map of expression names to avoid the potential for attribute names
+            // colliding with DynamoDB reserved words.
+            final Map<String, String> filterExpressionAttributeNames = new HashMap<>();
+            filterExpressionAttributeNames.put("#notes", "notes");
+
+            final Map<String, AttributeValue> filterExpressionAttributeValues = new HashMap<>();
+            filterExpressionAttributeValues.put(":Minnotes",
+                new AttributeValue().withS("demo-notes-500000"));
+
+            // Perform get using Partition key and sort key condition
+            DynamoDBQueryExpression<ScheduleDrugDO> queryExpression = new DynamoDBQueryExpression<ScheduleDrugDO>()
+                .withHashKeyValues(itemToFind)
+                .withRangeKeyCondition("alarmId", sortKeyCondition)
+                .withFilterExpression("#notes > :Minnotes")
+                .withExpressionAttributeNames(filterExpressionAttributeNames)
+                .withExpressionAttributeValues(filterExpressionAttributeValues)
+                .withConsistentRead(false);
+            results = mapper.query(ScheduleDrugDO.class, queryExpression);
+            if (results != null) {
+                resultsIterator = results.iterator();
+                if (resultsIterator.hasNext()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public List<DemoNoSQLResult> getNextResultGroup() {
+            return getNextResultsGroupFromIterator(resultsIterator);
+        }
+
+        @Override
+        public void resetResults() {
+            resultsIterator = results.iterator();
+        }
+    }
+
 
     public class DemoUserIdDrugQueryWithPartitionKeyAndSortKeyCondition extends DemoNoSQLOperationBase {
 
@@ -155,10 +358,6 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
                 }
             }
             return false;
-        }
-
-        public ScheduleDrugDO[] getResultArray(){
-            return results.toArray(new ScheduleDrugDO[0]);
         }
 
         @Override
@@ -297,7 +496,7 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
         DemoScanWithFilter(final Context context) {
             super(context.getString(R.string.nosql_operation_title_scan_with_filter),
                 String.format(context.getString(R.string.nosql_operation_example_scan_with_filter),
-                    "drug", "demo-drug-500000"));
+                    "alarmId", "1111500000"));
         }
 
         @Override
@@ -305,13 +504,13 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
             // Use an expression names Map to avoid the potential for attribute names
             // colliding with DynamoDB reserved words.
             final Map <String, String> filterExpressionAttributeNames = new HashMap<>();
-            filterExpressionAttributeNames.put("#drug", "drug");
+            filterExpressionAttributeNames.put("#alarmId", "alarmId");
 
             final Map<String, AttributeValue> filterExpressionAttributeValues = new HashMap<>();
-            filterExpressionAttributeValues.put(":Mindrug",
-                new AttributeValue().withS("demo-drug-500000"));
+            filterExpressionAttributeValues.put(":MinalarmId",
+                new AttributeValue().withN("1111500000"));
             final DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
-                .withFilterExpression("#drug > :Mindrug")
+                .withFilterExpression("#alarmId > :MinalarmId")
                 .withExpressionAttributeNames(filterExpressionAttributeNames)
                 .withExpressionAttributeValues(filterExpressionAttributeValues);
 
@@ -433,7 +632,7 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
 
     @Override
     public int getNumIndexes() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -442,6 +641,7 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
         final ScheduleDrugDO firstItem = new ScheduleDrugDO();
 
         firstItem.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+        firstItem.setAlarmId(DemoSampleDataGenerator.getRandomSampleNumber());
         firstItem.setDay(DemoSampleDataGenerator.getSampleStringSet());
         firstItem.setDrug(
             DemoSampleDataGenerator.getRandomSampleString("drug"));
@@ -461,6 +661,7 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
         for (int count = 0; count < SAMPLE_DATA_ENTRIES_PER_INSERT-1; count++) {
             final ScheduleDrugDO item = new ScheduleDrugDO();
             item.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+            item.setAlarmId(DemoSampleDataGenerator.getRandomSampleNumber());
             item.setDay(DemoSampleDataGenerator.getSampleStringSet());
             item.setDrug(DemoSampleDataGenerator.getRandomSampleString("drug"));
             item.setHour(DemoSampleDataGenerator.getSampleNumberSet());
@@ -541,6 +742,13 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
             noSQLOperationsList.add(new DemoGetWithPartitionKey(context));
 
         noSQLOperationsList.add(new DemoNoSQLOperationListHeader(
+            context.getString(R.string.nosql_operation_header_secondary_queries, "userIdAlarmId")));
+
+        noSQLOperationsList.add(new DemoUserIdAlarmIdQueryWithPartitionKeyOnly(context));
+        noSQLOperationsList.add(new DemoUserIdAlarmIdQueryWithPartitionKeyAndFilterCondition(context));
+        noSQLOperationsList.add(new DemoUserIdAlarmIdQueryWithPartitionKeyAndSortKeyCondition(context));
+        noSQLOperationsList.add(new DemoUserIdAlarmIdQueryWithPartitionKeySortKeyAndFilterCondition(context));
+        noSQLOperationsList.add(new DemoNoSQLOperationListHeader(
             context.getString(R.string.nosql_operation_header_secondary_queries, "userIdDrug")));
 
         noSQLOperationsList.add(new DemoUserIdDrugQueryWithPartitionKeyOnly(context));
@@ -572,7 +780,8 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
     }
 
     @Override
-    public DemoNoSQLOperationListItem getOperationByName(Context context,String operation){
-        return new DemoUserIdDrugQueryWithPartitionKeyOnly(context);
+    public DemoNoSQLOperationListItem getOperationByName(Context context, String operation) {
+        return new DemoUserIdAlarmIdQueryWithPartitionKeyOnly(context);
+        //return new DemoUserIdDrugQueryWithPartitionKeyOnly(context);
     }
 }

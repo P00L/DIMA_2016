@@ -2,7 +2,6 @@ package com.mysampleapp.demo.nosql;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -25,13 +24,13 @@ public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
     @Override
     public void updateItem() {
         final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-        final String originalValue = result.getDrug();
-        result.setDrug(DemoSampleDataGenerator.getRandomSampleString("drug"));
+        final double originalValue = result.getAlarmId();
+        result.setAlarmId(DemoSampleDataGenerator.getRandomSampleNumber());
         try {
             mapper.save(result);
         } catch (final AmazonClientException ex) {
             // Restore original data if save fails, and re-throw.
-            result.setDrug(originalValue);
+            result.setAlarmId(originalValue);
             throw ex;
         }
     }
@@ -96,6 +95,8 @@ public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
         final TextView resultNumberTextView;
         final TextView userIdKeyTextView;
         final TextView userIdValueTextView;
+        final TextView alarmIdKeyTextView;
+        final TextView alarmIdValueTextView;
         final TextView dayKeyTextView;
         final TextView dayValueTextView;
         final TextView drugKeyTextView;
@@ -117,6 +118,12 @@ public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
             setKeyAndValueTextViewStyles(userIdKeyTextView, userIdValueTextView);
             layout.addView(userIdKeyTextView);
             layout.addView(userIdValueTextView);
+
+            alarmIdKeyTextView = new TextView(context);
+            alarmIdValueTextView = new TextView(context);
+            setKeyAndValueTextViewStyles(alarmIdKeyTextView, alarmIdValueTextView);
+            layout.addView(alarmIdKeyTextView);
+            layout.addView(alarmIdValueTextView);
 
             dayKeyTextView = new TextView(context);
             dayValueTextView = new TextView(context);
@@ -148,22 +155,27 @@ public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
             userIdKeyTextView = (TextView) layout.getChildAt(1);
             userIdValueTextView = (TextView) layout.getChildAt(2);
 
-            dayKeyTextView = (TextView) layout.getChildAt(3);
-            dayValueTextView = (TextView) layout.getChildAt(4);
+            alarmIdKeyTextView = (TextView) layout.getChildAt(3);
+            alarmIdValueTextView = (TextView) layout.getChildAt(4);
 
-            drugKeyTextView = (TextView) layout.getChildAt(5);
-            drugValueTextView = (TextView) layout.getChildAt(6);
+            dayKeyTextView = (TextView) layout.getChildAt(5);
+            dayValueTextView = (TextView) layout.getChildAt(6);
 
-            hourKeyTextView = (TextView) layout.getChildAt(7);
-            hourValueTextView = (TextView) layout.getChildAt(8);
+            drugKeyTextView = (TextView) layout.getChildAt(7);
+            drugValueTextView = (TextView) layout.getChildAt(8);
 
-            notesKeyTextView = (TextView) layout.getChildAt(9);
-            notesValueTextView = (TextView) layout.getChildAt(10);
+            hourKeyTextView = (TextView) layout.getChildAt(9);
+            hourValueTextView = (TextView) layout.getChildAt(10);
+
+            notesKeyTextView = (TextView) layout.getChildAt(11);
+            notesValueTextView = (TextView) layout.getChildAt(12);
         }
 
         resultNumberTextView.setText(String.format("#%d", + position+1));
         userIdKeyTextView.setText("userId");
         userIdValueTextView.setText(result.getUserId());
+        alarmIdKeyTextView.setText("alarmId");
+        alarmIdValueTextView.setText("" + result.getAlarmId().longValue());
         dayKeyTextView.setText("day");
         dayValueTextView.setText(result.getDay().toString());
         drugKeyTextView.setText("drug");

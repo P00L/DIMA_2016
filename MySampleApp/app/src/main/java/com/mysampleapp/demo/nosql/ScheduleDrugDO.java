@@ -2,6 +2,8 @@ package com.mysampleapp.demo.nosql;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBIndexHashKey;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBIndexRangeKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 
 import java.util.Set;
@@ -10,19 +12,28 @@ import java.util.Set;
 
 public class ScheduleDrugDO {
     private String _userId;
+    private Double _alarmId;
     private Set<String> _day;
     private String _drug;
     private Set<Double> _hour;
     private String _notes;
 
     @DynamoDBHashKey(attributeName = "userId")
-    @DynamoDBAttribute(attributeName = "userId")
+    @DynamoDBIndexHashKey(attributeName = "userId", globalSecondaryIndexNames = {"userIdAlarmId","userIdDrug",})
     public String getUserId() {
         return _userId;
     }
 
     public void setUserId(final String _userId) {
         this._userId = _userId;
+    }
+    @DynamoDBIndexRangeKey(attributeName = "alarmId", globalSecondaryIndexName = "userIdAlarmId")
+    public Double getAlarmId() {
+        return _alarmId;
+    }
+
+    public void setAlarmId(final Double _alarmId) {
+        this._alarmId = _alarmId;
     }
     @DynamoDBAttribute(attributeName = "day")
     public Set<String> getDay() {
@@ -32,7 +43,7 @@ public class ScheduleDrugDO {
     public void setDay(final Set<String> _day) {
         this._day = _day;
     }
-    @DynamoDBAttribute(attributeName = "drug")
+    @DynamoDBIndexRangeKey(attributeName = "drug", globalSecondaryIndexName = "userIdDrug")
     public String getDrug() {
         return _drug;
     }
