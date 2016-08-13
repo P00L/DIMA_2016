@@ -8,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
@@ -25,6 +26,7 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.mysampleapp.R;
+import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DoctorDO;
 
 import java.util.regex.Pattern;
@@ -126,6 +128,25 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         activity.getSupportActionBar().setTitle(R.string.add_doc);
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.doc_menu);
+
+        DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        ((HomeActivity)activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
+        ((HomeActivity)activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // handle toolbar home button click
+                //TODO FORSE MEGLIO POPPARE DAL BACK STACK DA DOVE SI ARRIVA VISTO CHE QUI SI ARRIVA DA TRE PARTI
+                Fragment fragment = DocListFragment.newInstance();
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
