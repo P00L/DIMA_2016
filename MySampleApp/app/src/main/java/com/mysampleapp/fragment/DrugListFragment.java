@@ -104,7 +104,7 @@ public class DrugListFragment extends Fragment  {
 
         // set nav menu item checked
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
-        navigationView.setCheckedItem(R.id.drug_menu);
+        navigationView.setCheckedItem(R.id.nav_drug);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -116,7 +116,6 @@ public class DrugListFragment extends Fragment  {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
-                Log.w("FIRST","new click");
                 DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);

@@ -36,6 +36,8 @@ import com.mysampleapp.fragment.DrugFormFragment;
 import com.mysampleapp.fragment.DrugFragment;
 import com.mysampleapp.fragment.DrugListFragment;
 import com.mysampleapp.fragment.HomeFragment;
+import com.mysampleapp.fragment.ScheduleFormFragment;
+import com.mysampleapp.fragment.ScheduleListFragment;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -45,6 +47,8 @@ public class HomeActivity extends AppCompatActivity
         DocFormFragment.OnFragmentInteractionListener,
         DrugFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
+        ScheduleListFragment.OnFragmentInteractionListener,
+        ScheduleFormFragment.OnFragmentInteractionListener,
         View.OnClickListener {
 
     private Button signOutButton;
@@ -119,7 +123,7 @@ public class HomeActivity extends AppCompatActivity
                             .addToBackStack(null)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                             .commit();
-                    navigationView.setCheckedItem(R.id.nav_gallery);
+                    navigationView.setCheckedItem(R.id.nav_home);
                     break;
             }
         } else {
@@ -166,7 +170,7 @@ public class HomeActivity extends AppCompatActivity
         supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         switch (id) {
-            case R.id.doc_menu:
+            case R.id.nav_doc:
                 fragment = DocListFragment.newInstance();
                 supportFragmentManager
                         .beginTransaction()
@@ -175,7 +179,7 @@ public class HomeActivity extends AppCompatActivity
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
                 break;
-            case R.id.drug_menu:
+            case R.id.nav_drug:
                 fragment = DrugListFragment.newInstance();
                 supportFragmentManager
                         .beginTransaction()
@@ -184,7 +188,7 @@ public class HomeActivity extends AppCompatActivity
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
                 break;
-            case R.id.nav_camera:
+            case R.id.nav_sql:
                 final DemoConfiguration.DemoItem demo_item = new DemoConfiguration.DemoItem(R.string.main_fragment_title_nosql_database, R.mipmap.database,
                         R.string.feature_nosql_database_demo_button, NoSQLSelectTableDemoFragment.class);
                 fragment = Fragment.instantiate(this, demo_item.fragmentClassName);
@@ -195,8 +199,17 @@ public class HomeActivity extends AppCompatActivity
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
                 break;
-            case R.id.nav_gallery:
+            case R.id.nav_home:
                 fragment = HomeFragment.newInstance();
+                supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                break;
+            case R.id.nav_schedule:
+                fragment = ScheduleListFragment.newInstance();
                 supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)

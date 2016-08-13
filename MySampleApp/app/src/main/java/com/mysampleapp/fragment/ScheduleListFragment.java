@@ -7,8 +7,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,55 +18,51 @@ import android.widget.TextView;
 
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
-import com.mysampleapp.demo.nosql.DrugDO;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link DrugFragment.OnFragmentInteractionListener} interface
+ * {@link ScheduleListFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link DrugFragment#newInstance} factory method to
+ * Use the {@link ScheduleListFragment#newInstance} factory method to
  * create an instance of this fragment.
- *
  */
-public class DrugFragment extends Fragment {
+public class ScheduleListFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
-    private DrugDO drugDO;
 
     private AppCompatActivity activity;
+    private OnFragmentInteractionListener mListener;
+
+    public ScheduleListFragment() {
+        // Required empty public constructor
+    }
 
 
     // TODO: Rename and change types and number of parameters
-    public static DrugFragment newInstance(String param1, String param2) {
-        DrugFragment fragment = new DrugFragment();
+    public static ScheduleListFragment newInstance() {
+        ScheduleListFragment fragment = new ScheduleListFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
-    }
-    public DrugFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_drug, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_schedule_list, container, false);
     }
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (savedInstanceState != null){
-            drugDO = savedInstanceState.getParcelable("drugDoParc");
-        }
+
         activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
         if (!fab.isShown())
@@ -72,8 +70,7 @@ public class DrugFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DrugFormFragment fragment = DrugFormFragment.newInstance();
-                fragment.setDrug(drugDO);
+                Fragment fragment = ScheduleFormFragment.newInstance();
                 activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
@@ -83,31 +80,28 @@ public class DrugFragment extends Fragment {
             }
         });
 
-        activity.getSupportActionBar().setTitle(R.string.drug);
+        activity.getSupportActionBar().setTitle(R.string.scheduler);
 
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
-        navigationView.setCheckedItem(R.id.nav_drug);
+        navigationView.setCheckedItem(R.id.nav_schedule);
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        ((HomeActivity)activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        ((HomeActivity)activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_hamburger);
         ((HomeActivity)activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
-                Fragment fragment = DrugListFragment.newInstance();
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content_frame, fragment)
-                        .addToBackStack(null)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
+                DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                } else {
+                    drawer.openDrawer(GravityCompat.START);
+                }
 
             }
         });
 
-        TextView textView = (TextView) view.findViewById(R.id.drug_name);
-        textView.setText(drugDO.getName());
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -139,7 +133,7 @@ public class DrugFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -148,18 +142,4 @@ public class DrugFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
-    public void setResult(final DrugDO result) {
-        this.drugDO = result;
-    }
-
-    @Override
-
-    public void onSaveInstanceState(Bundle outState) {
-
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("drugDoParc", drugDO);
-
-    }
-
 }

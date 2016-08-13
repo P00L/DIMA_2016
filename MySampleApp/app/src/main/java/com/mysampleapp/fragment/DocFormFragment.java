@@ -127,7 +127,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
 
         activity.getSupportActionBar().setTitle(R.string.add_doc);
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
-        navigationView.setCheckedItem(R.id.doc_menu);
+        navigationView.setCheckedItem(R.id.nav_doc);
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);

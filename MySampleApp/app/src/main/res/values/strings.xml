@@ -182,5 +182,6 @@
     <string name="home">home</string>
     <string name="doctor">doctor</string>
     <string name="title_activity_doc_list">DocListActivity</string>
+    <string name="scheduler">scheduler</string>
 
 </resources>

@@ -123,7 +123,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         activity.getSupportActionBar().setTitle(R.string.add_drug);
 
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
-        navigationView.setCheckedItem(R.id.drug_menu);
+        navigationView.setCheckedItem(R.id.nav_drug);
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
