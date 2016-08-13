@@ -11,15 +11,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mysampleapp.R;
-import com.mysampleapp.demo.nosql.DrugDO;
-import com.mysampleapp.fragment.DrugFragment;
+import com.mysampleapp.demo.nosql.ScheduleDrugDO;
+import com.mysampleapp.fragment.ScheduleFragment;
 
-public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
+
+public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> {
 
     private Context mContext;
-    private DrugDO[] mList;
+    private ScheduleDrugDO[] mList;
 
-    public DrugAdapter(Context contexts, DrugDO[] list) {
+    public ScheduleAdapter(Context contexts, ScheduleDrugDO[] list) {
         this.mContext = contexts;
         this.mList = list;
     }
@@ -27,13 +28,13 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View itemView = inflater.inflate(R.layout.item_drug, parent, false);
+        View itemView = inflater.inflate(R.layout.item_schedule, parent, false);
         return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.titleTextView.setText(mList[position].getName());
+        holder.titleTextView.setText(mList[position].getDrug());
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
@@ -41,7 +42,7 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
                     Toast.makeText(mContext, "#" + position + " - " + mList[position] + " (Long click)", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(mContext, "#" + position + " - " + mList[position], Toast.LENGTH_SHORT).show();
-                    DrugFragment fragment = DrugFragment.newInstance(""+position,"asd");
+                    ScheduleFragment fragment = ScheduleFragment.newInstance();
                     fragment.setResult(mList[position]);
                     AppCompatActivity activity = (AppCompatActivity) mContext;
                     activity.getSupportFragmentManager()

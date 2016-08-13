@@ -1,7 +1,9 @@
 package com.mysampleapp.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -10,14 +12,20 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
+import com.mysampleapp.adapter.ScheduleAdapter;
+import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
+import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
+import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
+import com.mysampleapp.demo.nosql.DemoNoSQLTableScheduleDrug;
+import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +40,12 @@ public class ScheduleListFragment extends Fragment {
 
     private AppCompatActivity activity;
     private OnFragmentInteractionListener mListener;
+    RecyclerView mRecyclerView;
+    RecyclerView.Adapter mAdapter;
+    RecyclerView.LayoutManager mLayoutManager;
+    ScheduleDrugDO[] items;
+    ProgressDialog mProgressDialog;
+    DemoNoSQLOperation operation;
 
     public ScheduleListFragment() {
         // Required empty public constructor
@@ -56,7 +70,14 @@ public class ScheduleListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_schedule_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_schedule_list, container, false);
+        activity = (AppCompatActivity) getActivity();
+        DemoNoSQLTableBase demoTable = DemoNoSQLTableFactory.instance(getContext())
+                .getNoSQLTableByTableName("ScheduleDrug");
+        operation = (DemoNoSQLOperation) demoTable.getOperationByName(getContext(), "ASD");
+
+        new MyAsyncTask().execute();
+        return view;
     }
 
     @Override
@@ -85,10 +106,13 @@ public class ScheduleListFragment extends Fragment {
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_schedule);
 
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        ((HomeActivity)activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_hamburger);
-        ((HomeActivity)activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
+        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_hamburger);
+        ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
@@ -142,4 +166,43 @@ public class ScheduleListFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        public MyAsyncTask() {
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Create a progressdialog
+            mProgressDialog = new ProgressDialog(getActivity());
+            // Set progressdialog title
+            mProgressDialog.setTitle("We are working for you");
+            // Set progressdialog message
+            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setIndeterminate(false);
+            // Show progressdialog
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            operation.executeOperation();
+            items = ((DemoNoSQLTableScheduleDrug.DemoUserIdAlarmIdQueryWithPartitionKeyOnly) operation).getResultArray();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void args) {
+
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mAdapter = new ScheduleAdapter(getContext(), items);
+            mRecyclerView.setAdapter(mAdapter);
+            mProgressDialog.dismiss();
+        }
+    }
 }
+

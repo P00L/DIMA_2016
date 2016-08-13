@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mysampleapp.R;
+import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,35 +20,19 @@ import com.mysampleapp.R;
  * create an instance of this fragment.
  */
 public class ScheduleFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private ScheduleDrugDO scheduleDrugDO;
 
     public ScheduleFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ScheduleFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
-    public static ScheduleFragment newInstance(String param1, String param2) {
+    public static ScheduleFragment newInstance() {
         ScheduleFragment fragment = new ScheduleFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        Bundle args = new Bundle();;
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,10 +40,6 @@ public class ScheduleFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -90,6 +71,11 @@ public class ScheduleFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void setResult(ScheduleDrugDO scheduleDrugDO) {
+        this.scheduleDrugDO = scheduleDrugDO;
+
     }
 
     /**

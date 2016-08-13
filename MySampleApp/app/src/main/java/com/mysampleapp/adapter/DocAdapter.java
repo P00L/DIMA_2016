@@ -12,9 +12,7 @@ import android.widget.Toast;
 
 import com.mysampleapp.R;
 import com.mysampleapp.demo.nosql.DoctorDO;
-import com.mysampleapp.demo.nosql.DrugDO;
 import com.mysampleapp.fragment.DocFragment;
-import com.mysampleapp.fragment.DrugFragment;
 
 public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
@@ -29,7 +27,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View itemView = inflater.inflate(R.layout.doc_item, parent, false);
+        View itemView = inflater.inflate(R.layout.item_doc, parent, false);
         return new ViewHolder(itemView);
     }
 

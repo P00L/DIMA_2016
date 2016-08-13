@@ -183,5 +183,9 @@
     <string name="doctor">doctor</string>
     <string name="title_activity_doc_list">DocListActivity</string>
     <string name="scheduler">scheduler</string>
+    <string name="preference_file_name">com.mySampleapp.PREFERENCE_FILE_KEY</string>
+    <string name="pending_alarm">pending_alarm</string>
+    <string name="add_schedule">add schedule</string>
+    <string name="alarm_id">alarm_id</string>
 
 </resources>

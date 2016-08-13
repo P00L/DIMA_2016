@@ -37,18 +37,20 @@ import com.mysampleapp.fragment.DrugFragment;
 import com.mysampleapp.fragment.DrugListFragment;
 import com.mysampleapp.fragment.HomeFragment;
 import com.mysampleapp.fragment.ScheduleFormFragment;
+import com.mysampleapp.fragment.ScheduleFragment;
 import com.mysampleapp.fragment.ScheduleListFragment;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         DrugListFragment.OnFragmentInteractionListener,
-        DocListFragment.OnFragmentInteractionListener,
         DrugFormFragment.OnFragmentInteractionListener,
-        DocFormFragment.OnFragmentInteractionListener,
         DrugFragment.OnFragmentInteractionListener,
+        DocListFragment.OnFragmentInteractionListener,
+        DocFormFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
         ScheduleListFragment.OnFragmentInteractionListener,
         ScheduleFormFragment.OnFragmentInteractionListener,
+        ScheduleFragment.OnFragmentInteractionListener,
         View.OnClickListener {
 
     private Button signOutButton;
@@ -102,7 +104,7 @@ public class HomeActivity extends AppCompatActivity
 
         //getting the intent to know wich fragment start
         Intent intent = getIntent();
-        String message = intent.getStringExtra(SplashActivity.FRAGMENT_MESSAGE);
+        String message = intent.getStringExtra(SplashActivity.ACTIVITY_HOME_FRAGMENT_EXTRA);
 
         // sign in functionality
         AWSMobileClient.initializeMobileClientIfNecessary(this);
