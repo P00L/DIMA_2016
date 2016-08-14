@@ -187,5 +187,6 @@
     <string name="pending_alarm">pending_alarm</string>
     <string name="add_schedule">add schedule</string>
     <string name="alarm_id">alarm_id</string>
+    <string name="edit_doc">edit doctor</string>
 
 </resources>

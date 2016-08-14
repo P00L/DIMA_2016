@@ -30,6 +30,7 @@ import com.amazonaws.mobile.user.IdentityProvider;
 import com.mysampleapp.R;
 import com.mysampleapp.demo.DemoConfiguration;
 import com.mysampleapp.demo.nosql.NoSQLSelectTableDemoFragment;
+import com.mysampleapp.fragment.DocEditFragment;
 import com.mysampleapp.fragment.DocFormFragment;
 import com.mysampleapp.fragment.DocListFragment;
 import com.mysampleapp.fragment.DrugFormFragment;
@@ -47,6 +48,7 @@ public class HomeActivity extends AppCompatActivity
         DrugFragment.OnFragmentInteractionListener,
         DocListFragment.OnFragmentInteractionListener,
         DocFormFragment.OnFragmentInteractionListener,
+        DocEditFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
         ScheduleListFragment.OnFragmentInteractionListener,
         ScheduleFormFragment.OnFragmentInteractionListener,
