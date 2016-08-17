@@ -189,5 +189,6 @@
     <string name="alarm_id">alarm_id</string>
     <string name="edit_doc">edit doctor</string>
     <string name="edit_drug">edit drug</string>
+    <string name="checkbox_active">active</string>
 
 </resources>

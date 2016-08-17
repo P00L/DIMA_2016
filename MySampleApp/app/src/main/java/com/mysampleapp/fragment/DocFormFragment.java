@@ -19,8 +19,10 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
@@ -59,9 +61,8 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     private EditText surname_text;
     private final static int EMAIL_STEP = 2;
     private EditText email_text;
-    // diventa una checkbox
     private final static int ACTIVE_STEP = 3;
-    private EditText active_text;
+    private CheckBox cbactive;
     private final static int PHONE_NUMBER_STEP = 4;
     private EditText phoneNumber_text;
     private final static int ADDRESS_STEP = 5;
@@ -101,6 +102,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             if(docDO == null)
                 docDO = new DoctorDO();
         }
+
         return view;
     }
 
@@ -324,12 +326,39 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
 
     private View createActiveStep() {
         //TODO convertire a checkbox o simile
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View rootView = inflater.inflate(R.layout.checkbox_active, null ,false);
+
+        cbactive = (CheckBox)rootView.findViewById(R.id.checkbox_active);
+
+            if(docDO.getActive()!=null){
+                if(docDO.getActive())
+                    cbactive.setChecked(true);
+                else
+                    cbactive.setChecked(false);
+            }
+
+
+        cbactive.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                if(((CheckBox)v).isChecked()){
+                    Toast.makeText(getContext(), "checkato", Toast.LENGTH_SHORT).show();
+                }
+                    else {}
+                    }
+                });
+        /*
         // Here we generate programmatically the view that will be added by the system to the step content layout
         active_text = new EditText(getActivity());
         active_text.setSingleLine(true);
         active_text.setHint("active");
         active_text.setInputType(InputType.TYPE_CLASS_TEXT);
-        return active_text;
+        */
+        //return active_text;
+        return rootView;
     }
 
     private View createSPhoneNumberStep() {
@@ -436,8 +465,11 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         docDO.setEmail(email_text.getText().toString());
         //Log.w("emailtextvalue", email_text.getText().toString());
         //Log.w("emailvalue", docDO.getEmail().toString());
-        // TODO FIX
-        docDO.setActive(Boolean.TRUE);
+        // TODO FIX controllo
+        if(cbactive.isChecked())
+            docDO.setActive(Boolean.TRUE);
+        else
+            docDO.setActive(Boolean.FALSE);
         tmp = phoneNumber_text.getText().toString();
         docDO.setPhoneNumber(Double.parseDouble(tmp));
         docDO.setAddress(address_text.getText().toString());
@@ -544,14 +576,12 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         if(name_text != null) {
             if(!name_text.getText().toString().isEmpty())
                 docDO.setName(name_text.getText().toString());
-            //savedInstanceState.putString(STATE_NAME, name_text.getText().toString());
         }
 
         // Saving surname field
         if(surname_text != null) {
             if(!surname_text.getText().toString().isEmpty())
                 docDO.setSurname(surname_text.getText().toString());
-            //savedInstanceState.putString(STATE_SURNAME, surname_text.getText().toString());
         }
 
         // Saving email field
@@ -561,26 +591,26 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                 docDO.setEmail(email_text.getText().toString());
                 Log.w("docdoval", docDO.getEmail().toString());
             }
-            //savedInstanceState.putString(STATE_EMAIL, email_text.getText().toString());
         }
         // TODO:checkbox
         // Saving active field
-        if(active_text != null) {
-            //savedInstanceState.putBoolean(STATE_ACTIVE, active_text);
+        if(cbactive != null) {
+            if(cbactive.isChecked())
+                docDO.setActive(true);
+            else
+                docDO.setActive(false);
         }
 
         // Saving phone_number field
         if(phoneNumber_text != null) {
             if(!phoneNumber_text.getText().toString().isEmpty())
                 docDO.setPhoneNumber(Double.parseDouble(phoneNumber_text.getText().toString()));
-            //savedInstanceState.putString(STATE_PHONE_NUMBER, phoneNumber_text.getText().toString());
         }
 
         // Saving address field
         if(address_text != null) {
             if(!address_text.getText().toString().isEmpty())
                 docDO.setAddress(address_text.getText().toString());
-            //savedInstanceState.putString(STATE_ADDRESS, address_text.getText().toString());
         }
 
         savedInstanceState.putParcelable("doctorDoParc", docDO);
