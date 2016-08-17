@@ -188,5 +188,6 @@
     <string name="add_schedule">add schedule</string>
     <string name="alarm_id">alarm_id</string>
     <string name="edit_doc">edit doctor</string>
+    <string name="edit_drug">edit drug</string>
 
 </resources>

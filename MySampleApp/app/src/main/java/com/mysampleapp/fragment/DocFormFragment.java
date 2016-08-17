@@ -51,6 +51,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     private VerticalStepperFormLayout verticalStepperForm;
     private DynamoDBMapper mapper;
     private DoctorDO docDO;
+    private boolean editMode = false;
 
     private static final int NAME_STEP = 0;
     private EditText name_text;
@@ -91,15 +92,15 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_doc_form, container, false);
-        //#####################################################################
         if (savedInstanceState != null){
             Log.w("entrato", "entrato");
             docDO = savedInstanceState.getParcelable("doctorDoParc");
+            editMode = savedInstanceState.getBoolean("editMode");
         }
         else{
-            docDO = new DoctorDO();
+            if(docDO == null)
+                docDO = new DoctorDO();
         }
-        //#####################################################################
         return view;
     }
 
@@ -125,7 +126,10 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
 
         fab.hide();
 
-        activity.getSupportActionBar().setTitle(R.string.add_doc);
+        if(editMode)
+            activity.getSupportActionBar().setTitle(R.string.edit_doc);
+        else
+            activity.getSupportActionBar().setTitle(R.string.add_doc);
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_doc);
 
@@ -430,8 +434,8 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         docDO.setName(name_text.getText().toString());
         docDO.setSurname(surname_text.getText().toString());
         docDO.setEmail(email_text.getText().toString());
-        Log.w("emailtextvalue", email_text.getText().toString());
-        Log.w("emailvalue", docDO.getEmail().toString());
+        //Log.w("emailtextvalue", email_text.getText().toString());
+        //Log.w("emailvalue", docDO.getEmail().toString());
         // TODO FIX
         docDO.setActive(Boolean.TRUE);
         tmp = phoneNumber_text.getText().toString();
@@ -533,6 +537,8 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
 
+        if(docDO == null)
+            docDO = new DoctorDO();
         docDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
         // Saving name field
         if(name_text != null) {
@@ -578,11 +584,14 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         }
 
         savedInstanceState.putParcelable("doctorDoParc", docDO);
+        savedInstanceState.putBoolean("editMode", editMode);
         // The call to super method must be at the end here
         super.onSaveInstanceState(savedInstanceState);
     }
 
-
+    public void setEditMode(boolean editMode) {
+        this.editMode = editMode;
+    }
     public void setDoctor(DoctorDO doctor){
         this.docDO = doctor;
     }

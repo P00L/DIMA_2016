@@ -47,6 +47,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
     private VerticalStepperFormLayout verticalStepperForm;
     private DynamoDBMapper mapper;
     private DrugDO drugDO;
+    private boolean editMode = false;
 
     private final static int NAME_STEP = 0;
     private EditText name_text;
@@ -84,15 +85,15 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_drug_form, container, false);
-        //#####################################################################
         if (savedInstanceState != null){
             Log.w("entrato", "entrato");
             drugDO = savedInstanceState.getParcelable("drugDoParc");
+            editMode = savedInstanceState.getBoolean("editMode");
         }
         else{
-            drugDO = new DrugDO();
+            if(drugDO == null)
+                drugDO = new DrugDO();
         }
-        //#####################################################################
         return view;
     }
 
@@ -120,8 +121,10 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         if (fab.isShown())
             fab.hide();
 
-        activity.getSupportActionBar().setTitle(R.string.add_drug);
-
+        if(editMode)
+            activity.getSupportActionBar().setTitle(R.string.edit_drug);
+        else
+            activity.getSupportActionBar().setTitle(R.string.add_drug);
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_drug);
 
@@ -508,6 +511,8 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
 
+        if(drugDO == null)
+            drugDO = new DrugDO();
         drugDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
         // Saving name field
         if(name_text != null) {
@@ -545,10 +550,14 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         }
 
         savedInstanceState.putParcelable("drugDoParc", drugDO);
+        savedInstanceState.putBoolean("editMode", editMode);
         // The call to super method must be at the end here
         super.onSaveInstanceState(savedInstanceState);
     }
 
+    public void setEditMode(boolean editMode) {
+        this.editMode = editMode;
+    }
     public void setDrug(DrugDO drug){
         this.drugDO = drug;
     }

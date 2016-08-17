@@ -36,7 +36,7 @@ public class DrugFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static DrugFragment newInstance(String param1, String param2) {
+    public static DrugFragment newInstance() {
         DrugFragment fragment = new DrugFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -74,6 +74,7 @@ public class DrugFragment extends Fragment {
             public void onClick(View view) {
                 DrugFormFragment fragment = DrugFormFragment.newInstance();
                 fragment.setDrug(drugDO);
+                fragment.setEditMode(true);
                 activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
@@ -105,7 +106,6 @@ public class DrugFragment extends Fragment {
 
             }
         });
-
         TextView textView = (TextView) view.findViewById(R.id.drug_name);
         textView.setText(drugDO.getName());
     }
@@ -154,12 +154,9 @@ public class DrugFragment extends Fragment {
     }
 
     @Override
-
     public void onSaveInstanceState(Bundle outState) {
-
         super.onSaveInstanceState(outState);
         outState.putParcelable("drugDoParc", drugDO);
-
     }
 
 }

@@ -8,12 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DoctorDO;
@@ -22,7 +20,6 @@ import com.mysampleapp.demo.nosql.DoctorDO;
 public class DocFragment extends Fragment {
 
     private DoctorDO doctorDO;
-
     private AppCompatActivity activity;
 
     public DocFragment() {
@@ -47,7 +44,6 @@ public class DocFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_doc, container, false);
-
         return view;
     }
 
@@ -57,7 +53,7 @@ public class DocFragment extends Fragment {
         if (savedInstanceState != null){
            doctorDO = savedInstanceState.getParcelable("doctorDoParc");
         }
-        Log.w("docdo", doctorDO.getName());
+        //Log.w("docdo", doctorDO.getName());
         activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
         if (!fab.isShown())
@@ -66,8 +62,9 @@ public class DocFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //il fab manda al form di edit e passa doctorDO come parametro da salvare nel Bundle
-                DocEditFragment fragment = DocEditFragment.newInstance(doctorDO);
-                //fragment.setDoctor(doctorDO);
+                DocFormFragment fragment = DocFormFragment.newInstance();
+                fragment.setDoctor(doctorDO);
+                fragment.setEditMode(true);
                 activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
@@ -121,12 +118,9 @@ public class DocFragment extends Fragment {
     }
 
     @Override
-
     public void onSaveInstanceState(Bundle outState) {
-
         super.onSaveInstanceState(outState);
         outState.putParcelable("doctorDoParc", doctorDO);
-
     }
 
 }
