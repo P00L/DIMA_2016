@@ -2,9 +2,15 @@ package com.mysampleapp.fragment;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -12,18 +18,34 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.mobile.AWSMobileClient;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.mysampleapp.AlarmReceiver;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
+import com.mysampleapp.demo.nosql.ScheduleDrugDO;
+
+import ernestoyaquello.com.verticalstepperform.VerticalStepperFormLayout;
+import ernestoyaquello.com.verticalstepperform.interfaces.VerticalStepperForm;
 
 
 /**
@@ -34,11 +56,47 @@ import com.mysampleapp.activity.HomeActivity;
  * Use the {@link ScheduleFormFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ScheduleFormFragment extends Fragment {
+public class ScheduleFormFragment extends Fragment implements VerticalStepperForm {
 
     public final static String ALARM_ID_EXTRA = "alarm_id";
+    public final static String DRUG_EXTRA = "drug_name";
     private OnFragmentInteractionListener mListener;
     private AppCompatActivity activity;
+    private DynamoDBMapper mapper;
+    ScheduleDrugDO scheduleDrugDO;
+
+    public static final String NEW_ALARM_ADDED = "new_alarm_added";
+
+    // Information about the steps/fields of the form
+    private static final int TITLE_STEP_NUM = 0;
+    private static final int DESCRIPTION_STEP_NUM = 1;
+    private static final int TIME_STEP_NUM = 2;
+    private static final int DAYS_STEP_NUM = 3;
+
+    // Title step
+    private EditText titleEditText;
+    private static final int MIN_CHARACTERS_TITLE = 3;
+    public static final String STATE_TITLE = "title";
+
+    // Description step
+    private EditText descriptionEditText;
+    public static final String STATE_DESCRIPTION = "description";
+
+    // Time step
+    private TextView timeTextView;
+    private TimePickerDialog timePicker;
+    private Pair<Integer, Integer> time;
+    public static final String STATE_TIME_HOUR = "time_hour";
+    public static final String STATE_TIME_MINUTES = "time_minutes";
+
+    // Week days step
+    private boolean[] weekDays;
+    private LinearLayout daysStepContent;
+    public static final String STATE_WEEK_DAYS = "week_days";
+
+    private boolean confirmBack = true;
+    private ProgressDialog progressDialog;
+    private VerticalStepperFormLayout verticalStepperForm;
 
     public ScheduleFormFragment() {
         // Required empty public constructor
@@ -69,8 +127,11 @@ public class ScheduleFormFragment extends Fragment {
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
-
         fab.hide();
+        mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+
+        //inizialize erical stepper
+        initializeActivity(view);
 
         activity.getSupportActionBar().setTitle(R.string.add_schedule);
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
@@ -94,38 +155,6 @@ public class ScheduleFormFragment extends Fragment {
             }
         });
 
-        Button button = (Button) view.findViewById(R.id.fire);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // fire the alarm
-                Log.w("ScheduleFormFragment","FIRE IN THE HOLE");
-
-                AlarmManager alarmManager = (AlarmManager)activity.getSystemService(Context.ALARM_SERVICE);
-                // Define our intention of executing AlertReceiver
-                Intent alertIntent = new Intent(getContext(), AlarmReceiver.class);
-
-                //get shared pref file
-                SharedPreferences sharedPref = getContext().getSharedPreferences(
-                        getContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
-                // getting the last used number for the alarm id or 0 as default value for the first
-                int old_alarm_id = sharedPref.getInt(getContext().getString(R.string.alarm_id),0);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                int alarm_id = old_alarm_id +1;
-                editor.putInt(getString(R.string.alarm_id), alarm_id);
-                editor.apply();
-
-                alertIntent.putExtra(ScheduleFormFragment.ALARM_ID_EXTRA,alarm_id);
-                PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(), alarm_id, alertIntent,PendingIntent.FLAG_ONE_SHOT);
-
-                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        SystemClock.elapsedRealtime() +
-                                15*1000, alarmIntent);
-
-                Toast.makeText(getContext(), "set alarm 15 second from now", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -152,18 +181,339 @@ public class ScheduleFormFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+    private void initializeActivity(View view) {
+
+        // Time step vars
+        time = new Pair<>(8, 30);
+        setTimePicker(8, 30);
+
+        // Week days step vars
+        weekDays = new boolean[7];
+
+        // Vertical Stepper form vars
+        int colorPrimary = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
+        int colorPrimaryDark = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
+        String[] stepsTitles =  {"Name", "Surname", "e-mail", "Active",};
+        //String[] stepsSubtitles = getResources().getStringArray(R.array.steps_subtitles);
+
+        // Here we find and initialize the form
+        verticalStepperForm = (VerticalStepperFormLayout) view.findViewById(R.id.vertical_stepper_form);
+        VerticalStepperFormLayout.Builder.newInstance(verticalStepperForm, stepsTitles, this, getActivity())
+                //.stepsSubtitles(stepsSubtitles)
+                //.materialDesignInDisabledSteps(true) // false by default
+                //.showVerticalLineWhenStepsAreCollapsed(true) // false by default
+                .primaryColor(colorPrimary)
+                .primaryDarkColor(colorPrimaryDark)
+                .displayBottomNavigation(true)
+                .init();
+
+    }
+
+    // METHODS THAT HAVE TO BE IMPLEMENTED TO MAKE THE LIBRARY WORK
+    // (Implementation of the interface "VerticalStepperForm")
+
+    @Override
+    public View createStepContentView(int stepNumber) {
+        // Here we generate the content view of the correspondent step and we return it so it gets
+        // automatically added to the step layout (AKA stepContent)
+        View view = null;
+        switch (stepNumber) {
+            case TITLE_STEP_NUM:
+                view = createAlarmTitleStep();
+                break;
+            case DESCRIPTION_STEP_NUM:
+                view = createAlarmDescriptionStep();
+                break;
+            case TIME_STEP_NUM:
+                view = createAlarmTimeStep();
+                break;
+            case DAYS_STEP_NUM:
+                view = createAlarmDaysStep();
+                break;
+        }
+        return view;
+    }
+
+    @Override
+    public void onStepOpening(int stepNumber) {
+        switch (stepNumber) {
+            case TITLE_STEP_NUM:
+                // When this step is open, we check that the title is correct
+                verticalStepperForm.setStepAsCompleted(stepNumber);
+                break;
+            case DESCRIPTION_STEP_NUM:
+                verticalStepperForm.setStepAsCompleted(stepNumber);
+            case TIME_STEP_NUM:
+                // As soon as they are open, these two steps are marked as completed because they
+                // have default values
+                verticalStepperForm.setStepAsCompleted(stepNumber);
+                // In this case, the instruction above is equivalent to:
+                // verticalStepperForm.setActiveStepAsCompleted();
+                break;
+            case DAYS_STEP_NUM:
+                // When this step is open, we check the days to verify that at least one is selected
+                verticalStepperForm.setStepAsCompleted(stepNumber);
+                break;
+        }
+    }
+
+    @Override
+    public void sendData() {
+        executeDataSending();
+    }
+
+
+    //TODO UNICA COSA DA TENERE
+    private void executeDataSending() {
+        // fire the alarm
+        Log.w("ScheduleFormFragment", "FIRE IN THE HOLE");
+
+        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+        // Define our intention of executing AlertReceiver
+        Intent alertIntent = new Intent(getContext(), AlarmReceiver.class);
+
+        //get shared pref file
+        SharedPreferences sharedPref = getContext().getSharedPreferences(
+                getContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
+        // getting the last used number for the alarm id or 0 as default value for the first
+        int old_alarm_id = sharedPref.getInt(getContext().getString(R.string.alarm_id), 0);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        int alarm_id = old_alarm_id + 1;
+        Log.w("alarm id",alarm_id+"");
+        editor.putInt(getString(R.string.alarm_id), alarm_id);
+        editor.apply();
+
+        alertIntent.putExtra(ScheduleFormFragment.ALARM_ID_EXTRA, alarm_id);
+        alertIntent.putExtra(ScheduleFormFragment.DRUG_EXTRA, alarm_id+"drugname");
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(), alarm_id, alertIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() +
+                        15 * 1000, alarmIntent);
+
+        Toast.makeText(getContext(), "set alarm 15 second from now", Toast.LENGTH_SHORT).show();
+
+        scheduleDrugDO = new ScheduleDrugDO();
+        scheduleDrugDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+        scheduleDrugDO.setNotes("notes"+alarm_id);
+        scheduleDrugDO.setDrug("drug"+alarm_id);
+        scheduleDrugDO.setAlarmId(Double.parseDouble(alarm_id+""));
+
+        //TODO fare la save poi se va a buon fine far partire l'alarm
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //#####################################################################
+                    //errore Null or empty value for key: public java.lang.String com.mysampleapp.demo.nosql.DoctorDO.getEmail()
+                    mapper.save(scheduleDrugDO);
+                } catch (final AmazonClientException ex) {
+                    Log.e("ASD", "Failed saving item : " + ex.getMessage(), ex);
+                }
+            }
+        }).start();
+
+        Fragment fragment = new ScheduleListFragment();
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .addToBackStack(null)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit();
+
+
+    }
+
+    private View createAlarmTitleStep() {
+        // This step view is generated programmatically
+        titleEditText = new EditText(getActivity());
+        titleEditText.setHint(R.string.form_hint_title);
+        titleEditText.setSingleLine(true);
+        titleEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkTitleStep(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        titleEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(checkTitleStep(v.getText().toString())) {
+                    verticalStepperForm.goToNextStep();
+                }
+                return false;
+            }
+        });
+        return titleEditText;
+    }
+
+    private View createAlarmDescriptionStep() {
+        descriptionEditText = new EditText(getActivity());
+        descriptionEditText.setHint(R.string.form_hint_description);
+        descriptionEditText.setSingleLine(true);
+        descriptionEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                verticalStepperForm.goToNextStep();
+                return false;
+            }
+        });
+        return descriptionEditText;
+    }
+
+    private View createAlarmTimeStep() {
+        // This step view is generated by inflating a layout XML file
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        LinearLayout timeStepContent =
+                (LinearLayout) inflater.inflate(R.layout.step_time_layout, null, false);
+        timeTextView = (TextView) timeStepContent.findViewById(R.id.time);
+        timeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker.show();
+            }
+        });
+        return timeStepContent;
+    }
+
+    private View createAlarmDaysStep() {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        daysStepContent = (LinearLayout) inflater.inflate(
+                R.layout.step_days_of_week_layout, null, false);
+
+        String[] weekDays = {"L","M","M","G","V","S","D"};
+        for(int i = 0; i < weekDays.length; i++) {
+            final int index = i;
+            final LinearLayout dayLayout = getDayLayout(index);
+            if(index < 5) {
+                activateDay(index, dayLayout, false);
+            } else {
+                deactivateDay(index, dayLayout, false);
+            }
+
+            dayLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if((boolean)v.getTag()) {
+                        deactivateDay(index, dayLayout, true);
+                    } else {
+                        activateDay(index, dayLayout, true);
+                    }
+                }
+            });
+
+            final TextView dayText = (TextView) dayLayout.findViewById(R.id.day);
+            dayText.setText(weekDays[index]);
+        }
+        return daysStepContent;
+    }
+
+    private void setTimePicker(int hour, int minutes) {
+        timePicker = new TimePickerDialog(getContext(),
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        setTime(hourOfDay, minute);
+                    }
+                }, hour, minutes, true);
+    }
+
+    private boolean checkTitleStep(String title) {
+        boolean titleIsCorrect = false;
+
+        if(title.length() >= MIN_CHARACTERS_TITLE) {
+            titleIsCorrect = true;
+
+            verticalStepperForm.setActiveStepAsCompleted();
+            // Equivalent to: verticalStepperForm.setStepAsCompleted(TITLE_STEP_NUM);
+
+        } else {
+            String titleError = "ASD";
+
+            verticalStepperForm.setActiveStepAsUncompleted(titleError);
+            // Equivalent to: verticalStepperForm.setStepAsUncompleted(TITLE_STEP_NUM, titleError);
+
+        }
+
+        return titleIsCorrect;
+    }
+
+    private void setTime(int hour, int minutes) {
+        time = new Pair<>(hour, minutes);
+        String hourString = ((time.first > 9) ?
+                String.valueOf(time.first) : ("0" + time.first));
+        String minutesString = ((time.second > 9) ?
+                String.valueOf(time.second) : ("0" + time.second));
+        String time = hourString + ":" + minutesString;
+        timeTextView.setText(time);
+    }
+
+    private void activateDay(int index, LinearLayout dayLayout, boolean check) {
+        weekDays[index] = true;
+
+        dayLayout.setTag(true);
+
+        Drawable bg = ContextCompat.getDrawable(getContext(),
+                ernestoyaquello.com.verticalstepperform.R.drawable.circle_step_done);
+        int colorPrimary = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
+        bg.setColorFilter(new PorterDuffColorFilter(colorPrimary, PorterDuff.Mode.SRC_IN));
+        dayLayout.setBackground(bg);
+
+        TextView dayText = (TextView) dayLayout.findViewById(R.id.day);
+        dayText.setTextColor(Color.rgb(255, 255, 255));
+
+        if(check) {
+            checkDays();
+        }
+    }
+
+    private void deactivateDay(int index, LinearLayout dayLayout, boolean check) {
+        weekDays[index] = false;
+
+        dayLayout.setTag(false);
+
+        dayLayout.setBackgroundResource(0);
+
+        TextView dayText = (TextView) dayLayout.findViewById(R.id.day);
+        int colour = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
+        dayText.setTextColor(colour);
+
+        if(check) {
+            checkDays();
+        }
+    }
+
+    private boolean checkDays() {
+        boolean thereIsAtLeastOneDaySelected = false;
+        for(int i = 0; i < weekDays.length && !thereIsAtLeastOneDaySelected; i++) {
+            if(weekDays[i]) {
+                verticalStepperForm.setStepAsCompleted(DAYS_STEP_NUM);
+                thereIsAtLeastOneDaySelected = true;
+            }
+        }
+        if(!thereIsAtLeastOneDaySelected) {
+            verticalStepperForm.setStepAsUncompleted(DAYS_STEP_NUM, null);
+        }
+
+        return thereIsAtLeastOneDaySelected;
+    }
+
+    private LinearLayout getDayLayout(int i) {
+        int id = daysStepContent.getResources().getIdentifier(
+                "day_" + i, "id", getContext().getPackageName());
+        return (LinearLayout) daysStepContent.findViewById(id);
+    }
+
 }
