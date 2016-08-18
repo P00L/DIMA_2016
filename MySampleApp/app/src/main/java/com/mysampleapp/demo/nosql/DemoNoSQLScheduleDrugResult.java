@@ -24,13 +24,13 @@ public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
     @Override
     public void updateItem() {
         final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-        final double originalValue = result.getAlarmId();
-        result.setAlarmId(DemoSampleDataGenerator.getRandomSampleNumber());
+        final String originalValue = result.getDrug();
+        result.setDrug(DemoSampleDataGenerator.getRandomSampleString("drug"));
         try {
             mapper.save(result);
         } catch (final AmazonClientException ex) {
             // Restore original data if save fails, and re-throw.
-            result.setAlarmId(originalValue);
+            result.setDrug(originalValue);
             throw ex;
         }
     }

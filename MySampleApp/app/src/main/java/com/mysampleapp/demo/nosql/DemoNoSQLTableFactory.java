@@ -17,10 +17,10 @@ public class DemoNoSQLTableFactory {
 
     DemoNoSQLTableFactory(final Context context) {
         final List<DemoNoSQLTableBase> supportedTablesList = new ArrayList<>();
-        supportedTablesList.add(new DemoNoSQLTableUserTable());
         supportedTablesList.add(new DemoNoSQLTableDoctor());
         supportedTablesList.add(new DemoNoSQLTableScheduleDrug());
         supportedTablesList.add(new DemoNoSQLTableDrug());
+        supportedTablesList.add(new DemoNoSQLTableUser());
         for (final DemoNoSQLTableBase table : supportedTablesList) {
             supportedTablesMap.put(table.getTableName(), table);
         }

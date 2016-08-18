@@ -15,7 +15,6 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
 import com.mysampleapp.R;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 
-public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
-    private static final String LOG_TAG = DemoNoSQLTableUserTable.class.getSimpleName();
+public class DemoNoSQLTableUser extends DemoNoSQLTableBase {
+    private static final String LOG_TAG = DemoNoSQLTableUser.class.getSimpleName();
 
     /** Inner classes use this value to determine how many results to retrieve per service call. */
     private static final int RESULTS_PER_RESULT_GROUP = 40;
@@ -34,23 +33,24 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
     /** Removing sample data removes the items in batches of the following size. */
     private static final int MAX_BATCH_SIZE_FOR_DELETE = 50;
 
+
     /********* Primary Get Query Inner Classes *********/
 
-    public class DemoGetWithPartitionKey extends DemoNoSQLOperationBase {
-        private UserTableDO result;
+    public class DemoGetWithPartitionKeyAndSortKey extends DemoNoSQLOperationBase {
+        private UserDO result;
         private boolean resultRetrieved = true;
 
-        private DemoGetWithPartitionKey(final Context context) {
-            super(context.getString(R.string.nosql_operation_get_by_partition_text),
-                String.format(context.getString(R.string.nosql_operation_example_get_by_partition_text),
-                    "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID()));
+        DemoGetWithPartitionKeyAndSortKey(final Context context) {
+            super(context.getString(R.string.nosql_operation_get_by_partition_and_sort_text),
+                String.format(context.getString(R.string.nosql_operation_example_get_by_partition_and_sort_text),
+                    "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(),
+                    "email", "demo-userId-500000"));
         }
 
-        /* Blocks until result is retrieved, should be called in the background. */
         @Override
-        public boolean executeOperation() throws AmazonClientException {
+        public boolean executeOperation() {
             // Retrieve an item by passing the partition key using the object mapper.
-            result = mapper.load(UserTableDO.class, AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+            result = mapper.load(UserDO.class, AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(), "demo-email-500000");
 
             if (result != null) {
                 resultRetrieved = false;
@@ -65,7 +65,7 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
                 return null;
             }
             final List<DemoNoSQLResult> results = new ArrayList<>();
-            results.add(new DemoNoSQLUserTableResult(result));
+            results.add(new DemoNoSQLUserResult(result));
             resultRetrieved = true;
             return results;
         }
@@ -74,38 +74,37 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
         public void resetResults() {
             resultRetrieved = false;
         }
-
     }
 
-    /* ******** Secondary Named Index Query Inner Classes ******** */
+    /* ******** Primary Index Query Inner Classes ******** */
 
+    public class DemoQueryWithPartitionKeyAndSortKeyCondition extends DemoNoSQLOperationBase {
 
-    public class DemoUserIdEmailQueryWithPartitionKeyAndSortKeyCondition extends DemoNoSQLOperationBase {
+        private PaginatedQueryList<UserDO> results;
+        private Iterator<UserDO> resultsIterator;
 
-        private PaginatedQueryList<UserTableDO> results;
-        private Iterator<UserTableDO> resultsIterator;
-        DemoUserIdEmailQueryWithPartitionKeyAndSortKeyCondition (final Context context) {
-            super(
-                context.getString(R.string.nosql_operation_title_index_query_by_partition_and_sort_condition_text),
-                context.getString(R.string.nosql_operation_example_index_query_by_partition_and_sort_condition_text,
-                    "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(),
-                    "email", "demo-email-500000"));
+        DemoQueryWithPartitionKeyAndSortKeyCondition(final Context context) {
+            super(context.getString(R.string.nosql_operation_title_query_by_partition_and_sort_condition_text),
+                  String.format(context.getString(R.string.nosql_operation_example_query_by_partition_and_sort_condition_text),
+                      "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(),
+                      "email", "demo-userId-500000"));
         }
 
+        @Override
         public boolean executeOperation() {
-            // Perform a query using a partition key and sort key condition.
-            final UserTableDO itemToFind = new UserTableDO();
+            final UserDO itemToFind = new UserDO();
             itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-            final Condition sortKeyCondition = new Condition()
-                .withComparisonOperator(ComparisonOperator.LT.toString())
 
+            final Condition rangeKeyCondition = new Condition()
+                .withComparisonOperator(ComparisonOperator.LT.toString())
                 .withAttributeValueList(new AttributeValue().withS("demo-email-500000"));
-            // Perform get using Partition key and sort key condition
-            DynamoDBQueryExpression<UserTableDO> queryExpression = new DynamoDBQueryExpression<UserTableDO>()
+            final DynamoDBQueryExpression<UserDO> queryExpression = new DynamoDBQueryExpression<UserDO>()
                 .withHashKeyValues(itemToFind)
-                .withRangeKeyCondition("email", sortKeyCondition)
-                .withConsistentRead(false);
-            results = mapper.query(UserTableDO.class, queryExpression);
+                .withRangeKeyCondition("email", rangeKeyCondition)
+                .withConsistentRead(false)
+                .withLimit(RESULTS_PER_RESULT_GROUP);
+
+            results = mapper.query(UserDO.class, queryExpression);
             if (results != null) {
                 resultsIterator = results.iterator();
                 if (resultsIterator.hasNext()) {
@@ -115,7 +114,10 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
             return false;
         }
 
-        @Override
+        /**
+         * Gets the next page of results from the query.
+         * @return list of results, or null if there are no more results.
+         */
         public List<DemoNoSQLResult> getNextResultGroup() {
             return getNextResultsGroupFromIterator(resultsIterator);
         }
@@ -126,28 +128,28 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
         }
     }
 
-    public class DemoUserIdEmailQueryWithPartitionKeyOnly extends DemoNoSQLOperationBase {
+    public class DemoQueryWithPartitionKeyOnly extends DemoNoSQLOperationBase {
 
-        private PaginatedQueryList<UserTableDO> results;
-        private Iterator<UserTableDO> resultsIterator;
+        private PaginatedQueryList<UserDO> results;
+        private Iterator<UserDO> resultsIterator;
 
-        DemoUserIdEmailQueryWithPartitionKeyOnly(final Context context) {
-            super(
-                context.getString(R.string.nosql_operation_title_index_query_by_partition_text),
-                context.getString(R.string.nosql_operation_example_index_query_by_partition_text,
+        DemoQueryWithPartitionKeyOnly(final Context context) {
+            super(context.getString(R.string.nosql_operation_title_query_by_partition_text),
+                String.format(context.getString(R.string.nosql_operation_example_query_by_partition_text),
                     "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID()));
         }
 
+        @Override
         public boolean executeOperation() {
-            // Perform a query using a partition key and filter condition.
-            final UserTableDO itemToFind = new UserTableDO();
+            final UserDO itemToFind = new UserDO();
             itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
 
-            // Perform get using Partition key
-            DynamoDBQueryExpression<UserTableDO> queryExpression = new DynamoDBQueryExpression<UserTableDO>()
+            final DynamoDBQueryExpression<UserDO> queryExpression = new DynamoDBQueryExpression<UserDO>()
                 .withHashKeyValues(itemToFind)
-                .withConsistentRead(false);
-            results = mapper.query(UserTableDO.class, queryExpression);
+                .withConsistentRead(false)
+                .withLimit(RESULTS_PER_RESULT_GROUP);
+
+            results = mapper.query(UserDO.class, queryExpression);
             if (results != null) {
                 resultsIterator = results.iterator();
                 if (resultsIterator.hasNext()) {
@@ -155,10 +157,6 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
                 }
             }
             return false;
-        }
-
-        public UserTableDO[] getResultArray(){
-            return results.toArray(new UserTableDO[0]);
         }
 
         @Override
@@ -172,22 +170,21 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
         }
     }
 
-    public class DemoUserIdEmailQueryWithPartitionKeyAndFilterCondition extends DemoNoSQLOperationBase {
+    public class DemoQueryWithPartitionKeyAndFilter extends DemoNoSQLOperationBase {
 
-        private PaginatedQueryList<UserTableDO> results;
-        private Iterator<UserTableDO> resultsIterator;
+        private PaginatedQueryList<UserDO> results;
+        private Iterator<UserDO> resultsIterator;
 
-        DemoUserIdEmailQueryWithPartitionKeyAndFilterCondition (final Context context) {
-            super(
-                context.getString(R.string.nosql_operation_title_index_query_by_partition_and_filter_text),
-                context.getString(R.string.nosql_operation_example_index_query_by_partition_and_filter_text,
-                    "userId",AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(),
-                    "address", "demo-address-500000"));
+        DemoQueryWithPartitionKeyAndFilter(final Context context) {
+            super(context.getString(R.string.nosql_operation_title_query_by_partition_and_filter_text),
+                  String.format(context.getString(R.string.nosql_operation_example_query_by_partition_and_filter_text),
+                      "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(),
+                      "address", "demo-address-500000"));
         }
 
+        @Override
         public boolean executeOperation() {
-            // Perform a query using a partition key and filter condition.
-            final UserTableDO itemToFind = new UserTableDO();
+            final UserDO itemToFind = new UserDO();
             itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
 
             // Use an expression names Map to avoid the potential for attribute names
@@ -199,14 +196,15 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
             filterExpressionAttributeValues.put(":Minaddress",
                 new AttributeValue().withS("demo-address-500000"));
 
-            // Perform get using Partition key and sort key condition
-            DynamoDBQueryExpression<UserTableDO> queryExpression = new DynamoDBQueryExpression<UserTableDO>()
+            final DynamoDBQueryExpression<UserDO> queryExpression = new DynamoDBQueryExpression<UserDO>()
                 .withHashKeyValues(itemToFind)
                 .withFilterExpression("#address > :Minaddress")
                 .withExpressionAttributeNames(filterExpressionAttributeNames)
                 .withExpressionAttributeValues(filterExpressionAttributeValues)
-                .withConsistentRead(false);
-            results = mapper.query(UserTableDO.class, queryExpression);
+                .withConsistentRead(false)
+                .withLimit(RESULTS_PER_RESULT_GROUP);
+
+            results = mapper.query(UserDO.class, queryExpression);
             if (results != null) {
                 resultsIterator = results.iterator();
                 if (resultsIterator.hasNext()) {
@@ -216,6 +214,10 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
             return false;
         }
 
+        public UserDO[] getResultArray(){
+            return results.toArray(new UserDO[0]);
+        }
+
         @Override
         public List<DemoNoSQLResult> getNextResultGroup() {
             return getNextResultsGroupFromIterator(resultsIterator);
@@ -223,50 +225,50 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
 
         @Override
         public void resetResults() {
-            resultsIterator = results.iterator();
-        }
+             resultsIterator = results.iterator();
+         }
     }
 
-    public class DemoUserIdEmailQueryWithPartitionKeySortKeyAndFilterCondition extends DemoNoSQLOperationBase {
+    public class DemoQueryWithPartitionKeySortKeyConditionAndFilter extends DemoNoSQLOperationBase {
 
-        private PaginatedQueryList<UserTableDO> results;
-        private Iterator<UserTableDO> resultsIterator;
+        private PaginatedQueryList<UserDO> results;
+        private Iterator<UserDO> resultsIterator;
 
-        DemoUserIdEmailQueryWithPartitionKeySortKeyAndFilterCondition (final Context context) {
-            super(
-                context.getString(R.string.nosql_operation_title_index_query_by_partition_sort_condition_and_filter_text),
-                context.getString(R.string.nosql_operation_example_index_query_by_partition_sort_condition_and_filter_text,
-                    "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(),
-                    "email", "demo-email-500000",
-                    "address", "demo-address-500000"));
+        DemoQueryWithPartitionKeySortKeyConditionAndFilter(final Context context) {
+            super(context.getString(R.string.nosql_operation_title_query_by_partition_sort_condition_and_filter_text),
+                  String.format(context.getString(R.string.nosql_operation_example_query_by_partition_sort_condition_and_filter_text),
+                      "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(),
+                      "email", "demo-userId-500000",
+                      "address", "demo-address-500000"));
         }
 
         public boolean executeOperation() {
-            // Perform a query using a partition key, sort condition, and filter.
-            final UserTableDO itemToFind = new UserTableDO();
+            final UserDO itemToFind = new UserDO();
             itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-            final Condition sortKeyCondition = new Condition()
+
+            final Condition rangeKeyCondition = new Condition()
                 .withComparisonOperator(ComparisonOperator.LT.toString())
                 .withAttributeValueList(new AttributeValue().withS("demo-email-500000"));
 
-            // Use a map of expression names to avoid the potential for attribute names
+            // Use an expression names Map to avoid the potential for attribute names
             // colliding with DynamoDB reserved words.
-            final Map<String, String> filterExpressionAttributeNames = new HashMap<>();
+            final Map <String, String> filterExpressionAttributeNames = new HashMap<>();
             filterExpressionAttributeNames.put("#address", "address");
 
             final Map<String, AttributeValue> filterExpressionAttributeValues = new HashMap<>();
             filterExpressionAttributeValues.put(":Minaddress",
                 new AttributeValue().withS("demo-address-500000"));
 
-            // Perform get using Partition key and sort key condition
-            DynamoDBQueryExpression<UserTableDO> queryExpression = new DynamoDBQueryExpression<UserTableDO>()
+            final DynamoDBQueryExpression<UserDO> queryExpression = new DynamoDBQueryExpression<UserDO>()
                 .withHashKeyValues(itemToFind)
-                .withRangeKeyCondition("email", sortKeyCondition)
+                .withRangeKeyCondition("email", rangeKeyCondition)
                 .withFilterExpression("#address > :Minaddress")
                 .withExpressionAttributeNames(filterExpressionAttributeNames)
                 .withExpressionAttributeValues(filterExpressionAttributeValues)
-                .withConsistentRead(false);
-            results = mapper.query(UserTableDO.class, queryExpression);
+                .withConsistentRead(false)
+                .withLimit(RESULTS_PER_RESULT_GROUP);
+
+            results = mapper.query(UserDO.class, queryExpression);
             if (results != null) {
                 resultsIterator = results.iterator();
                 if (resultsIterator.hasNext()) {
@@ -287,12 +289,14 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
         }
     }
 
+    /* ******** Secondary Named Index Query Inner Classes ******** */
+
     /********* Scan Inner Classes *********/
 
     public class DemoScanWithFilter extends DemoNoSQLOperationBase {
 
-        private PaginatedScanList<UserTableDO> results;
-        private Iterator<UserTableDO> resultsIterator;
+        private PaginatedScanList<UserDO> results;
+        private Iterator<UserDO> resultsIterator;
 
         DemoScanWithFilter(final Context context) {
             super(context.getString(R.string.nosql_operation_title_scan_with_filter),
@@ -315,7 +319,7 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
                 .withExpressionAttributeNames(filterExpressionAttributeNames)
                 .withExpressionAttributeValues(filterExpressionAttributeValues);
 
-            results = mapper.scan(UserTableDO.class, scanExpression);
+            results = mapper.scan(UserDO.class, scanExpression);
             if (results != null) {
                 resultsIterator = results.iterator();
                 if (resultsIterator.hasNext()) {
@@ -343,8 +347,8 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
 
     public class DemoScanWithoutFilter extends DemoNoSQLOperationBase {
 
-        private PaginatedScanList<UserTableDO> results;
-        private Iterator<UserTableDO> resultsIterator;
+        private PaginatedScanList<UserDO> results;
+        private Iterator<UserDO> resultsIterator;
 
         DemoScanWithoutFilter(final Context context) {
             super(context.getString(R.string.nosql_operation_title_scan_without_filter),
@@ -354,7 +358,7 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
         @Override
         public boolean executeOperation() {
             final DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
-            results = mapper.scan(UserTableDO.class, scanExpression);
+            results = mapper.scan(UserDO.class, scanExpression);
             if (results != null) {
                 resultsIterator = results.iterator();
                 if (resultsIterator.hasNext()) {
@@ -385,7 +389,7 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
      * @param resultsIterator the iterator for all the results (makes a new service call for each result group).
      * @return the next list of results.
      */
-    private static List<DemoNoSQLResult> getNextResultsGroupFromIterator(final Iterator<UserTableDO> resultsIterator) {
+    private static List<DemoNoSQLResult> getNextResultsGroupFromIterator(final Iterator<UserDO> resultsIterator) {
         if (!resultsIterator.hasNext()) {
             return null;
         }
@@ -393,9 +397,9 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
         int itemsRetrieved = 0;
         do {
             // Retrieve the item from the paginated results.
-            final UserTableDO item = resultsIterator.next();
+            final UserDO item = resultsIterator.next();
             // Add the item to a group of results that will be displayed later.
-            resultGroup.add(new DemoNoSQLUserTableResult(item));
+            resultGroup.add(new DemoNoSQLUserResult(item));
             itemsRetrieved++;
         } while ((itemsRetrieved < RESULTS_PER_RESULT_GROUP) && resultsIterator.hasNext());
         return resultGroup;
@@ -404,13 +408,13 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
     /** The DynamoDB object mapper for accessing DynamoDB. */
     private final DynamoDBMapper mapper;
 
-    public DemoNoSQLTableUserTable() {
+    public DemoNoSQLTableUser() {
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
     }
 
     @Override
     public String getTableName() {
-        return "UserTable";
+        return "User";
     }
 
     @Override
@@ -424,29 +428,28 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
 
     @Override
     public String getSortKeyName() {
-        return null;
+        return "email";
     }
 
     public String getSortKeyType() {
-        return "";
+        return "String";
     }
 
     @Override
     public int getNumIndexes() {
-        return 1;
+        return 0;
     }
 
     @Override
     public void insertSampleData() throws AmazonClientException {
         Log.d(LOG_TAG, "Inserting Sample data.");
-        final UserTableDO firstItem = new UserTableDO();
+        final UserDO firstItem = new UserDO();
 
         firstItem.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+        firstItem.setEmail("demo-email-500000");
         firstItem.setAddress(
             DemoSampleDataGenerator.getRandomSampleString("address"));
         firstItem.setBirthdate(DemoSampleDataGenerator.getSampleNumberSet());
-        firstItem.setEmail(
-            DemoSampleDataGenerator.getRandomSampleString("email"));
         firstItem.setName(
             DemoSampleDataGenerator.getRandomSampleString("name"));
         firstItem.setPhone(DemoSampleDataGenerator.getRandomSampleNumber());
@@ -461,13 +464,13 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
             lastException = ex;
         }
 
-        final UserTableDO[] items = new UserTableDO[SAMPLE_DATA_ENTRIES_PER_INSERT-1];
+        final UserDO[] items = new UserDO[SAMPLE_DATA_ENTRIES_PER_INSERT-1];
         for (int count = 0; count < SAMPLE_DATA_ENTRIES_PER_INSERT-1; count++) {
-            final UserTableDO item = new UserTableDO();
+            final UserDO item = new UserDO();
             item.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+            item.setEmail(DemoSampleDataGenerator.getRandomSampleString("email"));
             item.setAddress(DemoSampleDataGenerator.getRandomSampleString("address"));
             item.setBirthdate(DemoSampleDataGenerator.getSampleNumberSet());
-            item.setEmail(DemoSampleDataGenerator.getRandomSampleString("email"));
             item.setName(DemoSampleDataGenerator.getRandomSampleString("name"));
             item.setPhone(DemoSampleDataGenerator.getRandomSampleNumber());
             item.setSurname(DemoSampleDataGenerator.getRandomSampleString("surname"));
@@ -490,22 +493,22 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
     @Override
     public void removeSampleData() throws AmazonClientException {
 
-        final UserTableDO itemToFind = new UserTableDO();
+        final UserDO itemToFind = new UserDO();
         itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
 
-        final DynamoDBQueryExpression<UserTableDO> queryExpression = new DynamoDBQueryExpression<UserTableDO>()
+        final DynamoDBQueryExpression<UserDO> queryExpression = new DynamoDBQueryExpression<UserDO>()
             .withHashKeyValues(itemToFind)
             .withConsistentRead(false)
             .withLimit(MAX_BATCH_SIZE_FOR_DELETE);
 
-        final PaginatedQueryList<UserTableDO> results = mapper.query(UserTableDO.class, queryExpression);
+        final PaginatedQueryList<UserDO> results = mapper.query(UserDO.class, queryExpression);
 
-        Iterator<UserTableDO> resultsIterator = results.iterator();
+        Iterator<UserDO> resultsIterator = results.iterator();
 
         AmazonClientException lastException = null;
 
         if (resultsIterator.hasNext()) {
-            final UserTableDO item = resultsIterator.next();
+            final UserDO item = resultsIterator.next();
 
             // Demonstrate deleting a single item.
             try {
@@ -516,7 +519,7 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
             }
         }
 
-        final List<UserTableDO> batchOfItems = new LinkedList<UserTableDO>();
+        final List<UserDO> batchOfItems = new LinkedList<UserDO>();
         while (resultsIterator.hasNext()) {
             // Build a batch of books to delete.
             for (int index = 0; index < MAX_BATCH_SIZE_FOR_DELETE && resultsIterator.hasNext(); index++) {
@@ -544,15 +547,17 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
 
     private List<DemoNoSQLOperationListItem> getSupportedDemoOperations(final Context context) {
         List<DemoNoSQLOperationListItem> noSQLOperationsList = new ArrayList<DemoNoSQLOperationListItem>();
-            noSQLOperationsList.add(new DemoGetWithPartitionKey(context));
+        noSQLOperationsList.add(new DemoNoSQLOperationListHeader(
+            context.getString(R.string.nosql_operation_header_get)));
+        noSQLOperationsList.add(new DemoGetWithPartitionKeyAndSortKey(context));
 
         noSQLOperationsList.add(new DemoNoSQLOperationListHeader(
-            context.getString(R.string.nosql_operation_header_secondary_queries, "userIdEmail")));
+            context.getString(R.string.nosql_operation_header_primary_queries)));
+        noSQLOperationsList.add(new DemoQueryWithPartitionKeyOnly(context));
+        noSQLOperationsList.add(new DemoQueryWithPartitionKeyAndFilter(context));
+        noSQLOperationsList.add(new DemoQueryWithPartitionKeyAndSortKeyCondition(context));
+        noSQLOperationsList.add(new DemoQueryWithPartitionKeySortKeyConditionAndFilter(context));
 
-        noSQLOperationsList.add(new DemoUserIdEmailQueryWithPartitionKeyOnly(context));
-        noSQLOperationsList.add(new DemoUserIdEmailQueryWithPartitionKeyAndFilterCondition(context));
-        noSQLOperationsList.add(new DemoUserIdEmailQueryWithPartitionKeyAndSortKeyCondition(context));
-        noSQLOperationsList.add(new DemoUserIdEmailQueryWithPartitionKeySortKeyAndFilterCondition(context));
         noSQLOperationsList.add(new DemoNoSQLOperationListHeader(
             context.getString(R.string.nosql_operation_header_scan)));
         noSQLOperationsList.add(new DemoScanWithoutFilter(context));
@@ -578,7 +583,7 @@ public class DemoNoSQLTableUserTable extends DemoNoSQLTableBase {
     }
 
     @Override
-    public DemoNoSQLOperationListItem getOperationByName(Context context,String operation){
-        return new DemoUserIdEmailQueryWithPartitionKeyOnly(context);
+    public DemoNoSQLOperationListItem getOperationByName(Context context, String operation) {
+        return new DemoQueryWithPartitionKeyOnly(context);
     }
 }

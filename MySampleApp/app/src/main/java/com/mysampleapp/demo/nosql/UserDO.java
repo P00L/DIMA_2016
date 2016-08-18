@@ -2,17 +2,18 @@ package com.mysampleapp.demo.nosql;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBRangeKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 
 import java.util.Set;
 
-@DynamoDBTable(tableName = "myfirstapp-mobilehub-1482957139-UserTable")
+@DynamoDBTable(tableName = "myfirstapp-mobilehub-1482957139-User")
 
-public class UserTableDO {
+public class UserDO {
     private String _userId;
+    private String _email;
     private String _address;
     private Set<Double> _birthdate;
-    private String _email;
     private String _name;
     private Double _phone;
     private String _surname;
@@ -25,6 +26,15 @@ public class UserTableDO {
 
     public void setUserId(final String _userId) {
         this._userId = _userId;
+    }
+    @DynamoDBRangeKey(attributeName = "email")
+    @DynamoDBAttribute(attributeName = "email")
+    public String getEmail() {
+        return _email;
+    }
+
+    public void setEmail(final String _email) {
+        this._email = _email;
     }
     @DynamoDBAttribute(attributeName = "address")
     public String getAddress() {
@@ -41,14 +51,6 @@ public class UserTableDO {
 
     public void setBirthdate(final Set<Double> _birthdate) {
         this._birthdate = _birthdate;
-    }
-    @DynamoDBAttribute(attributeName = "email")
-    public String getEmail() {
-        return _email;
-    }
-
-    public void setEmail(final String _email) {
-        this._email = _email;
     }
     @DynamoDBAttribute(attributeName = "name")
     public String getName() {

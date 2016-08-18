@@ -14,11 +14,11 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 
 import java.util.Set;
 
-public class DemoNoSQLUserTableResult implements DemoNoSQLResult {
+public class DemoNoSQLUserResult implements DemoNoSQLResult {
     private static final int KEY_TEXT_COLOR = 0xFF333333;
-    private final UserTableDO result;
+    private final UserDO result;
 
-    DemoNoSQLUserTableResult(final UserTableDO result) {
+    DemoNoSQLUserResult(final UserDO result) {
         this.result = result;
     }
     @Override
@@ -95,12 +95,12 @@ public class DemoNoSQLUserTableResult implements DemoNoSQLResult {
         final TextView resultNumberTextView;
         final TextView userIdKeyTextView;
         final TextView userIdValueTextView;
+        final TextView emailKeyTextView;
+        final TextView emailValueTextView;
         final TextView addressKeyTextView;
         final TextView addressValueTextView;
         final TextView birthdateKeyTextView;
         final TextView birthdateValueTextView;
-        final TextView emailKeyTextView;
-        final TextView emailValueTextView;
         final TextView nameKeyTextView;
         final TextView nameValueTextView;
         final TextView phoneKeyTextView;
@@ -121,6 +121,12 @@ public class DemoNoSQLUserTableResult implements DemoNoSQLResult {
             layout.addView(userIdKeyTextView);
             layout.addView(userIdValueTextView);
 
+            emailKeyTextView = new TextView(context);
+            emailValueTextView = new TextView(context);
+            setKeyAndValueTextViewStyles(emailKeyTextView, emailValueTextView);
+            layout.addView(emailKeyTextView);
+            layout.addView(emailValueTextView);
+
             addressKeyTextView = new TextView(context);
             addressValueTextView = new TextView(context);
             setKeyAndValueTextViewStyles(addressKeyTextView, addressValueTextView);
@@ -132,12 +138,6 @@ public class DemoNoSQLUserTableResult implements DemoNoSQLResult {
             setKeyAndValueTextViewStyles(birthdateKeyTextView, birthdateValueTextView);
             layout.addView(birthdateKeyTextView);
             layout.addView(birthdateValueTextView);
-
-            emailKeyTextView = new TextView(context);
-            emailValueTextView = new TextView(context);
-            setKeyAndValueTextViewStyles(emailKeyTextView, emailValueTextView);
-            layout.addView(emailKeyTextView);
-            layout.addView(emailValueTextView);
 
             nameKeyTextView = new TextView(context);
             nameValueTextView = new TextView(context);
@@ -163,14 +163,14 @@ public class DemoNoSQLUserTableResult implements DemoNoSQLResult {
             userIdKeyTextView = (TextView) layout.getChildAt(1);
             userIdValueTextView = (TextView) layout.getChildAt(2);
 
-            addressKeyTextView = (TextView) layout.getChildAt(3);
-            addressValueTextView = (TextView) layout.getChildAt(4);
+            emailKeyTextView = (TextView) layout.getChildAt(3);
+            emailValueTextView = (TextView) layout.getChildAt(4);
 
-            birthdateKeyTextView = (TextView) layout.getChildAt(5);
-            birthdateValueTextView = (TextView) layout.getChildAt(6);
+            addressKeyTextView = (TextView) layout.getChildAt(5);
+            addressValueTextView = (TextView) layout.getChildAt(6);
 
-            emailKeyTextView = (TextView) layout.getChildAt(7);
-            emailValueTextView = (TextView) layout.getChildAt(8);
+            birthdateKeyTextView = (TextView) layout.getChildAt(7);
+            birthdateValueTextView = (TextView) layout.getChildAt(8);
 
             nameKeyTextView = (TextView) layout.getChildAt(9);
             nameValueTextView = (TextView) layout.getChildAt(10);
@@ -185,12 +185,12 @@ public class DemoNoSQLUserTableResult implements DemoNoSQLResult {
         resultNumberTextView.setText(String.format("#%d", + position+1));
         userIdKeyTextView.setText("userId");
         userIdValueTextView.setText(result.getUserId());
+        emailKeyTextView.setText("email");
+        emailValueTextView.setText(result.getEmail());
         addressKeyTextView.setText("address");
         addressValueTextView.setText(result.getAddress());
         birthdateKeyTextView.setText("birthdate");
         birthdateValueTextView.setText(result.getBirthdate().toString());
-        emailKeyTextView.setText("email");
-        emailValueTextView.setText(result.getEmail());
         nameKeyTextView.setText("name");
         nameValueTextView.setText(result.getName());
         phoneKeyTextView.setText("phone");

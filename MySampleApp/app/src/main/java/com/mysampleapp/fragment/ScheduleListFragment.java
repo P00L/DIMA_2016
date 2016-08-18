@@ -14,10 +14,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.adapter.ScheduleAdapter;
@@ -190,7 +190,7 @@ public class ScheduleListFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             operation.executeOperation();
-            items = ((DemoNoSQLTableScheduleDrug.DemoUserIdAlarmIdQueryWithPartitionKeyOnly) operation).getResultArray();
+            items = ((DemoNoSQLTableScheduleDrug.DemoQueryWithPartitionKeyOnly) operation).getResultArray();
             return null;
         }
 
