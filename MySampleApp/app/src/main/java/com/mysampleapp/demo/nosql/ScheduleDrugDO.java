@@ -1,5 +1,8 @@
 package com.mysampleapp.demo.nosql;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBRangeKey;
@@ -9,7 +12,7 @@ import java.util.Set;
 
 @DynamoDBTable(tableName = "myfirstapp-mobilehub-1482957139-ScheduleDrug")
 
-public class ScheduleDrugDO {
+public class ScheduleDrugDO implements Parcelable {
     private String _userId;
     private Double _alarmId;
     private Set<String> _day;
@@ -17,6 +20,17 @@ public class ScheduleDrugDO {
     private Set<Double> _hour;
     private String _notes;
 
+    public ScheduleDrugDO(){}
+
+    // Parcelling part
+    public ScheduleDrugDO(Parcel in) {
+
+        _alarmId = in.readByte() == 0x00 ? null : in.readDouble();
+        _day = (Set) in.readValue(Set.class.getClassLoader());
+        _drug = in.readString();
+        _hour = (Set) in.readValue(Set.class.getClassLoader());
+        _notes = in.readString();
+    }
     @DynamoDBHashKey(attributeName = "userId")
     @DynamoDBAttribute(attributeName = "userId")
     public String getUserId() {
@@ -68,4 +82,35 @@ public class ScheduleDrugDO {
         this._notes = _notes;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        if (_alarmId == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(_alarmId);
+        }
+        dest.writeValue(_day);
+        dest.writeString(_drug);
+        dest.writeValue(_hour);
+        dest.writeString(_notes);
+    }
+
+    public static final Parcelable.Creator<ScheduleDrugDO> CREATOR = new Parcelable.Creator<ScheduleDrugDO>() {
+        @Override
+        public ScheduleDrugDO createFromParcel(Parcel in) {
+            return new ScheduleDrugDO(in);
+        }
+
+        @Override
+        public ScheduleDrugDO[] newArray(int size) {
+            return new ScheduleDrugDO[size];
+        }
+    };
 }

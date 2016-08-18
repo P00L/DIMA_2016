@@ -112,7 +112,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
 
-        String[] mySteps = {"Name", "Surname", "e-mail", "Active", "Phone number", "Address"};
+        String[] mySteps = {"Name", "Surname", "E-mail", "Active", "Phone Number", "Address"};
         int colorPrimary = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
         int colorPrimaryDark = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
 
@@ -227,6 +227,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         name_text.setSingleLine(true);
         name_text.setHint("name");
         name_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        name_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         if(docDO.getName()!=null)
                 name_text.setText(docDO.getName());
@@ -261,6 +262,8 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         surname_text.setSingleLine(true);
         surname_text.setHint("surname");
         surname_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        surname_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
         if (docDO.getSurname()!=null)
             surname_text.setText(docDO.getSurname());
         surname_text.addTextChangedListener(new TextWatcher() {
@@ -294,6 +297,8 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         email_text.setSingleLine(true);
         email_text.setHint("email");
         email_text.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        email_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
         if(docDO.getEmail()!=null){
             Log.w("email", docDO.getEmail().toString());
             email_text.setText(docDO.getEmail());
@@ -367,6 +372,8 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         phoneNumber_text.setSingleLine(true);
         phoneNumber_text.setHint("phone number");
         phoneNumber_text.setInputType(InputType.TYPE_CLASS_PHONE);
+        phoneNumber_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
         if(docDO.getPhoneNumber()!=null)
             phoneNumber_text.setText(String.valueOf(docDO.getPhoneNumber().intValue()));
         phoneNumber_text.addTextChangedListener(new TextWatcher() {
@@ -401,6 +408,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         address_text.setSingleLine(true);
         address_text.setHint("address");
         address_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        address_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         if(docDO.getAddress()!=null)
             address_text.setText(docDO.getAddress());
@@ -577,13 +585,11 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             if(!name_text.getText().toString().isEmpty())
                 docDO.setName(name_text.getText().toString());
         }
-
         // Saving surname field
         if(surname_text != null) {
             if(!surname_text.getText().toString().isEmpty())
                 docDO.setSurname(surname_text.getText().toString());
         }
-
         // Saving email field
         if(email_text != null) {
             Log.w("emailnotnull", email_text.getText().toString());
@@ -592,7 +598,6 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                 Log.w("docdoval", docDO.getEmail().toString());
             }
         }
-        // TODO:checkbox
         // Saving active field
         if(cbactive != null) {
             if(cbactive.isChecked())
@@ -600,13 +605,11 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             else
                 docDO.setActive(false);
         }
-
         // Saving phone_number field
         if(phoneNumber_text != null) {
             if(!phoneNumber_text.getText().toString().isEmpty())
                 docDO.setPhoneNumber(Double.parseDouble(phoneNumber_text.getText().toString()));
         }
-
         // Saving address field
         if(address_text != null) {
             if(!address_text.getText().toString().isEmpty())

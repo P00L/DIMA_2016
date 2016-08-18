@@ -221,6 +221,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         name_text.setSingleLine(true);
         name_text.setHint("name");
         name_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        name_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         if(drugDO.getName()!=null)
             name_text.setText(drugDO.getName());
 
@@ -255,6 +256,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         type_text.setSingleLine(true);
         type_text.setHint("type");
         type_text.setInputType(InputType.TYPE_CLASS_TEXT);
+        type_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         if(drugDO.getType()!=null)
             type_text.setText(drugDO.getType());
         type_text.addTextChangedListener(new TextWatcher() {
@@ -287,6 +289,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         qty_text.setSingleLine(true);
         qty_text.setHint("quantity");
         qty_text.setInputType(InputType.TYPE_CLASS_NUMBER);
+        qty_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         if(drugDO.getQuantity()!=null)
             qty_text.setText(String.valueOf(drugDO.getQuantity().intValue()));
         qty_text.addTextChangedListener(new TextWatcher() {
@@ -319,6 +322,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         weight_text.setSingleLine(true);
         weight_text.setHint("weight");
         weight_text.setInputType(InputType.TYPE_CLASS_NUMBER);
+        weight_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         if(drugDO.getWeight()!=null)
             weight_text.setText(String.valueOf(drugDO.getWeight().intValue()));
         weight_text.addTextChangedListener(new TextWatcher() {
@@ -351,6 +355,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         minqty_text.setSingleLine(true);
         minqty_text.setHint("sottoscorta");
         minqty_text.setInputType(InputType.TYPE_CLASS_NUMBER);
+        minqty_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         if(drugDO.getMinqty()!=null)
             minqty_text.setText(String.valueOf(drugDO.getMinqty().intValue()));
         minqty_text.addTextChangedListener(new TextWatcher() {
@@ -386,6 +391,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         notes_text.setMaxLines(7);
         notes_text.setLines(5);
         notes_text.setGravity(Gravity.LEFT | Gravity.BOTTOM);
+        notes_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         if(drugDO.getNotes()!=null)
             notes_text.setText(drugDO.getNotes().toString());
         return notes_text;

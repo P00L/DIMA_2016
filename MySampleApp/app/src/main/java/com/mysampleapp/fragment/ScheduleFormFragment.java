@@ -2,7 +2,6 @@ package com.mysampleapp.fragment;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
@@ -29,7 +29,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,6 +43,11 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.mysampleapp.AlarmReceiver;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
+import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
+import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
+import com.mysampleapp.demo.nosql.DemoNoSQLTableDrug;
+import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
+import com.mysampleapp.demo.nosql.DrugDO;
 import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormLayout;
@@ -63,24 +69,26 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     private OnFragmentInteractionListener mListener;
     private AppCompatActivity activity;
     private DynamoDBMapper mapper;
-    ScheduleDrugDO scheduleDrugDO;
+    DemoNoSQLOperation operation;
+    DrugDO[] druglist;
+    String[] drugnames;
+    private ScheduleDrugDO scheduleDrugDO;
+
 
     public static final String NEW_ALARM_ADDED = "new_alarm_added";
 
     // Information about the steps/fields of the form
-    private static final int TITLE_STEP_NUM = 0;
-    private static final int DESCRIPTION_STEP_NUM = 1;
+    private static final int DRUG_STEP_NUM = 0;
+    private static final int NOTES_STEP_NUM = 1;
     private static final int TIME_STEP_NUM = 2;
     private static final int DAYS_STEP_NUM = 3;
 
-    // Title step
-    private EditText titleEditText;
+    // drug step
+    private AutoCompleteTextView autoDrugTextView;
     private static final int MIN_CHARACTERS_TITLE = 3;
-    public static final String STATE_TITLE = "title";
 
-    // Description step
-    private EditText descriptionEditText;
-    public static final String STATE_DESCRIPTION = "description";
+    // notes step
+    private EditText notesEditText;
 
     // Time step
     private TextView timeTextView;
@@ -94,8 +102,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     private LinearLayout daysStepContent;
     public static final String STATE_WEEK_DAYS = "week_days";
 
-    private boolean confirmBack = true;
-    private ProgressDialog progressDialog;
     private VerticalStepperFormLayout verticalStepperForm;
 
     public ScheduleFormFragment() {
@@ -105,7 +111,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     public static ScheduleFormFragment newInstance() {
         ScheduleFormFragment fragment = new ScheduleFormFragment();
         Bundle args = new Bundle();
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -120,7 +125,23 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_schedule_form, container, false);
+        View view = inflater.inflate(R.layout.fragment_schedule_form, container, false);
+        //activity = (AppCompatActivity) getActivity();
+        DemoNoSQLTableBase demoTable= DemoNoSQLTableFactory.instance(getContext())
+                .getNoSQLTableByTableName("Drug");
+        operation = (DemoNoSQLOperation)demoTable.getOperationByName(getContext(),"ASD");
+
+        if (savedInstanceState != null){
+            Log.w("entrato", "entrato");
+            scheduleDrugDO = savedInstanceState.getParcelable("scheduleDrugDoParc");
+        }
+        else{
+            if(scheduleDrugDO == null)
+                scheduleDrugDO = new ScheduleDrugDO();
+        }
+
+        new MyAsyncTask(view).execute();
+        return view;
     }
 
     @Override
@@ -130,12 +151,13 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         fab.hide();
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
 
-        //inizialize erical stepper
-        initializeActivity(view);
+        //inizialize vertical stepper
+        //initializeActivity(view);
+        //new MyAsyncTask(view).execute();
 
         activity.getSupportActionBar().setTitle(R.string.add_schedule);
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
-        navigationView.setCheckedItem(R.id.nav_doc);
+        navigationView.setCheckedItem(R.id.nav_schedule);
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -198,7 +220,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         // Vertical Stepper form vars
         int colorPrimary = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
         int colorPrimaryDark = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
-        String[] stepsTitles =  {"Name", "Surname", "e-mail", "Active",};
+        String[] stepsTitles =  {"Drug", "Notes", "Hour", "Days",};
         //String[] stepsSubtitles = getResources().getStringArray(R.array.steps_subtitles);
 
         // Here we find and initialize the form
@@ -223,11 +245,11 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         // automatically added to the step layout (AKA stepContent)
         View view = null;
         switch (stepNumber) {
-            case TITLE_STEP_NUM:
-                view = createAlarmTitleStep();
+            case DRUG_STEP_NUM:
+                view = addDrugStep();
                 break;
-            case DESCRIPTION_STEP_NUM:
-                view = createAlarmDescriptionStep();
+            case NOTES_STEP_NUM:
+                view = createNotesStep();
                 break;
             case TIME_STEP_NUM:
                 view = createAlarmTimeStep();
@@ -242,12 +264,12 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     @Override
     public void onStepOpening(int stepNumber) {
         switch (stepNumber) {
-            case TITLE_STEP_NUM:
-                // When this step is open, we check that the title is correct
+            case DRUG_STEP_NUM:
+                checkIfExists(autoDrugTextView.getText().toString());
+                break;
+            case NOTES_STEP_NUM:
                 verticalStepperForm.setStepAsCompleted(stepNumber);
                 break;
-            case DESCRIPTION_STEP_NUM:
-                verticalStepperForm.setStepAsCompleted(stepNumber);
             case TIME_STEP_NUM:
                 // As soon as they are open, these two steps are marked as completed because they
                 // have default values
@@ -257,7 +279,8 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                 break;
             case DAYS_STEP_NUM:
                 // When this step is open, we check the days to verify that at least one is selected
-                verticalStepperForm.setStepAsCompleted(stepNumber);
+                checkDays();
+                //verticalStepperForm.setStepAsCompleted(stepNumber);
                 break;
         }
     }
@@ -330,47 +353,64 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
     }
 
-    private View createAlarmTitleStep() {
-        // This step view is generated programmatically
-        titleEditText = new EditText(getActivity());
-        titleEditText.setHint(R.string.form_hint_title);
-        titleEditText.setSingleLine(true);
-        titleEditText.addTextChangedListener(new TextWatcher() {
+    private View addDrugStep() {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View addDrugView = inflater.inflate(R.layout.drug_choice, null ,false);
+        addDrugView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        // Get a reference to the AutoCompleteTextView in the layout
+        autoDrugTextView = (AutoCompleteTextView) addDrugView.findViewById(R.id.autocomplete_drug);
+
+        int n = 0;
+        for (DrugDO drugDO : druglist) {
+            drugnames[n] = drugDO.getName();
+            Log.w("nomedrug", drugnames[n]);
+            n++;
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, drugnames);
+        autoDrugTextView.setAdapter(adapter);
+
+        if(scheduleDrugDO.getDrug()!=null)
+            autoDrugTextView.setText(scheduleDrugDO.getDrug());
+
+        autoDrugTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkTitleStep(s.toString());
+                checkIfExists(autoDrugTextView.getText().toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {}
         });
-        titleEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        autoDrugTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(checkTitleStep(v.getText().toString())) {
+                if(checkIfExists(autoDrugTextView.getText().toString())) {
                     verticalStepperForm.goToNextStep();
                 }
                 return false;
             }
         });
-        return titleEditText;
+
+        return addDrugView;
     }
 
-    private View createAlarmDescriptionStep() {
-        descriptionEditText = new EditText(getActivity());
-        descriptionEditText.setHint(R.string.form_hint_description);
-        descriptionEditText.setSingleLine(true);
-        descriptionEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+    private View createNotesStep() {
+        notesEditText = new EditText(getActivity());
+        notesEditText.setHint(R.string.anything_useful);
+        notesEditText.setSingleLine(true);
+        notesEditText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        notesEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 verticalStepperForm.goToNextStep();
                 return false;
             }
         });
-        return descriptionEditText;
+        return notesEditText;
     }
 
     private View createAlarmTimeStep() {
@@ -504,7 +544,8 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
             }
         }
         if(!thereIsAtLeastOneDaySelected) {
-            verticalStepperForm.setStepAsUncompleted(DAYS_STEP_NUM, null);
+            String atleastone = getResources().getString(R.string.at_least_one);
+            verticalStepperForm.setActiveStepAsUncompleted(atleastone);
         }
 
         return thereIsAtLeastOneDaySelected;
@@ -516,4 +557,91 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         return (LinearLayout) daysStepContent.findViewById(id);
     }
 
+    private boolean checkIfExists(String drugname){
+        boolean exists = false;
+        if(drugnames!=null){
+            for (String s : drugnames) {
+                if(s.equals(drugname))
+                    exists = true;
+            }
+            if(exists)
+                verticalStepperForm.setActiveStepAsCompleted();
+            else {
+                if(drugname.isEmpty()){
+                    String emptycontent;
+                    emptycontent = getResources().getString(R.string.error_empty_content);
+                    verticalStepperForm.setActiveStepAsUncompleted(emptycontent);
+                }
+                else{
+                    String nodrug;
+                    nodrug = getResources().getString(R.string.error_drug_not_exists);
+                    verticalStepperForm.setActiveStepAsUncompleted(nodrug);
+                }
+            }
+            return exists;
+        }
+        else{
+            Log.w("drugnameNULL", "drugnameNULL");
+            return exists;
+        }
+    }
+
+    // SAVING THE STATE
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        if(scheduleDrugDO == null)
+            scheduleDrugDO = new ScheduleDrugDO();
+        scheduleDrugDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+
+        // Saving drug field
+        if(autoDrugTextView != null) {
+            if(!autoDrugTextView.getText().toString().isEmpty())
+                scheduleDrugDO.setDrug(autoDrugTextView.getText().toString());
+        }
+        // Saving notes field
+        if(notesEditText != null) {
+            if(!notesEditText.getText().toString().isEmpty())
+                scheduleDrugDO.setNotes(notesEditText.getText().toString());
+        }
+        // Saving hour field --- Set è una collezione, utilizza metodo add, conviene usare String
+        // ed eventualmente splittare sul divisore
+        if(timeTextView != null){
+            if(!timeTextView.getText().toString().isEmpty())
+                Log.w("cambiare", "cambiare");
+            // scheduleDrugDO.setHour();
+
+        }
+        // Saving days field
+
+        savedInstanceState.putParcelable("scheduleDrugDoParc", scheduleDrugDO);
+        // The call to super method must be at the end here
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private View view;
+        public MyAsyncTask(View view) {
+            this.view = view;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            operation.executeOperation();
+            druglist = ((DemoNoSQLTableDrug.DemoQueryWithPartitionKeyOnly)operation).getResultArray();
+            drugnames = new String[druglist.length];
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void args) {
+            initializeActivity(view);
+        }
+    }
 }

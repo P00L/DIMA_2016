@@ -34,7 +34,7 @@ public class DemoNoSQLTableDrug extends DemoNoSQLTableBase {
     /** Removing sample data removes the items in batches of the following size. */
     private static final int MAX_BATCH_SIZE_FOR_DELETE = 50;
 
-
+    public static final String PARTITION_KEY_ONLY = "query by partition key only";
     /********* Primary Get Query Inner Classes *********/
 
     public class DemoGetWithPartitionKeyAndSortKey extends DemoNoSQLOperationBase {
@@ -582,8 +582,15 @@ public class DemoNoSQLTableDrug extends DemoNoSQLTableBase {
         }).start();
     }
 
+    // TODO: mettere switch case su operation per metodo
     @Override
     public DemoNoSQLOperationListItem getOperationByName(Context context,String operation){
-        return new DemoQueryWithPartitionKeyOnly(context);
+        switch (operation){
+            case PARTITION_KEY_ONLY:
+                return new DemoQueryWithPartitionKeyOnly(context);
+            default:
+                return new DemoQueryWithPartitionKeyOnly(context);
+        }
+
     }
 }
