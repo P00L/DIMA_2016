@@ -2,8 +2,10 @@ package com.mysampleapp.fragment;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -21,6 +23,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -77,6 +80,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     DrugDO[] druglist;
     String[] drugnames;
     private ScheduleDrugDO scheduleDrugDO;
+    ProgressDialog mProgressDialog;
 
 
     public static final String NEW_ALARM_ADDED = "new_alarm_added";
@@ -131,16 +135,15 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_schedule_form, container, false);
         //activity = (AppCompatActivity) getActivity();
-        DemoNoSQLTableBase demoTable= DemoNoSQLTableFactory.instance(getContext())
+        DemoNoSQLTableBase demoTable = DemoNoSQLTableFactory.instance(getContext())
                 .getNoSQLTableByTableName("Drug");
-        operation = (DemoNoSQLOperation)demoTable.getOperationByName(getContext(),"ASD");
+        operation = (DemoNoSQLOperation) demoTable.getOperationByName(getContext(), "ASD");
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             Log.w("entrato", "entrato");
             scheduleDrugDO = savedInstanceState.getParcelable("scheduleDrugDoParc");
-        }
-        else{
-            if(scheduleDrugDO == null)
+        } else {
+            if (scheduleDrugDO == null)
                 scheduleDrugDO = new ScheduleDrugDO();
         }
 
@@ -151,7 +154,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         activity = (AppCompatActivity) getActivity();
-        FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
         fab.hide();
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
 
@@ -166,8 +169,8 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        ((HomeActivity)activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
-        ((HomeActivity)activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
+        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
+        ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
@@ -213,6 +216,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
     private void initializeActivity(View view) {
 
         // Time step vars
@@ -225,7 +229,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         // Vertical Stepper form vars
         int colorPrimary = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
         int colorPrimaryDark = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
-        String[] stepsTitles =  {"Drug", "Notes", "Hour", "Days",};
+        String[] stepsTitles = {"Drug", "Notes", "Hour", "Days",};
         //String[] stepsSubtitles = getResources().getStringArray(R.array.steps_subtitles);
 
         // Here we find and initialize the form
@@ -292,97 +296,39 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
     @Override
     public void sendData() {
-        executeDataSending();
-    }
-
-
-    //TODO UNICA COSA DA TENERE
-    private void executeDataSending() {
-
-        //get shared pref file
-        SharedPreferences sharedPref = getContext().getSharedPreferences(
-                getContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
-        // getting the last used number for the alarm id or 0 as default value for the first
-        int old_alarm_id = sharedPref.getInt(getContext().getString(R.string.alarm_id), 0);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        final int alarm_id = old_alarm_id + 1;
-        Log.w("alarm id",alarm_id+"");
-        editor.putInt(getString(R.string.alarm_id), alarm_id);
-        editor.apply();
-        final String drugName = "drug"+alarm_id;
-
-        scheduleDrugDO = new ScheduleDrugDO();
-        scheduleDrugDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-        scheduleDrugDO.setNotes("notes"+alarm_id);
-        scheduleDrugDO.setDrug(drugName);
-        Set<String> day_list = new HashSet<String>();
-        day_list.add("1");
-        day_list.add("2");
-        day_list.add("3");
-        day_list.add("4");
-        day_list.add("5");
-
-        scheduleDrugDO.setDay(day_list);
-        Set<Double> hour_list = new HashSet<Double>();
+        //TODO SETTARE TUTTI I VALORI DI SCGEDULEDRUGDO presi dagli input form
+        scheduleDrugDO.setDrug("drug");
+        Set<Double> s = new HashSet<Double>();
         Random r = new Random();
-        hour_list.add(r.nextDouble());
-        hour_list.add(r.nextDouble());
-        scheduleDrugDO.setHour(hour_list);
-        scheduleDrugDO.setAlarmId(Double.parseDouble(alarm_id+""));
-
-        //TODO fare la save poi se va a buon fine far partire l'alarm
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //#####################################################################
-                    //errore Null or empty value for key: public java.lang.String com.mysampleapp.demo.nosql.DoctorDO.getEmail()
-                    mapper.save(scheduleDrugDO);
-                } catch (final AmazonClientException ex) {
-                    Log.e("ASD", "Failed saving item : " + ex.getMessage(), ex);
-                }
-
-                //TODO UNA VOLTA CHE E' SALVATO NEL DB POSSIAMO SETTARE L'ALARM MANAGER IN UN BACKGROUND TASK
-                AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
-                // Define our intention of executing AlertReceiver
-                Intent alertIntent = new Intent(getContext(), AlarmReceiver.class);
-
-                alertIntent.putExtra(ScheduleFormFragment.ALARM_ID_EXTRA, alarm_id);
-                alertIntent.putExtra(ScheduleFormFragment.DRUG_EXTRA, drugName);
-                PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(), alarm_id, alertIntent, PendingIntent.FLAG_ONE_SHOT);
-
-                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        SystemClock.elapsedRealtime() +
-                                15 * 1000, alarmIntent);
-
-                Fragment fragment = new ScheduleListFragment();
-                AppCompatActivity activity = (AppCompatActivity) getActivity();
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content_frame, fragment)
-                        .addToBackStack(null)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-
-
-            }
-        }).start();
+        s.add(r.nextDouble());
+        s.add(r.nextDouble());
+        s.add(r.nextDouble());
+        s.add(r.nextDouble());
+        scheduleDrugDO.setHour(s);
+        scheduleDrugDO.setNotes("notes");
+        Set<String> ss = new HashSet<String>();
+        ss.add(1+"");
+        ss.add(3+"");
+        ss.add(6+"");
+        scheduleDrugDO.setDay(ss);
+        new SaveTask().execute();
     }
 
 
     private View addDrugStep() {
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        View addDrugView = inflater.inflate(R.layout.drug_choice, null ,false);
+        View addDrugView = inflater.inflate(R.layout.drug_choice, null, false);
         addDrugView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         // Get a reference to the AutoCompleteTextView in the layout
         autoDrugTextView = (AutoCompleteTextView) addDrugView.findViewById(R.id.autocomplete_drug);
 
-        if(scheduleDrugDO.getDrug()!=null)
+        if (scheduleDrugDO.getDrug() != null)
             autoDrugTextView.setText(scheduleDrugDO.getDrug());
 
         autoDrugTextView.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -390,12 +336,13 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
         autoDrugTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(checkIfExists(autoDrugTextView.getText().toString())) {
+                if (checkIfExists(autoDrugTextView.getText().toString())) {
                     verticalStepperForm.goToNextStep();
                 }
                 return false;
@@ -440,11 +387,11 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         daysStepContent = (LinearLayout) inflater.inflate(
                 R.layout.step_days_of_week_layout, null, false);
 
-        String[] weekDays = {"L","M","M","G","V","S","D"};
-        for(int i = 0; i < weekDays.length; i++) {
+        String[] weekDays = {"L", "M", "M", "G", "V", "S", "D"};
+        for (int i = 0; i < weekDays.length; i++) {
             final int index = i;
             final LinearLayout dayLayout = getDayLayout(index);
-            if(index < 5) {
+            if (index < 5) {
                 activateDay(index, dayLayout, false);
             } else {
                 deactivateDay(index, dayLayout, false);
@@ -453,7 +400,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
             dayLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if((boolean)v.getTag()) {
+                    if ((boolean) v.getTag()) {
                         deactivateDay(index, dayLayout, true);
                     } else {
                         activateDay(index, dayLayout, true);
@@ -480,7 +427,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     private boolean checkTitleStep(String title) {
         boolean titleIsCorrect = false;
 
-        if(title.length() >= MIN_CHARACTERS_TITLE) {
+        if (title.length() >= MIN_CHARACTERS_TITLE) {
             titleIsCorrect = true;
 
             verticalStepperForm.setActiveStepAsCompleted();
@@ -521,7 +468,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         TextView dayText = (TextView) dayLayout.findViewById(R.id.day);
         dayText.setTextColor(Color.rgb(255, 255, 255));
 
-        if(check) {
+        if (check) {
             checkDays();
         }
     }
@@ -537,20 +484,20 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         int colour = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
         dayText.setTextColor(colour);
 
-        if(check) {
+        if (check) {
             checkDays();
         }
     }
 
     private boolean checkDays() {
         boolean thereIsAtLeastOneDaySelected = false;
-        for(int i = 0; i < weekDays.length && !thereIsAtLeastOneDaySelected; i++) {
-            if(weekDays[i]) {
+        for (int i = 0; i < weekDays.length && !thereIsAtLeastOneDaySelected; i++) {
+            if (weekDays[i]) {
                 verticalStepperForm.setStepAsCompleted(DAYS_STEP_NUM);
                 thereIsAtLeastOneDaySelected = true;
             }
         }
-        if(!thereIsAtLeastOneDaySelected) {
+        if (!thereIsAtLeastOneDaySelected) {
             String atleastone = getResources().getString(R.string.at_least_one);
             verticalStepperForm.setActiveStepAsUncompleted(atleastone);
         }
@@ -564,30 +511,28 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         return (LinearLayout) daysStepContent.findViewById(id);
     }
 
-    private boolean checkIfExists(String drugname){
+    private boolean checkIfExists(String drugname) {
         boolean exists = false;
-        if(drugnames!=null){
+        if (drugnames != null) {
             for (String s : drugnames) {
-                if(s.equals(drugname))
+                if (s.equals(drugname))
                     exists = true;
             }
-            if(exists)
+            if (exists)
                 verticalStepperForm.setActiveStepAsCompleted();
             else {
-                if(drugname.isEmpty()){
+                if (drugname.isEmpty()) {
                     String emptycontent;
                     emptycontent = getResources().getString(R.string.error_empty_content);
                     verticalStepperForm.setActiveStepAsUncompleted(emptycontent);
-                }
-                else{
+                } else {
                     String nodrug;
                     nodrug = getResources().getString(R.string.error_drug_not_exists);
                     verticalStepperForm.setActiveStepAsUncompleted(nodrug);
                 }
             }
             return exists;
-        }
-        else{
+        } else {
             Log.w("drugnameNULL", "drugnameNULL");
             return exists;
         }
@@ -598,24 +543,24 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
 
-        if(scheduleDrugDO == null)
+        if (scheduleDrugDO == null)
             scheduleDrugDO = new ScheduleDrugDO();
         scheduleDrugDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
 
         // Saving drug field
-        if(autoDrugTextView != null) {
-            if(!autoDrugTextView.getText().toString().isEmpty())
+        if (autoDrugTextView != null) {
+            if (!autoDrugTextView.getText().toString().isEmpty())
                 scheduleDrugDO.setDrug(autoDrugTextView.getText().toString());
         }
         // Saving notes field
-        if(notesEditText != null) {
-            if(!notesEditText.getText().toString().isEmpty())
+        if (notesEditText != null) {
+            if (!notesEditText.getText().toString().isEmpty())
                 scheduleDrugDO.setNotes(notesEditText.getText().toString());
         }
         // Saving hour field --- Set è una collezione, utilizza metodo add, conviene usare String
         // ed eventualmente splittare sul divisore
-        if(timeTextView != null){
-            if(!timeTextView.getText().toString().isEmpty())
+        if (timeTextView != null) {
+            if (!timeTextView.getText().toString().isEmpty())
                 Log.w("cambiare", "cambiare");
             // scheduleDrugDO.setHour();
 
@@ -630,6 +575,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private View view;
+
         public MyAsyncTask(View view) {
             this.view = view;
         }
@@ -642,10 +588,11 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         @Override
         protected Void doInBackground(Void... params) {
             operation.executeOperation();
-            druglist = ((DemoNoSQLTableDrug.DemoQueryWithPartitionKeyOnly)operation).getResultArray();
+            druglist = ((DemoNoSQLTableDrug.DemoQueryWithPartitionKeyOnly) operation).getResultArray();
             drugnames = new String[druglist.length];
             return null;
         }
+
         @Override
         protected void onPostExecute(Void args) {
             int n = 0;
@@ -657,7 +604,106 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, drugnames);
             autoDrugTextView.setAdapter(adapter);
-            checkIfExists("");
+        }
+    }
+
+    private class SaveTask extends AsyncTask<Void, Void, Void> {
+        private Boolean success;
+
+        public SaveTask() {
+            success = false;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Create a progressdialog
+            mProgressDialog = new ProgressDialog(getActivity());
+            // Set progressdialog title
+            mProgressDialog.setTitle("Save data");
+            // Set progressdialog message
+            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setIndeterminate(false);
+            mProgressDialog.setCancelable(false);
+            // Show progressdialog
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            //setting the alarmID field retriving the value from shared pref
+            SharedPreferences sharedPref = getContext().getSharedPreferences(
+                    getContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
+            // getting the last used number for the alarm id or 0 as default value for the first
+            int old_alarm_id = sharedPref.getInt(getContext().getString(R.string.alarm_id), 0);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            int alarm_id = old_alarm_id + 1;
+            Log.w("alarm id", alarm_id + "");
+            editor.putInt(getString(R.string.alarm_id), alarm_id);
+            editor.apply();
+            scheduleDrugDO.setAlarmId(Double.parseDouble(alarm_id + ""));
+            scheduleDrugDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+            //save into db
+            try {
+                mapper.save(scheduleDrugDO);
+                success = true;
+            } catch (final AmazonClientException ex) {
+                Log.e("ScheduleFormFragment", "Failed saving item : " + ex.getMessage(), ex);
+                success = false;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void args) {
+            //handle success or fail of db insertion
+            if (success) {
+                mProgressDialog.dismiss();
+                AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+                // Define our intention of executing AlertReceiver
+                Intent alertIntent = new Intent(getContext(), AlarmReceiver.class);
+                int alarmID = scheduleDrugDO.getAlarmId().intValue();
+                alertIntent.putExtra(ScheduleFormFragment.ALARM_ID_EXTRA, alarmID);
+                alertIntent.putExtra(ScheduleFormFragment.DRUG_EXTRA, scheduleDrugDO.getDrug());
+                PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(), alarmID, alertIntent, PendingIntent.FLAG_ONE_SHOT);
+
+                //TODO INVOCARE METODI CHE CALCOLA IL TEMPO PER IL PROSSIMO ALARM DA  ricordarsi di non fare cntrollo solo sul
+                //giorno ma anche sull'ora dello stesso giorno
+                long trigger_millis = SystemClock.elapsedRealtime() + 15 * 1000;
+
+                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,trigger_millis, alarmIntent);
+
+                //TODO DEVE DIVENTARE UNA POP
+                Fragment fragment = new ScheduleListFragment();
+                AppCompatActivity activity = (AppCompatActivity) getActivity();
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+
+            } else {
+                mProgressDialog.dismiss();
+                // 1. Instantiate an AlertDialog.Builder with its constructor
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                // 2. Chain together various setter methods to set the dialog characteristics
+                builder.setMessage("Error")
+                        .setTitle("an error as occurred");
+
+                // 3. Get the AlertDialog from create()
+                AlertDialog dialog = builder.create();
+
+                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                dialog.show();
+
+            }
         }
     }
 }

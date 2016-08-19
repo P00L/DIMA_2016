@@ -4,9 +4,11 @@ import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -115,7 +117,8 @@ public class ServiceNotification extends IntentService {
 
                 long thirtySecondsFromNow = System.currentTimeMillis() + 60 * 1000;
 
-                alarmManager.set(AlarmManager.RTC_WAKEUP, thirtySecondsFromNow, alarmIntent);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, thirtySecondsFromNow, alarmIntent);
+
             }
         }).start();
 
