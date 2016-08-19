@@ -50,6 +50,10 @@ import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
 import com.mysampleapp.demo.nosql.DrugDO;
 import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormLayout;
 import ernestoyaquello.com.verticalstepperform.interfaces.VerticalStepperForm;
 
@@ -154,6 +158,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         //inizialize vertical stepper
         //initializeActivity(view);
         //new MyAsyncTask(view).execute();
+        initializeActivity(view);
 
         activity.getSupportActionBar().setTitle(R.string.add_schedule);
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
@@ -293,12 +298,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
     //TODO UNICA COSA DA TENERE
     private void executeDataSending() {
-        // fire the alarm
-        Log.w("ScheduleFormFragment", "FIRE IN THE HOLE");
-
-        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
-        // Define our intention of executing AlertReceiver
-        Intent alertIntent = new Intent(getContext(), AlarmReceiver.class);
 
         //get shared pref file
         SharedPreferences sharedPref = getContext().getSharedPreferences(
@@ -306,25 +305,29 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         // getting the last used number for the alarm id or 0 as default value for the first
         int old_alarm_id = sharedPref.getInt(getContext().getString(R.string.alarm_id), 0);
         SharedPreferences.Editor editor = sharedPref.edit();
-        int alarm_id = old_alarm_id + 1;
+        final int alarm_id = old_alarm_id + 1;
         Log.w("alarm id",alarm_id+"");
         editor.putInt(getString(R.string.alarm_id), alarm_id);
         editor.apply();
-
-        alertIntent.putExtra(ScheduleFormFragment.ALARM_ID_EXTRA, alarm_id);
-        alertIntent.putExtra(ScheduleFormFragment.DRUG_EXTRA, alarm_id+"drugname");
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(), alarm_id, alertIntent, PendingIntent.FLAG_ONE_SHOT);
-
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() +
-                        15 * 1000, alarmIntent);
-
-        Toast.makeText(getContext(), "set alarm 15 second from now", Toast.LENGTH_SHORT).show();
+        final String drugName = "drug"+alarm_id;
 
         scheduleDrugDO = new ScheduleDrugDO();
         scheduleDrugDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
         scheduleDrugDO.setNotes("notes"+alarm_id);
-        scheduleDrugDO.setDrug("drug"+alarm_id);
+        scheduleDrugDO.setDrug(drugName);
+        Set<String> day_list = new HashSet<String>();
+        day_list.add("1");
+        day_list.add("2");
+        day_list.add("3");
+        day_list.add("4");
+        day_list.add("5");
+
+        scheduleDrugDO.setDay(day_list);
+        Set<Double> hour_list = new HashSet<Double>();
+        Random r = new Random();
+        hour_list.add(r.nextDouble());
+        hour_list.add(r.nextDouble());
+        scheduleDrugDO.setHour(hour_list);
         scheduleDrugDO.setAlarmId(Double.parseDouble(alarm_id+""));
 
         //TODO fare la save poi se va a buon fine far partire l'alarm
@@ -338,20 +341,34 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                 } catch (final AmazonClientException ex) {
                     Log.e("ASD", "Failed saving item : " + ex.getMessage(), ex);
                 }
+
+                //TODO UNA VOLTA CHE E' SALVATO NEL DB POSSIAMO SETTARE L'ALARM MANAGER IN UN BACKGROUND TASK
+                AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+                // Define our intention of executing AlertReceiver
+                Intent alertIntent = new Intent(getContext(), AlarmReceiver.class);
+
+                alertIntent.putExtra(ScheduleFormFragment.ALARM_ID_EXTRA, alarm_id);
+                alertIntent.putExtra(ScheduleFormFragment.DRUG_EXTRA, drugName);
+                PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(), alarm_id, alertIntent, PendingIntent.FLAG_ONE_SHOT);
+
+                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        SystemClock.elapsedRealtime() +
+                                15 * 1000, alarmIntent);
+
+                Fragment fragment = new ScheduleListFragment();
+                AppCompatActivity activity = (AppCompatActivity) getActivity();
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+
+
             }
         }).start();
-
-        Fragment fragment = new ScheduleListFragment();
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .addToBackStack(null)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .commit();
-
-
     }
+
 
     private View addDrugStep() {
         LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -359,16 +376,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         addDrugView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         // Get a reference to the AutoCompleteTextView in the layout
         autoDrugTextView = (AutoCompleteTextView) addDrugView.findViewById(R.id.autocomplete_drug);
-
-        int n = 0;
-        for (DrugDO drugDO : druglist) {
-            drugnames[n] = drugDO.getName();
-            Log.w("nomedrug", drugnames[n]);
-            n++;
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, drugnames);
-        autoDrugTextView.setAdapter(adapter);
 
         if(scheduleDrugDO.getDrug()!=null)
             autoDrugTextView.setText(scheduleDrugDO.getDrug());
@@ -641,7 +648,15 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         }
         @Override
         protected void onPostExecute(Void args) {
-            initializeActivity(view);
+            int n = 0;
+            for (DrugDO drugDO : druglist) {
+                drugnames[n] = drugDO.getName();
+                Log.w("nomedrug", drugnames[n]);
+                n++;
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, drugnames);
+            autoDrugTextView.setAdapter(adapter);
         }
     }
 }

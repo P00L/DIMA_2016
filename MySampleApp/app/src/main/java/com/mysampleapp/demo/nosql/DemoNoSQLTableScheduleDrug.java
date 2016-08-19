@@ -40,24 +40,30 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
     public class DemoGetWithPartitionKeyAndSortKey extends DemoNoSQLOperationBase {
         private ScheduleDrugDO result;
         private boolean resultRetrieved = true;
+        private Double alarmID;
 
-        DemoGetWithPartitionKeyAndSortKey(final Context context) {
+        DemoGetWithPartitionKeyAndSortKey(final Context context,Double alarmID) {
             super(context.getString(R.string.nosql_operation_get_by_partition_and_sort_text),
                 String.format(context.getString(R.string.nosql_operation_example_get_by_partition_and_sort_text),
                     "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(),
-                    "alarmId", "1111500000"));
+                    "alarmId", alarmID));
+            this.alarmID = alarmID;
         }
 
         @Override
         public boolean executeOperation() {
             // Retrieve an item by passing the partition key using the object mapper.
-            result = mapper.load(ScheduleDrugDO.class, AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(), 1111500000.0);
+            result = mapper.load(ScheduleDrugDO.class, AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(), alarmID);
 
             if (result != null) {
                 resultRetrieved = false;
                 return true;
             }
             return false;
+        }
+
+        public ScheduleDrugDO getResult(){
+            return result;
         }
 
         @Override
@@ -547,7 +553,7 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
         List<DemoNoSQLOperationListItem> noSQLOperationsList = new ArrayList<DemoNoSQLOperationListItem>();
         noSQLOperationsList.add(new DemoNoSQLOperationListHeader(
             context.getString(R.string.nosql_operation_header_get)));
-        noSQLOperationsList.add(new DemoGetWithPartitionKeyAndSortKey(context));
+        noSQLOperationsList.add(new DemoGetWithPartitionKeyAndSortKey(context,5.0));
 
         noSQLOperationsList.add(new DemoNoSQLOperationListHeader(
             context.getString(R.string.nosql_operation_header_primary_queries)));
@@ -582,6 +588,16 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
 
     @Override
     public DemoNoSQLOperationListItem getOperationByName(Context context, String operation) {
-        return new DemoQueryWithPartitionKeyOnly(context);
+        if(operation == "all")
+            return new DemoQueryWithPartitionKeyOnly(context);
+        return null;
+    }
+
+
+    public DemoNoSQLOperation getOperationByNameSingle(Context context, String operation,Double alarmID) {
+        if(operation == "one")
+            return new DemoGetWithPartitionKeyAndSortKey(context,alarmID);
+        else
+            return null;
     }
 }

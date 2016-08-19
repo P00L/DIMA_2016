@@ -74,7 +74,7 @@ public class ScheduleListFragment extends Fragment {
         activity = (AppCompatActivity) getActivity();
         DemoNoSQLTableBase demoTable = DemoNoSQLTableFactory.instance(getContext())
                 .getNoSQLTableByTableName("ScheduleDrug");
-        operation = (DemoNoSQLOperation) demoTable.getOperationByName(getContext(), "ASD");
+        operation = (DemoNoSQLOperation) demoTable.getOperationByName(getContext(), "all");
 
         new MyAsyncTask().execute();
         return view;

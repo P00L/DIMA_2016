@@ -12,6 +12,10 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
@@ -177,7 +181,12 @@ public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
         alarmIdKeyTextView.setText("alarmId");
         alarmIdValueTextView.setText("" + result.getAlarmId().longValue());
         dayKeyTextView.setText("day");
-        dayValueTextView.setText(result.getDay().toString());
+
+        Set<String> set = result.getDay();
+        List<String> list = new ArrayList<String>(set);
+        Collections.sort(list);
+
+        dayValueTextView.setText(list.toString());
         drugKeyTextView.setText("drug");
         drugValueTextView.setText(result.getDrug());
         hourKeyTextView.setText("hour");

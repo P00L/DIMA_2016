@@ -1,6 +1,10 @@
 package com.mysampleapp.activity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -27,6 +31,7 @@ import android.widget.TextView;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobile.user.IdentityManager;
 import com.amazonaws.mobile.user.IdentityProvider;
+import com.mysampleapp.AlarmReceiver;
 import com.mysampleapp.R;
 import com.mysampleapp.demo.DemoConfiguration;
 import com.mysampleapp.demo.nosql.NoSQLSelectTableDemoFragment;
@@ -39,6 +44,9 @@ import com.mysampleapp.fragment.HomeFragment;
 import com.mysampleapp.fragment.ScheduleFormFragment;
 import com.mysampleapp.fragment.ScheduleFragment;
 import com.mysampleapp.fragment.ScheduleListFragment;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -66,8 +74,34 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//************************************************************************************************************
+        //TODO GRANDE COME UNA CASA TOGLIERE
+
+        //CLEAR ALARM MANAGER
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_name), Context.MODE_PRIVATE);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Set<String> s = new HashSet<String>(sharedPref.getStringSet(getApplicationContext().getString(R.string.pending_alarm),
+                new HashSet<String>()));
+        for (String ss : s) {
+            String [] split = ss.split("/");
+            int alarm_id = Integer.parseInt(split[0]);
+            Log.w("CANCEL ALAMR",alarm_id+"");
+            // Cancel Alarm using Reminder ID
+            Intent alertIntent = new Intent(this, AlarmReceiver.class);
+            PendingIntent alarmIntent = PendingIntent.getBroadcast(this, alarm_id, alertIntent, PendingIntent.FLAG_ONE_SHOT);
+            alarmManager.cancel(alarmIntent);
+
+        }
+
+        //clear shared pref
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.clear().apply();
         setContentView(R.layout.activity_home);
 
+//***********************************************************************************************************
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
