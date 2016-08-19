@@ -635,7 +635,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, drugnames);
             autoDrugTextView.setAdapter(adapter);
-            checkIfExists("");
         }
     }
 }
