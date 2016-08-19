@@ -380,28 +380,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         if(scheduleDrugDO.getDrug()!=null)
             autoDrugTextView.setText(scheduleDrugDO.getDrug());
 
-        autoDrugTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkIfExists(autoDrugTextView.getText().toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-        autoDrugTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(checkIfExists(autoDrugTextView.getText().toString())) {
-                    verticalStepperForm.goToNextStep();
-                }
-                return false;
-            }
-        });
-
         return addDrugView;
     }
 
@@ -657,6 +635,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, drugnames);
             autoDrugTextView.setAdapter(adapter);
+            checkIfExists("");
         }
     }
 }
