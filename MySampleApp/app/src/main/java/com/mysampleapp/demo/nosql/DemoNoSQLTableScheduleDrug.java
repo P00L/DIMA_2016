@@ -42,7 +42,7 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
         private boolean resultRetrieved = true;
         private Double alarmID;
 
-        DemoGetWithPartitionKeyAndSortKey(final Context context,Double alarmID) {
+        DemoGetWithPartitionKeyAndSortKey(final Context context, Double alarmID) {
             super(context.getString(R.string.nosql_operation_get_by_partition_and_sort_text),
                 String.format(context.getString(R.string.nosql_operation_example_get_by_partition_and_sort_text),
                     "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(),
@@ -190,7 +190,7 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
             super(context.getString(R.string.nosql_operation_title_query_by_partition_and_filter_text),
                   String.format(context.getString(R.string.nosql_operation_example_query_by_partition_and_filter_text),
                       "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(),
-                      "drug", "demo-drug-500000"));
+                      "day", "demo-day-500000"));
         }
 
         @Override
@@ -201,15 +201,15 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
             // Use an expression names Map to avoid the potential for attribute names
             // colliding with DynamoDB reserved words.
             final Map <String, String> filterExpressionAttributeNames = new HashMap<>();
-            filterExpressionAttributeNames.put("#drug", "drug");
+            filterExpressionAttributeNames.put("#day", "day");
 
             final Map<String, AttributeValue> filterExpressionAttributeValues = new HashMap<>();
-            filterExpressionAttributeValues.put(":Mindrug",
-                new AttributeValue().withS("demo-drug-500000"));
+            filterExpressionAttributeValues.put(":Minday",
+                new AttributeValue().withS("demo-day-500000"));
 
             final DynamoDBQueryExpression<ScheduleDrugDO> queryExpression = new DynamoDBQueryExpression<ScheduleDrugDO>()
                 .withHashKeyValues(itemToFind)
-                .withFilterExpression("#drug > :Mindrug")
+                .withFilterExpression("#day > :Minday")
                 .withExpressionAttributeNames(filterExpressionAttributeNames)
                 .withExpressionAttributeValues(filterExpressionAttributeValues)
                 .withConsistentRead(false)
@@ -246,7 +246,7 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
                   String.format(context.getString(R.string.nosql_operation_example_query_by_partition_sort_condition_and_filter_text),
                       "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID(),
                       "alarmId", "1111500000",
-                      "drug", "demo-drug-500000"));
+                      "day", "demo-day-500000"));
         }
 
         public boolean executeOperation() {
@@ -260,16 +260,16 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
             // Use an expression names Map to avoid the potential for attribute names
             // colliding with DynamoDB reserved words.
             final Map <String, String> filterExpressionAttributeNames = new HashMap<>();
-            filterExpressionAttributeNames.put("#drug", "drug");
+            filterExpressionAttributeNames.put("#day", "day");
 
             final Map<String, AttributeValue> filterExpressionAttributeValues = new HashMap<>();
-            filterExpressionAttributeValues.put(":Mindrug",
-                new AttributeValue().withS("demo-drug-500000"));
+            filterExpressionAttributeValues.put(":Minday",
+                new AttributeValue().withS("demo-day-500000"));
 
             final DynamoDBQueryExpression<ScheduleDrugDO> queryExpression = new DynamoDBQueryExpression<ScheduleDrugDO>()
                 .withHashKeyValues(itemToFind)
                 .withRangeKeyCondition("alarmId", rangeKeyCondition)
-                .withFilterExpression("#drug > :Mindrug")
+                .withFilterExpression("#day > :Minday")
                 .withExpressionAttributeNames(filterExpressionAttributeNames)
                 .withExpressionAttributeValues(filterExpressionAttributeValues)
                 .withConsistentRead(false)
@@ -308,7 +308,7 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
         DemoScanWithFilter(final Context context) {
             super(context.getString(R.string.nosql_operation_title_scan_with_filter),
                 String.format(context.getString(R.string.nosql_operation_example_scan_with_filter),
-                    "drug", "demo-drug-500000"));
+                    "day", "demo-day-500000"));
         }
 
         @Override
@@ -316,13 +316,13 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
             // Use an expression names Map to avoid the potential for attribute names
             // colliding with DynamoDB reserved words.
             final Map <String, String> filterExpressionAttributeNames = new HashMap<>();
-            filterExpressionAttributeNames.put("#drug", "drug");
+            filterExpressionAttributeNames.put("#day", "day");
 
             final Map<String, AttributeValue> filterExpressionAttributeValues = new HashMap<>();
-            filterExpressionAttributeValues.put(":Mindrug",
-                new AttributeValue().withS("demo-drug-500000"));
+            filterExpressionAttributeValues.put(":Minday",
+                new AttributeValue().withS("demo-day-500000"));
             final DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
-                .withFilterExpression("#drug > :Mindrug")
+                .withFilterExpression("#day > :Minday")
                 .withExpressionAttributeNames(filterExpressionAttributeNames)
                 .withExpressionAttributeValues(filterExpressionAttributeValues);
 
@@ -454,10 +454,12 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
 
         firstItem.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
         firstItem.setAlarmId(1111500000.0);
-        firstItem.setDay(DemoSampleDataGenerator.getSampleStringSet());
+        firstItem.setDay(
+            DemoSampleDataGenerator.getRandomSampleString("day"));
         firstItem.setDrug(
             DemoSampleDataGenerator.getRandomSampleString("drug"));
-        firstItem.setHour(DemoSampleDataGenerator.getSampleNumberSet());
+        firstItem.setHour(
+            DemoSampleDataGenerator.getRandomSampleString("hour"));
         firstItem.setNotes(
             DemoSampleDataGenerator.getRandomSampleString("notes"));
         AmazonClientException lastException = null;
@@ -474,9 +476,9 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
             final ScheduleDrugDO item = new ScheduleDrugDO();
             item.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
             item.setAlarmId(DemoSampleDataGenerator.getRandomSampleNumber());
-            item.setDay(DemoSampleDataGenerator.getSampleStringSet());
+            item.setDay(DemoSampleDataGenerator.getRandomSampleString("day"));
             item.setDrug(DemoSampleDataGenerator.getRandomSampleString("drug"));
-            item.setHour(DemoSampleDataGenerator.getSampleNumberSet());
+            item.setHour(DemoSampleDataGenerator.getRandomSampleString("hour"));
             item.setNotes(DemoSampleDataGenerator.getRandomSampleString("notes"));
 
             items[count] = item;
@@ -553,7 +555,7 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
         List<DemoNoSQLOperationListItem> noSQLOperationsList = new ArrayList<DemoNoSQLOperationListItem>();
         noSQLOperationsList.add(new DemoNoSQLOperationListHeader(
             context.getString(R.string.nosql_operation_header_get)));
-        noSQLOperationsList.add(new DemoGetWithPartitionKeyAndSortKey(context,5.0));
+        noSQLOperationsList.add(new DemoGetWithPartitionKeyAndSortKey(context, 5.0));
 
         noSQLOperationsList.add(new DemoNoSQLOperationListHeader(
             context.getString(R.string.nosql_operation_header_primary_queries)));
@@ -593,11 +595,10 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
         return null;
     }
 
-
-    public DemoNoSQLOperation getOperationByNameSingle(Context context, String operation,Double alarmID) {
-        if(operation == "one")
-            return new DemoGetWithPartitionKeyAndSortKey(context,alarmID);
-        else
-            return null;
+    public DemoNoSQLOperation getOperationByNameSingle(Context context, String operation, Double alarmID) {
+            if(operation == "one")
+                return new DemoGetWithPartitionKeyAndSortKey(context,alarmID);
+            else
+                return null;
     }
 }

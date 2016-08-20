@@ -4,12 +4,9 @@ import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -76,8 +73,13 @@ public class ServiceNotification extends IntentService {
                 Log.w("ALARM ID EXTRA", finalAlarmID + "");
                 Log.w("ALARM ID DB", item.getAlarmId() + "");
 
-                Set<String> set = item.getDay();
-                List<String> list = new ArrayList<String>(set);
+                //modifica dopo cambio da Set<String> a String
+                // la stringa salvata e ritornata da getDay() deve essere formattata "day1/day2/dayn"
+                String days = item.getDay();
+                String[] splitday = days.split("/");
+                List<String> list = new ArrayList<String>();
+                for(String s : splitday)
+                    list.add(s);
                 Collections.sort(list);
 
                 Log.w("SERVICE LIST", list.toString());
@@ -117,7 +119,7 @@ public class ServiceNotification extends IntentService {
 
                 long thirtySecondsFromNow = System.currentTimeMillis() + 60 * 1000;
 
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, thirtySecondsFromNow, alarmIntent);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, thirtySecondsFromNow, alarmIntent);
 
             }
         }).start();

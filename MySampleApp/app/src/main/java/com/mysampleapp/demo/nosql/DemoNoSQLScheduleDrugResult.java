@@ -12,10 +12,6 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
@@ -28,13 +24,13 @@ public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
     @Override
     public void updateItem() {
         final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-        final String originalValue = result.getDrug();
-        result.setDrug(DemoSampleDataGenerator.getRandomSampleString("drug"));
+        final String originalValue = result.getDay();
+        result.setDay(DemoSampleDataGenerator.getRandomSampleString("day"));
         try {
             mapper.save(result);
         } catch (final AmazonClientException ex) {
             // Restore original data if save fails, and re-throw.
-            result.setDrug(originalValue);
+            result.setDay(originalValue);
             throw ex;
         }
     }
@@ -181,16 +177,11 @@ public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
         alarmIdKeyTextView.setText("alarmId");
         alarmIdValueTextView.setText("" + result.getAlarmId().longValue());
         dayKeyTextView.setText("day");
-
-        Set<String> set = result.getDay();
-        List<String> list = new ArrayList<String>(set);
-        Collections.sort(list);
-
-        dayValueTextView.setText(list.toString());
+        dayValueTextView.setText(result.getDay());
         drugKeyTextView.setText("drug");
         drugValueTextView.setText(result.getDrug());
         hourKeyTextView.setText("hour");
-        hourValueTextView.setText(result.getHour().toString());
+        hourValueTextView.setText(result.getHour());
         notesKeyTextView.setText("notes");
         notesValueTextView.setText(result.getNotes());
         return layout;
