@@ -52,7 +52,11 @@ import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
 import com.mysampleapp.demo.nosql.DrugDO;
 import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormLayout;
 import ernestoyaquello.com.verticalstepperform.interfaces.VerticalStepperForm;
@@ -424,7 +428,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                         count++;
                     } else
                         deactivateDay(index, dayLayout, false);
-                }else{
+                } else {
                     deactivateDay(index, dayLayout, false);
                 }
             } else {
@@ -551,7 +555,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
     private boolean checkIfExists(String drugname) {
         boolean exists = false;
-        //nullpointer su s.equals se drugnames non nullo ma vuoto
         if (drugnames != null && drugnames.length > 0) {
             for (String s : drugnames) {
                 if (s.equals(drugname))
@@ -677,6 +680,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
             // Set progressdialog message
             mProgressDialog.setMessage("Loading...");
             mProgressDialog.setIndeterminate(false);
+            //TODO aggiungerlo a tutti i dialog di attesa
             mProgressDialog.setCancelable(false);
             // Show progressdialog
             mProgressDialog.show();
@@ -713,24 +717,8 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
             //handle success or fail of db insertion
             if (success) {
                 mProgressDialog.dismiss();
-                AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
-                // Define our intention of executing AlertReceiver
-                Intent alertIntent = new Intent(getContext(), AlarmReceiver.class);
-                int alarmID = scheduleDrugDO.getAlarmId().intValue();
-                alertIntent.putExtra(ScheduleFormFragment.ALARM_ID_EXTRA, alarmID);
-                alertIntent.putExtra(ScheduleFormFragment.DRUG_EXTRA, scheduleDrugDO.getDrug());
-                PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(), alarmID, alertIntent, PendingIntent.FLAG_ONE_SHOT);
 
-                //TODO INVOCARE METODI CHE CALCOLA IL TEMPO PER IL PROSSIMO ALARM DA  ricordarsi di non fare cntrollo solo sul
-                //giorno ma anche sull'ora dello stesso giorno
-                //TODO manca anche se viene modificato
-                Log.w("day",scheduleDrugDO.getDay());
-
-                Calendar calNow = Calendar.getInstance();
-
-                long trigger_millis = SystemClock.elapsedRealtime() + 15 * 1000;
-
-                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, trigger_millis, alarmIntent);
+                setAlarm();
 
                 //TODO DEVE DIVENTARE UNA POP
                 Fragment fragment = new ScheduleListFragment();
@@ -763,5 +751,148 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
             }
         }
+    }
+
+    public void setAlarm() {
+
+        String days = scheduleDrugDO.getDay();
+        String[] splitday = days.split("/");
+        List<String> list = new ArrayList<String>();
+        //convert string format of day to int to match Calendar day
+        for (String s : splitday)
+            switch (s) {
+                case "L":
+                    list.add("2");
+                    break;
+                case "MA":
+                    list.add("3");
+                    break;
+                case "ME":
+                    list.add("4");
+                    break;
+                case "G":
+                    list.add("5");
+                    break;
+                case "V":
+                    list.add("6");
+                    break;
+                case "S":
+                    list.add("7");
+                    break;
+                case "D":
+                    list.add("1");
+                    break;
+                default:
+                    list.add("x");
+                    break;
+            }
+        Collections.sort(list);
+        //get today
+        Calendar calNow = Calendar.getInstance();
+        //get next day inizialized to today
+        Calendar nextDay = Calendar.getInstance();
+        long timeDiff;
+        long alarmDelay;
+        Log.w("TODAY DAY", calNow.get(Calendar.DAY_OF_WEEK) + "");
+        Log.w("index of today", list.indexOf(calNow.get(Calendar.DAY_OF_WEEK) + "") + "");
+        String[] hourmin = scheduleDrugDO.getHour().split(":");
+        //get today index inside scheduled day alarm
+        int today_index = list.indexOf(calNow.get(Calendar.DAY_OF_WEEK) + "");
+
+        if (today_index != -1) {
+            // schedule alarm today if in the future time or next day
+            nextDay.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourmin[0]));
+            nextDay.set(Calendar.MINUTE, Integer.parseInt(hourmin[1]));
+
+            if (Calendar.getInstance().getTimeInMillis() < nextDay.getTimeInMillis()) {
+                //schedule alarm today
+                //set up time difference from now to next alarm
+                timeDiff = nextDay.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                alarmDelay = Calendar.getInstance().getTimeInMillis() + timeDiff;
+
+            } else {
+                //schedule alarm next day starting searching from today ---> easy
+                //getting next index to set alarm
+                int next_day_index;
+                if (today_index == list.size() - 1) {
+                    next_day_index = 0;
+                } else {
+                    next_day_index = today_index + 1;
+                }
+                Log.w("next day index", next_day_index + "");
+                Log.w("next day ", list.get(next_day_index) + "");
+
+                //get nex day Calendar format
+                while (nextDay.get(Calendar.DAY_OF_WEEK) != Integer.parseInt(list.get(next_day_index))) {
+                    nextDay.add(Calendar.DATE, 1);
+                }
+                //setting hour and minute
+                nextDay.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourmin[0]));
+                nextDay.set(Calendar.MINUTE, Integer.parseInt(hourmin[1]));
+
+                timeDiff = nextDay.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                alarmDelay = Calendar.getInstance().getTimeInMillis() + timeDiff;
+            }
+        } else {
+            //schedule alarm next day searching next value from today ---> harder
+            //getting next index to set alarm
+            int next_day_index = 8;
+            if (calNow.get(Calendar.DAY_OF_WEEK) == 7) {
+                //find smallest value in list
+                next_day_index =  0;
+            } else {
+                //find first value greater than today
+                for (String s : list){
+                    if (Integer.parseInt(s) > calNow.get(Calendar.DAY_OF_WEEK)){
+                        next_day_index = list.indexOf(s);
+                        break;
+                    }
+                }
+            }
+
+            Log.w("next day index", next_day_index + "");
+            Log.w("next day ", list.get(next_day_index) + "");
+
+            //get nex day Calendar format
+            while (nextDay.get(Calendar.DAY_OF_WEEK) != Integer.parseInt(list.get(next_day_index))) {
+                nextDay.add(Calendar.DATE, 1);
+            }
+            //setting hour and minute
+            nextDay.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourmin[0]));
+            nextDay.set(Calendar.MINUTE, Integer.parseInt(hourmin[1]));
+
+            timeDiff = nextDay.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+            alarmDelay = Calendar.getInstance().getTimeInMillis() + timeDiff;
+
+        }
+
+
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy 'at' h:mm a");
+        Log.w("TODAY", format.format(calNow.getTime()));
+        Log.w("NEXT DAY", format.format(nextDay.getTime()));
+
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        // Define our intention of executing AlertReceiver
+        Intent alertIntent = new Intent(getContext(), AlarmReceiver.class);
+
+        alertIntent.putExtra(ScheduleFormFragment.ALARM_ID_EXTRA, scheduleDrugDO.getAlarmId().intValue());
+        alertIntent.putExtra(ScheduleFormFragment.DRUG_EXTRA, scheduleDrugDO.getDrug());
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(), scheduleDrugDO.getAlarmId().intValue(), alertIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        Log.w("alarm delay", alarmDelay + "");
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmDelay, alarmIntent);
+    }
+
+    public void cancelAlarm() {
+        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+        Intent alertIntent = new Intent(getContext(), AlarmReceiver.class);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(), scheduleDrugDO.getAlarmId().intValue(), alertIntent, PendingIntent.FLAG_ONE_SHOT);
+        alarmManager.cancel(alarmIntent);
+    }
+
+    public void updateAlarm() {
+        cancelAlarm();
+        setAlarm();
     }
 }
