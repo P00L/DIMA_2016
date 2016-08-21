@@ -218,14 +218,13 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     private void initializeActivity(View view) {
 
         //se trova gia salvato in savedInstanceState
-        if(scheduleDrugDO.getHour()!=null && scheduleDrugDO.getHour().matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")){
+        if (scheduleDrugDO.getHour() != null && scheduleDrugDO.getHour().matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")) {
             String[] hourmin = scheduleDrugDO.getHour().split(":");
             Log.w("hourmin", hourmin[0]);
             Log.w("hourmin", hourmin[1]);
-            setTime(Integer.getInteger(hourmin[0]), Integer.getInteger(hourmin[1]));
-            setTimePicker(Integer.getInteger(hourmin[0]), Integer.getInteger(hourmin[1]));
-        }
-        else{
+            //setTime(Integer.getInteger(hourmin[0]), Integer.getInteger(hourmin[1]));
+            setTimePicker(Integer.parseInt(hourmin[0]), Integer.parseInt(hourmin[1]));
+        } else {
             // Time step vars
             time = new Pair<>(8, 30);
             setTimePicker(8, 30);
@@ -305,19 +304,18 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     @Override
     public void sendData() {
         //TODO SETTARE TUTTI I VALORI DI SCGEDULEDRUGDO presi dagli input form
-        scheduleDrugDO.setDrug("drug");
-        scheduleDrugDO.setNotes("notes");
+        scheduleDrugDO.setDrug(autoDrugTextView.getText().toString());
+        scheduleDrugDO.setNotes(notesEditText.getText().toString());
         scheduleDrugDO.setHour(timeTextView.getText().toString());
 
         boolean addFirst = true;
-        for(int i = 0; i < weekDaysString.length; i++){
-            if(weekDaysBool[i]){
+        for (int i = 0; i < weekDaysString.length; i++) {
+            if (weekDaysBool[i]) {
                 //se è il primo elemento
-                if(addFirst){
+                if (addFirst) {
                     daysToSave = weekDaysString[i];
-                    addFirst=false;
-                }
-                else{
+                    addFirst = false;
+                } else {
                     //se siamo dopo il primo aggiungo il separatore
                     daysToSave = daysToSave + "/" + weekDaysString[i];
                 }
@@ -370,7 +368,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         notesEditText.setHint(R.string.anything_useful);
         notesEditText.setSingleLine(true);
         notesEditText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        if(scheduleDrugDO.getNotes()!=null)
+        if (scheduleDrugDO.getNotes() != null)
             notesEditText.setText(scheduleDrugDO.getNotes());
         notesEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -387,11 +385,10 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         LayoutInflater inflater = LayoutInflater.from(getContext());
         LinearLayout timeStepContent =
                 (LinearLayout) inflater.inflate(R.layout.step_time_layout, null, false);
-        if(scheduleDrugDO.getHour()!=null){
+        if (scheduleDrugDO.getHour() != null) {
             timeTextView = (TextView) timeStepContent.findViewById(R.id.time);
             timeTextView.setText(scheduleDrugDO.getHour());
-        }
-        else
+        } else
             timeTextView = (TextView) timeStepContent.findViewById(R.id.time);
         timeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -408,24 +405,30 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                 R.layout.step_days_of_week_layout, null, false);
 
         //controllo che non abbia una instance salvata
-        if(scheduleDrugDO.getDay()!=null){
+        if (scheduleDrugDO.getDay() != null) {
             daysToSave = scheduleDrugDO.getDay();
             daysaved = scheduleDrugDO.getDay().split("/");
+            Log.w("DAY to save", daysToSave);
+            Log.w("DAY saved", daysaved.toString());
         }
+
         int count = 0;
         for (int i = 0; i < weekDaysString.length; i++) {
             final int index = i;
             final LinearLayout dayLayout = getDayLayout(index);
             //se ho trovato giorni salvati e splittati
-            if(daysaved!=null){
-                if(daysaved[count].equals(weekDaysString[index])) {
-                    activateDay(index, dayLayout, false);
-                    count++;
-                }
-                else
+            if (daysaved != null) {
+                Log.w("leng saved",daysaved.length+"");
+                if (count < daysaved.length) {
+                    if (daysaved[count].equals(weekDaysString[index])) {
+                        activateDay(index, dayLayout, false);
+                        count++;
+                    } else
+                        deactivateDay(index, dayLayout, false);
+                }else{
                     deactivateDay(index, dayLayout, false);
-            }
-            else{
+                }
+            } else {
                 if (index < 5) {
                     activateDay(index, dayLayout, false);
                 } else {
@@ -599,24 +602,21 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                 scheduleDrugDO.setHour(timeTextView.getText().toString());
         }
         // Saving days field
-        if(daysToSave != null){
-            if(!daysToSave.isEmpty()){
-                boolean addFirst = true;
-                for(int i = 0; i < weekDaysString.length; i++){
-                    if(weekDaysBool[i]){
-                        //se è il primo elemento
-                        if(addFirst){
-                            daysToSave = weekDaysString[i];
-                            addFirst=false;
-                        }
-                        else{
-                            //se siamo dopo il primo aggiungo il separatore
-                            daysToSave = daysToSave + "/" + weekDaysString[i];
-                        }
+        if (weekDaysBool != null) {
+            boolean addFirst = true;
+            for (int i = 0; i < weekDaysString.length; i++) {
+                if (weekDaysBool[i]) {
+                    //se è il primo elemento
+                    if (addFirst) {
+                        daysToSave = weekDaysString[i];
+                        addFirst = false;
+                    } else {
+                        //se siamo dopo il primo aggiungo il separatore
+                        daysToSave = daysToSave + "/" + weekDaysString[i];
                     }
                 }
-                scheduleDrugDO.setDay(daysToSave);
             }
+            scheduleDrugDO.setDay(daysToSave);
         }
 
         savedInstanceState.putParcelable("scheduleDrugDoParc", scheduleDrugDO);
@@ -656,6 +656,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, drugnames);
             autoDrugTextView.setAdapter(adapter);
+            checkIfExists(autoDrugTextView.getText().toString());
         }
     }
 
@@ -724,7 +725,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                 //giorno ma anche sull'ora dello stesso giorno
                 long trigger_millis = SystemClock.elapsedRealtime() + 15 * 1000;
 
-                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,trigger_millis, alarmIntent);
+                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, trigger_millis, alarmIntent);
 
                 //TODO DEVE DIVENTARE UNA POP
                 Fragment fragment = new ScheduleListFragment();

@@ -100,8 +100,8 @@ public class ServiceNotification extends IntentService {
                 Log.w("next day ", list.get(next_day_index)+ "");
 
                 Calendar next_day = Calendar.getInstance();
-
-                while (next_day.get(Calendar.DAY_OF_WEEK) != Integer.parseInt(list.get(next_day_index))) {
+                //TODO CONVERTIRE LA STRINGA IN UN NUMERO PER MATCHARE Calendar.DAY_OF_WEEK
+                while (next_day.get(Calendar.DAY_OF_WEEK) != 2) {
                     next_day.add(Calendar.DATE, 1);
                 }
 
