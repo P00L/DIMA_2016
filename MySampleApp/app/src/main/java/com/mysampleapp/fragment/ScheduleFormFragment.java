@@ -551,7 +551,8 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
     private boolean checkIfExists(String drugname) {
         boolean exists = false;
-        if (drugnames != null) {
+        //nullpointer su s.equals se drugnames non nullo ma vuoto
+        if (drugnames != null && drugnames.length > 0) {
             for (String s : drugnames) {
                 if (s.equals(drugname))
                     exists = true;
