@@ -52,6 +52,8 @@ import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
 import com.mysampleapp.demo.nosql.DrugDO;
 import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 
+import java.util.Calendar;
+
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormLayout;
 import ernestoyaquello.com.verticalstepperform.interfaces.VerticalStepperForm;
 
@@ -76,7 +78,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     String[] drugnames;
     private ScheduleDrugDO scheduleDrugDO;
     ProgressDialog mProgressDialog;
-
 
     public static final String NEW_ALARM_ADDED = "new_alarm_added";
 
@@ -303,7 +304,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
     @Override
     public void sendData() {
-        //TODO SETTARE TUTTI I VALORI DI SCGEDULEDRUGDO presi dagli input form
         scheduleDrugDO.setDrug(autoDrugTextView.getText().toString());
         scheduleDrugDO.setNotes(notesEditText.getText().toString());
         scheduleDrugDO.setHour(timeTextView.getText().toString());
@@ -418,7 +418,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
             final LinearLayout dayLayout = getDayLayout(index);
             //se ho trovato giorni salvati e splittati
             if (daysaved != null) {
-                Log.w("leng saved",daysaved.length+"");
                 if (count < daysaved.length) {
                     if (daysaved[count].equals(weekDaysString[index])) {
                         activateDay(index, dayLayout, false);
@@ -723,6 +722,11 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
                 //TODO INVOCARE METODI CHE CALCOLA IL TEMPO PER IL PROSSIMO ALARM DA  ricordarsi di non fare cntrollo solo sul
                 //giorno ma anche sull'ora dello stesso giorno
+                //TODO manca anche se viene modificato
+                Log.w("day",scheduleDrugDO.getDay());
+
+                Calendar calNow = Calendar.getInstance();
+
                 long trigger_millis = SystemClock.elapsedRealtime() + 15 * 1000;
 
                 alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, trigger_millis, alarmIntent);

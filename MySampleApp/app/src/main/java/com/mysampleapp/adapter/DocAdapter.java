@@ -33,6 +33,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        //TODO togliere toast
         holder.titleTextView.setText(mList[position].getName());
         holder.setClickListener(new ItemClickListener() {
             @Override

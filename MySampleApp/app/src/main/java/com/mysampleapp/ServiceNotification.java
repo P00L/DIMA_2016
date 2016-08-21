@@ -73,23 +73,53 @@ public class ServiceNotification extends IntentService {
                 Log.w("ALARM ID EXTRA", finalAlarmID + "");
                 Log.w("ALARM ID DB", item.getAlarmId() + "");
 
+                //TODO fare un metodo forse da usare anche la prima volta che si setta
                 //modifica dopo cambio da Set<String> a String
                 // la stringa salvata e ritornata da getDay() deve essere formattata "day1/day2/dayn"
                 String days = item.getDay();
                 String[] splitday = days.split("/");
                 List<String> list = new ArrayList<String>();
+                //convert string format of day to int to match Calendar day
                 for(String s : splitday)
-                    list.add(s);
+                switch (s){
+                    case "L":
+                        list.add("2");
+                        break;
+                    case "MA":
+                        list.add("3");
+                        break;
+                    case "ME":
+                        list.add("4");
+                        break;
+                    case "G":
+                        list.add("5");
+                        break;
+                    case "V":
+                        list.add("6");
+                        break;
+                    case "S":
+                        list.add("7");
+                        break;
+                    case "D":
+                        list.add("1");
+                        break;
+                    default:
+                        list.add("x");
+                        break;
+                }
                 Collections.sort(list);
 
                 Log.w("SERVICE LIST", list.toString());
+                //get today
                 Calendar calNow = Calendar.getInstance();
                 Log.w("SERVICE CAL", calNow.get(Calendar.DAY_OF_WEEK) + "");
 
                 Log.w("index of", list.indexOf(calNow.get(Calendar.DAY_OF_WEEK) + "") + "");
+                //get today index inside scheduled day alarm
                 int today_index = list.indexOf(calNow.get(Calendar.DAY_OF_WEEK) + "");
 
                 Log.w("list", list.size() + "");
+                //getting nex index to set alarm
                 int next_day_index;
                 if (today_index == list.size()-1) {
                     next_day_index = 0;
@@ -99,11 +129,16 @@ public class ServiceNotification extends IntentService {
                 Log.w("next day index", next_day_index + "");
                 Log.w("next day ", list.get(next_day_index)+ "");
 
+                //get nex day Calendar format
                 Calendar next_day = Calendar.getInstance();
-                //TODO CONVERTIRE LA STRINGA IN UN NUMERO PER MATCHARE Calendar.DAY_OF_WEEK
-                while (next_day.get(Calendar.DAY_OF_WEEK) != 2) {
+                while (next_day.get(Calendar.DAY_OF_WEEK) != Integer.parseInt(list.get(next_day_index))) {
                     next_day.add(Calendar.DATE, 1);
                 }
+                //setting hour and minute
+                String[] hourmin = item.getHour().split(":");
+                next_day.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourmin[0]));
+                next_day.set(Calendar.MINUTE, Integer.parseInt(hourmin[1]));
+
 
                 SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy 'at' h:mm a");
                 Log.w("TODAY",format.format(calNow.getTime()));
@@ -112,14 +147,18 @@ public class ServiceNotification extends IntentService {
                 AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
                 // Define our intention of executing AlertReceiver
                 Intent alertIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
-                //TODO metodo che ritorna il tempo al prossimo alarm
+
                 alertIntent.putExtra(ScheduleFormFragment.ALARM_ID_EXTRA, finalAlarmID);
                 alertIntent.putExtra(ScheduleFormFragment.DRUG_EXTRA, drugName);
                 PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), finalAlarmID, alertIntent, PendingIntent.FLAG_ONE_SHOT);
 
-                long thirtySecondsFromNow = System.currentTimeMillis() + 60 * 1000;
+                //set up time difference from now to next alarm
+                long timeDiff = next_day.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                long alarmDelay = Calendar.getInstance().getTimeInMillis() +timeDiff;
 
-                alarmManager.set(AlarmManager.RTC_WAKEUP, thirtySecondsFromNow, alarmIntent);
+                Log.w("alarm delay",alarmDelay+"");
+
+                alarmManager.set(AlarmManager.RTC_WAKEUP, alarmDelay, alarmIntent);
 
             }
         }).start();
