@@ -74,34 +74,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//************************************************************************************************************
-        //TODO GRANDE COME UNA CASA TOGLIERE
-
-        //CLEAR ALARM MANAGER
-        SharedPreferences sharedPref = getSharedPreferences(
-                getString(R.string.preference_file_name), Context.MODE_PRIVATE);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        Set<String> s = new HashSet<String>(sharedPref.getStringSet(getApplicationContext().getString(R.string.pending_alarm),
-                new HashSet<String>()));
-        for (String ss : s) {
-            String [] split = ss.split("/");
-            int alarm_id = Integer.parseInt(split[0]);
-            Log.w("CANCEL ALAMR",alarm_id+"");
-            // Cancel Alarm using Reminder ID
-            Intent alertIntent = new Intent(this, AlarmReceiver.class);
-            PendingIntent alarmIntent = PendingIntent.getBroadcast(this, alarm_id, alertIntent, PendingIntent.FLAG_ONE_SHOT);
-            alarmManager.cancel(alarmIntent);
-
-        }
-
-        //clear shared pref
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.clear().apply();
         setContentView(R.layout.activity_home);
-
-//***********************************************************************************************************
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

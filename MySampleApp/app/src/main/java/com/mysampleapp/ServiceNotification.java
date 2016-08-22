@@ -56,7 +56,7 @@ public class ServiceNotification extends IntentService {
         editor.putStringSet(getApplicationContext().getString(R.string.pending_alarm), s);
         //persist immediatly the data in the shared pref
         editor.apply();
-
+        //TODO METTERE UN CONTROLLO SULLA CONNESSIONE COSA FACCIAMO PER RIAGGIORNARE SE MANCA LA CONNESSIONE????
         //rischedula alarm per il prossimo giorno qui si che adesso ci vuole la query da db ma solo
         //per recuperare una specifica entry
         final DemoNoSQLOperation operation;

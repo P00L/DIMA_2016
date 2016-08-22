@@ -4,10 +4,12 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -42,6 +44,7 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.mysampleapp.AlarmReceiver;
+import com.mysampleapp.BootReceiver;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
@@ -168,7 +171,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         //new MyAsyncTask(view).execute();
         initializeActivity(view);
 
-        if(editMode)
+        if (editMode)
             activity.getSupportActionBar().setTitle(R.string.edit_schedule_drug);
         else
             activity.getSupportActionBar().setTitle(R.string.add_schedule);
@@ -562,7 +565,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         boolean exists = false;
         if (drugnames != null && drugnames.length > 0 && drugname != null) {
             for (String s : drugnames) {
-                if(s != null)
+                if (s != null)
                     if (s.equals(drugname))
                         exists = true;
             }
@@ -634,9 +637,10 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    public void setScheduleDrugDO(ScheduleDrugDO schedule){
+    public void setScheduleDrugDO(ScheduleDrugDO schedule) {
         this.scheduleDrugDO = schedule;
     }
+
     public void setEditMode(boolean editMode) {
         this.editMode = editMode;
     }
@@ -694,25 +698,26 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
             // Set progressdialog message
             mProgressDialog.setMessage("Loading...");
             mProgressDialog.setIndeterminate(false);
-            //TODO aggiungerlo a tutti i dialog di attesa
-            mProgressDialog.setCancelable(false);
             // Show progressdialog
             mProgressDialog.show();
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            //setting the alarmID field retriving the value from shared pref
-            SharedPreferences sharedPref = getContext().getSharedPreferences(
-                    getContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
-            // getting the last used number for the alarm id or 0 as default value for the first
-            int old_alarm_id = sharedPref.getInt(getContext().getString(R.string.alarm_id), 0);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            int alarm_id = old_alarm_id + 1;
-            Log.w("alarm id", alarm_id + "");
-            editor.putInt(getString(R.string.alarm_id), alarm_id);
-            editor.apply();
-            scheduleDrugDO.setAlarmId(Double.parseDouble(alarm_id + ""));
+            //if it isn't edit mode we have to generate a new alarm id otherwise we keep using the old one
+            if (!editMode) {
+                //setting the alarmID field retriving the value from shared pref
+                SharedPreferences sharedPref = getContext().getSharedPreferences(
+                        getContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
+                // getting the last used number for the alarm id or 0 as default value for the first
+                int old_alarm_id = sharedPref.getInt(getContext().getString(R.string.alarm_id), 0);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                int alarm_id = old_alarm_id + 1;
+                Log.w("alarm id", alarm_id + "");
+                editor.putInt(getString(R.string.alarm_id), alarm_id);
+                editor.apply();
+                scheduleDrugDO.setAlarmId(Double.parseDouble(alarm_id + ""));
+            }
             scheduleDrugDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
             //save into db
             try {
@@ -731,8 +736,11 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
             //handle success or fail of db insertion
             if (success) {
                 mProgressDialog.dismiss();
+                if (editMode)
+                    updateAlarm();
+                else
+                    setAlarm();
 
-                setAlarm();
 
                 //TODO DEVE DIVENTARE UNA POP
                 Fragment fragment = new ScheduleListFragment();
@@ -768,6 +776,13 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     }
 
     public void setAlarm() {
+
+        // Restart alarm if device is rebooted
+        ComponentName receiver = new ComponentName(getContext(), BootReceiver.class);
+        PackageManager pm = getContext().getPackageManager();
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
 
         String days = scheduleDrugDO.getDay();
         String[] splitday = days.split("/");
@@ -853,11 +868,11 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
             int next_day_index = 8;
             if (calNow.get(Calendar.DAY_OF_WEEK) == 7) {
                 //find smallest value in list
-                next_day_index =  0;
+                next_day_index = 0;
             } else {
                 //find first value greater than today
-                for (String s : list){
-                    if (Integer.parseInt(s) > calNow.get(Calendar.DAY_OF_WEEK)){
+                for (String s : list) {
+                    if (Integer.parseInt(s) > calNow.get(Calendar.DAY_OF_WEEK)) {
                         next_day_index = list.indexOf(s);
                         break;
                     }
