@@ -194,5 +194,7 @@
     <string name="error_drug_not_exists">this drug doesn\'t exist</string>
     <string name="anything_useful">anything useful</string>
     <string name="at_least_one">at least one day</string>
+    <string name="edit_schedule_drug">edit schedule</string>
+    <string name="schedule">schedule</string>
 
 </resources>

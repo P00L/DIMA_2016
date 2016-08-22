@@ -15,7 +15,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -81,6 +80,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     DrugDO[] druglist;
     String[] drugnames;
     private ScheduleDrugDO scheduleDrugDO;
+    private boolean editMode = false;
     ProgressDialog mProgressDialog;
 
     public static final String NEW_ALARM_ADDED = "new_alarm_added";
@@ -145,6 +145,8 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         if (savedInstanceState != null) {
             Log.w("entrato", "entrato");
             scheduleDrugDO = savedInstanceState.getParcelable("scheduleDrugDoParc");
+            editMode = savedInstanceState.getBoolean("editMode");
+
         } else {
             if (scheduleDrugDO == null)
                 scheduleDrugDO = new ScheduleDrugDO();
@@ -166,7 +168,10 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         //new MyAsyncTask(view).execute();
         initializeActivity(view);
 
-        activity.getSupportActionBar().setTitle(R.string.add_schedule);
+        if(editMode)
+            activity.getSupportActionBar().setTitle(R.string.edit_schedule_drug);
+        else
+            activity.getSupportActionBar().setTitle(R.string.add_schedule);
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_schedule);
 
@@ -555,10 +560,11 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
     private boolean checkIfExists(String drugname) {
         boolean exists = false;
-        if (drugnames != null && drugnames.length > 0) {
+        if (drugnames != null && drugnames.length > 0 && drugname != null) {
             for (String s : drugnames) {
-                if (s.equals(drugname))
-                    exists = true;
+                if(s != null)
+                    if (s.equals(drugname))
+                        exists = true;
             }
             if (exists)
                 verticalStepperForm.setActiveStepAsCompleted();
@@ -623,8 +629,16 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         }
 
         savedInstanceState.putParcelable("scheduleDrugDoParc", scheduleDrugDO);
+        savedInstanceState.putBoolean("editMode", editMode);
         // The call to super method must be at the end here
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    public void setScheduleDrugDO(ScheduleDrugDO schedule){
+        this.scheduleDrugDO = schedule;
+    }
+    public void setEditMode(boolean editMode) {
+        this.editMode = editMode;
     }
 
     private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
