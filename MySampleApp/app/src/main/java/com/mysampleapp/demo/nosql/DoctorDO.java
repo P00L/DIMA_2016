@@ -115,12 +115,24 @@ public class DoctorDO implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        String phone_str;
+        if (this._phoneNumber == null){
+            phone_str = "";
+        }else{
+            phone_str = this._phoneNumber.toString();
+        }
+        String active_str;
+        if (this._phoneNumber == null){
+            active_str = "";
+        }else{
+            active_str = this._active.toString();
+        }
         dest.writeStringArray(new String[]{
                 this._email,
-                this._active.toString(),
+                active_str,
                 this._address,
                 this._name,
-                this._phoneNumber.toString(),
+                phone_str,
                 this._surname,});
 
     }

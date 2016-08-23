@@ -141,6 +141,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        //TODO IO METTEREI UNA X ANZICHE' LA FRECCIA INDIETRO
         ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
         ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
@@ -504,15 +505,6 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
 
         new SaveTask().execute();
 
-
-        Fragment fragment = new DocListFragment();
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .addToBackStack(null)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .commit();
     }
 
     // name/surname checker

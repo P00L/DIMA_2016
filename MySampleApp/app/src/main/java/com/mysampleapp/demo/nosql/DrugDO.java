@@ -114,12 +114,30 @@ public class DrugDO implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        String _minqty_str;
+        if (this._minqty == null){
+            _minqty_str = "";
+        }else{
+            _minqty_str = this._minqty.toString();
+        }
+        String quantity_str;
+        if (this._quantity == null){
+            quantity_str = "";
+        }else{
+            quantity_str = this._quantity.toString();
+        }
+        String weight_str;
+        if (this._weight == null){
+            weight_str = "";
+        }else{
+            weight_str = this._weight.toString();
+        }
         dest.writeStringArray(new String[]{
                 this._name,
-                this._minqty.toString(),
-                this._quantity.toString(),
+                _minqty_str,
+                quantity_str,
                 this._type,
-                this._weight.toString(),
+                weight_str,
                 this._notes});
 
     }

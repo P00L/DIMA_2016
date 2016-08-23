@@ -11,11 +11,9 @@
   <component name="ChangeListManager">
     <list default="true" id="ae45c68b-7891-4f4a-9dc6-e4b08b3e159c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DoctorDO.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DoctorDO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DrugDO.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DrugDO.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java" />
     </list>
     <ignored path="MySampleApp.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -47,7 +45,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="343" column="94" selection-start-line="343" selection-start-column="94" selection-end-line="343" selection-end-column="94" />
+              <caret line="354" column="70" selection-start-line="354" selection-start-column="70" selection-end-line="354" selection-end-column="70" />
               <folding>
                 <element signature="method#onCreate#0;class#HomeActivity#0" expanded="false" />
                 <element signature="e#3293#3324#0" expanded="true" />
@@ -75,10 +73,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DocListFragment.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ScheduleDrugDO.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/ScheduleDrugDO.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DocListFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.4134614">
+            <state vertical-scroll-proportion="0.0">
               <caret line="69" column="72" selection-start-line="69" selection-start-column="72" selection-end-line="69" selection-end-column="72" />
               <folding>
                 <element signature="method#DocListFragment#0;class#DocListFragment#0" expanded="false" />
@@ -146,22 +154,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DocFormFragment.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DocFormFragment.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.413793">
-              <caret line="162" column="30" selection-start-line="148" selection-start-column="16" selection-end-line="162" selection-end-column="30" />
+            <state vertical-scroll-proportion="-5.823129">
+              <caret line="506" column="0" selection-start-line="506" selection-start-column="0" selection-end-line="506" selection-end-column="0" />
               <folding>
                 <element signature="method#DocFormFragment#0;class#DocFormFragment#0" expanded="false" />
                 <element signature="method#newInstance#0;class#DocFormFragment#0" expanded="false" />
                 <element signature="e#5078#5095#0" expanded="true" />
                 <element signature="e#5163#5179#0" expanded="true" />
-                <element signature="e#5666#6678#0" expanded="true" />
-                <element signature="e#6074#6280#0" expanded="true" />
-                <element signature="e#6279#6280#0" expanded="true" />
-                <element signature="e#6336#6566#0" expanded="true" />
-                <element signature="e#6565#6566#0" expanded="true" />
-                <element signature="e#6677#6678#0" expanded="true" />
+                <element signature="e#5728#6740#0" expanded="true" />
+                <element signature="e#6136#6342#0" expanded="true" />
+                <element signature="e#6341#6342#0" expanded="true" />
+                <element signature="e#6398#6628#0" expanded="true" />
+                <element signature="e#6627#6628#0" expanded="true" />
+                <element signature="e#6739#6740#0" expanded="true" />
                 <element signature="method#onButtonPressed#0;class#DocFormFragment#0" expanded="false" />
                 <element signature="method#onAttach#0;class#DocFormFragment#0" expanded="false" />
                 <element signature="method#onDetach#0;class#DocFormFragment#0" expanded="false" />
@@ -169,35 +177,35 @@
                 <element signature="class#OnFragmentInteractionListener#0;class#DocFormFragment#0" expanded="false" />
                 <element signature="method#createStepContentView#0;class#DocFormFragment#0" expanded="false" />
                 <element signature="method#createNameStep#0;class#DocFormFragment#0" expanded="false" />
-                <element signature="class#9363:9788" expanded="false" />
-                <element signature="method#onTextChanged#0;class#9363:9788" expanded="false" />
+                <element signature="class#9425:9850" expanded="false" />
+                <element signature="method#onTextChanged#0;class#9425:9850" expanded="false" />
                 <element signature="method#createSurnameStep#0;class#DocFormFragment#0" expanded="false" />
-                <element signature="class#10847:11272" expanded="false" />
-                <element signature="method#onTextChanged#0;class#10847:11272" expanded="false" />
+                <element signature="class#10909:11334" expanded="false" />
+                <element signature="method#onTextChanged#0;class#10909:11334" expanded="false" />
                 <element signature="method#createEmailStep#0;class#DocFormFragment#0" expanded="false" />
-                <element signature="class#12404:12821" expanded="false" />
-                <element signature="method#onTextChanged#0;class#12404:12821" expanded="false" />
+                <element signature="class#12466:12883" expanded="false" />
+                <element signature="method#onTextChanged#0;class#12466:12883" expanded="false" />
                 <element signature="method#createActiveStep#0;class#DocFormFragment#0" expanded="false" />
                 <element signature="method#createSPhoneNumberStep#0;class#DocFormFragment#0" expanded="false" />
-                <element signature="class#15181:15602" expanded="false" />
-                <element signature="method#onTextChanged#0;class#15181:15602" expanded="false" />
+                <element signature="class#15243:15664" expanded="false" />
+                <element signature="method#onTextChanged#0;class#15243:15664" expanded="false" />
                 <element signature="method#createAddressStep#0;class#DocFormFragment#0" expanded="false" />
-                <element signature="class#16701:17113" expanded="false" />
-                <element signature="method#onTextChanged#0;class#16701:17113" expanded="false" />
+                <element signature="class#16763:17175" expanded="false" />
+                <element signature="method#onTextChanged#0;class#16763:17175" expanded="false" />
                 <element signature="method#onStepOpening#0;class#DocFormFragment#0" expanded="false" />
-                <element signature="e#18718#18777#0" expanded="false" />
+                <element signature="e#18780#18839#0" expanded="false" />
                 <element signature="method#checkNameSurnameStep#0;class#DocFormFragment#0" expanded="false" />
-                <element signature="e#20161#20222#0" expanded="true" />
-                <element signature="e#20275#20327#0" expanded="true" />
+                <element signature="e#19824#19885#0" expanded="true" />
+                <element signature="e#19938#19990#0" expanded="true" />
                 <element signature="method#isValidEmail#0;class#DocFormFragment#0" expanded="false" />
-                <element signature="e#20834#20880#0" expanded="true" />
+                <element signature="e#20497#20543#0" expanded="true" />
                 <element signature="method#isValidCellPhone#0;class#DocFormFragment#0" expanded="false" />
-                <element signature="e#21304#21357#0" expanded="true" />
+                <element signature="e#20967#21020#0" expanded="true" />
                 <element signature="method#isEmpty#0;class#DocFormFragment#0" expanded="false" />
-                <element signature="e#21805#21859#0" expanded="true" />
-                <element signature="e#24207#24208#0" expanded="true" />
-                <element signature="e#24246#24247#0" expanded="true" />
-                <element signature="e#24875#24946#0" expanded="false" />
+                <element signature="e#21468#21522#0" expanded="true" />
+                <element signature="e#23870#23871#0" expanded="true" />
+                <element signature="e#23909#23910#0" expanded="true" />
+                <element signature="e#24538#24609#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -2967,9 +2975,11 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/ServiceNotification.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DoctorDO.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DrugDO.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java" />
       </list>
     </option>
   </component>
@@ -3166,6 +3176,62 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="fragment" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysampleapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysampleapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nosql" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -3565,12 +3631,18 @@
       <option name="project" value="LOCAL" />
       <updated>1471892657617</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="added navigation with popBackstack in doctor navigation. the dialog disappear on screen rotation">
+      <created>1471946300225</created>
+      <option name="number" value="00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1471946300225</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935154" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -3578,7 +3650,7 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41979522" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4010239" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935154" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -3586,7 +3658,7 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22314675" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27760968" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -3647,14 +3719,15 @@
     <MESSAGE value="first version on alarm setted according to the value in the db" />
     <MESSAGE value="Alarm setted according to the value in the db also for the first time, also added the code of cancel and update alarm manger to be invoked" />
     <MESSAGE value="added reschedule of notification on reboot(see comment of BootReceiver XD). added implementation of update schedule." />
-    <option name="LAST_COMMIT_MESSAGE" value="added reschedule of notification on reboot(see comment of BootReceiver XD). added implementation of update schedule." />
+    <MESSAGE value="added navigation with popBackstack in doctor navigation. the dialog disappear on screen rotation" />
+    <option name="LAST_COMMIT_MESSAGE" value="added navigation with popBackstack in doctor navigation. the dialog disappear on screen rotation" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java</url>
-          <line>493</line>
+          <line>494</line>
           <properties />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -3741,9 +3814,9 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1537#1538#0" expanded="true" />
-            <element signature="e#1583#1584#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#1537#1538#0" expanded="false" />
+            <element signature="e#1583#1584#0" expanded="false" />
             <element signature="e#4488#4510#0" expanded="false" />
             <element signature="e#4792#4857#0" expanded="false" />
             <element signature="e#5779#5848#0" expanded="false" />
@@ -4152,9 +4225,9 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1537#1538#0" expanded="true" />
-            <element signature="e#1583#1584#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#1537#1538#0" expanded="false" />
+            <element signature="e#1583#1584#0" expanded="false" />
             <element signature="e#4488#4510#0" expanded="false" />
             <element signature="e#4792#4857#0" expanded="false" />
             <element signature="e#5779#5848#0" expanded="false" />
@@ -4186,14 +4259,6 @@
             <element signature="e#1239#1329#0" expanded="false" />
             <element signature="e#1405#1488#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DoctorDO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="122" column="0" selection-start-line="122" selection-start-column="0" selection-end-line="122" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -4246,57 +4311,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.413793">
-          <caret line="162" column="30" selection-start-line="148" selection-start-column="16" selection-end-line="162" selection-end-column="30" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="69" column="72" selection-start-line="69" selection-start-column="72" selection-end-line="69" selection-end-column="72" />
           <folding>
-            <element signature="method#DocFormFragment#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="method#newInstance#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="e#5078#5095#0" expanded="true" />
-            <element signature="e#5163#5179#0" expanded="true" />
-            <element signature="e#5666#6678#0" expanded="true" />
-            <element signature="e#6074#6280#0" expanded="true" />
-            <element signature="e#6279#6280#0" expanded="true" />
-            <element signature="e#6336#6566#0" expanded="true" />
-            <element signature="e#6565#6566#0" expanded="true" />
-            <element signature="e#6677#6678#0" expanded="true" />
-            <element signature="method#onButtonPressed#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="method#onAttach#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="method#onDetach#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="docComment;class#OnFragmentInteractionListener#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="class#OnFragmentInteractionListener#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="method#createStepContentView#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="method#createNameStep#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="class#9363:9788" expanded="false" />
-            <element signature="method#onTextChanged#0;class#9363:9788" expanded="false" />
-            <element signature="method#createSurnameStep#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="class#10847:11272" expanded="false" />
-            <element signature="method#onTextChanged#0;class#10847:11272" expanded="false" />
-            <element signature="method#createEmailStep#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="class#12404:12821" expanded="false" />
-            <element signature="method#onTextChanged#0;class#12404:12821" expanded="false" />
-            <element signature="method#createActiveStep#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="method#createSPhoneNumberStep#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="class#15181:15602" expanded="false" />
-            <element signature="method#onTextChanged#0;class#15181:15602" expanded="false" />
-            <element signature="method#createAddressStep#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="class#16701:17113" expanded="false" />
-            <element signature="method#onTextChanged#0;class#16701:17113" expanded="false" />
-            <element signature="method#onStepOpening#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="e#18718#18777#0" expanded="false" />
-            <element signature="method#checkNameSurnameStep#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="e#20161#20222#0" expanded="true" />
-            <element signature="e#20275#20327#0" expanded="true" />
-            <element signature="method#isValidEmail#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="e#20834#20880#0" expanded="true" />
-            <element signature="method#isValidCellPhone#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="e#21304#21357#0" expanded="true" />
-            <element signature="method#isEmpty#0;class#DocFormFragment#0" expanded="false" />
-            <element signature="e#21805#21859#0" expanded="true" />
-            <element signature="e#24207#24208#0" expanded="true" />
-            <element signature="e#24246#24247#0" expanded="true" />
-            <element signature="e#24875#24946#0" expanded="false" />
+            <element signature="method#DocListFragment#0;class#DocListFragment#0" expanded="false" />
+            <element signature="method#newInstance#0;class#DocListFragment#0" expanded="false" />
+            <element signature="method#onButtonPressed#0;class#DocListFragment#0" expanded="false" />
+            <element signature="method#onAttach#0;class#DocListFragment#0" expanded="false" />
+            <element signature="method#onDetach#0;class#DocListFragment#0" expanded="false" />
+            <element signature="class#OnFragmentInteractionListener#0;class#DocListFragment#0" expanded="false" />
+            <element signature="method#MyAsyncTask#0;class#MyAsyncTask#0;class#DocListFragment#0" expanded="false" />
+            <element signature="method#onPreExecute#0;class#MyAsyncTask#0;class#DocListFragment#0" expanded="false" />
+            <element signature="method#doInBackground#0;class#MyAsyncTask#0;class#DocListFragment#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/ScheduleDrugDO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/UserDO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.3974359">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DrugDO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34615386">
+          <caret line="129" column="24" selection-start-line="129" selection-start-column="24" selection-end-line="129" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DoctorDO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4551282">
+          <caret line="128" column="9" selection-start-line="123" selection-start-column="8" selection-end-line="128" selection-end-column="9" />
+          <folding>
+            <element signature="method#DoctorDO#0;class#DoctorDO#0" expanded="false" />
+            <element signature="e#1391#1433#0" expanded="false" />
+            <element signature="e#1639#1681#0" expanded="false" />
+            <element signature="class#3693:3919" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -4304,7 +4369,7 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="343" column="94" selection-start-line="343" selection-start-column="94" selection-end-line="343" selection-end-column="94" />
+          <caret line="354" column="70" selection-start-line="354" selection-start-column="70" selection-end-line="354" selection-end-column="70" />
           <folding>
             <element signature="method#onCreate#0;class#HomeActivity#0" expanded="false" />
             <element signature="e#3293#3324#0" expanded="true" />
@@ -4331,20 +4396,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.4134614">
-          <caret line="69" column="72" selection-start-line="69" selection-start-column="72" selection-end-line="69" selection-end-column="72" />
+        <state vertical-scroll-proportion="-5.823129">
+          <caret line="506" column="0" selection-start-line="506" selection-start-column="0" selection-end-line="506" selection-end-column="0" />
           <folding>
-            <element signature="method#DocListFragment#0;class#DocListFragment#0" expanded="false" />
-            <element signature="method#newInstance#0;class#DocListFragment#0" expanded="false" />
-            <element signature="method#onButtonPressed#0;class#DocListFragment#0" expanded="false" />
-            <element signature="method#onAttach#0;class#DocListFragment#0" expanded="false" />
-            <element signature="method#onDetach#0;class#DocListFragment#0" expanded="false" />
-            <element signature="class#OnFragmentInteractionListener#0;class#DocListFragment#0" expanded="false" />
-            <element signature="method#MyAsyncTask#0;class#MyAsyncTask#0;class#DocListFragment#0" expanded="false" />
-            <element signature="method#onPreExecute#0;class#MyAsyncTask#0;class#DocListFragment#0" expanded="false" />
-            <element signature="method#doInBackground#0;class#MyAsyncTask#0;class#DocListFragment#0" expanded="false" />
+            <element signature="method#DocFormFragment#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="method#newInstance#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="e#5078#5095#0" expanded="true" />
+            <element signature="e#5163#5179#0" expanded="true" />
+            <element signature="e#5728#6740#0" expanded="true" />
+            <element signature="e#6136#6342#0" expanded="true" />
+            <element signature="e#6341#6342#0" expanded="true" />
+            <element signature="e#6398#6628#0" expanded="true" />
+            <element signature="e#6627#6628#0" expanded="true" />
+            <element signature="e#6739#6740#0" expanded="true" />
+            <element signature="method#onButtonPressed#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="method#onAttach#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="method#onDetach#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="docComment;class#OnFragmentInteractionListener#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="class#OnFragmentInteractionListener#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="method#createStepContentView#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="method#createNameStep#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="class#9425:9850" expanded="false" />
+            <element signature="method#onTextChanged#0;class#9425:9850" expanded="false" />
+            <element signature="method#createSurnameStep#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="class#10909:11334" expanded="false" />
+            <element signature="method#onTextChanged#0;class#10909:11334" expanded="false" />
+            <element signature="method#createEmailStep#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="class#12466:12883" expanded="false" />
+            <element signature="method#onTextChanged#0;class#12466:12883" expanded="false" />
+            <element signature="method#createActiveStep#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="method#createSPhoneNumberStep#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="class#15243:15664" expanded="false" />
+            <element signature="method#onTextChanged#0;class#15243:15664" expanded="false" />
+            <element signature="method#createAddressStep#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="class#16763:17175" expanded="false" />
+            <element signature="method#onTextChanged#0;class#16763:17175" expanded="false" />
+            <element signature="method#onStepOpening#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="e#18780#18839#0" expanded="false" />
+            <element signature="method#checkNameSurnameStep#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="e#19824#19885#0" expanded="true" />
+            <element signature="e#19938#19990#0" expanded="true" />
+            <element signature="method#isValidEmail#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="e#20497#20543#0" expanded="true" />
+            <element signature="method#isValidCellPhone#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="e#20967#21020#0" expanded="true" />
+            <element signature="method#isEmpty#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="e#21468#21522#0" expanded="true" />
+            <element signature="e#23870#23871#0" expanded="true" />
+            <element signature="e#23909#23910#0" expanded="true" />
+            <element signature="e#24538#24609#0" expanded="false" />
           </folding>
         </state>
       </provider>
