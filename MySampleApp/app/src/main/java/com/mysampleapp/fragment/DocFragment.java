@@ -86,14 +86,7 @@ public class DocFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
-                Fragment fragment = DocListFragment.newInstance();
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content_frame, fragment)
-                        .addToBackStack(null)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-
+                activity.getSupportFragmentManager().popBackStack();
             }
         });
 

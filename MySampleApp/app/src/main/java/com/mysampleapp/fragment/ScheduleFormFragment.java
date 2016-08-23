@@ -149,13 +149,14 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
             Log.w("entrato", "entrato");
             scheduleDrugDO = savedInstanceState.getParcelable("scheduleDrugDoParc");
             editMode = savedInstanceState.getBoolean("editMode");
+            //TODO manca controllo se dobbiamo riaggiornare la lista se arriviamo da un insert new drug
+            drugnames = savedInstanceState.getStringArray("drugnames");
 
         } else {
+            new MyAsyncTask(view).execute();
             if (scheduleDrugDO == null)
                 scheduleDrugDO = new ScheduleDrugDO();
         }
-
-        new MyAsyncTask(view).execute();
         return view;
     }
 
@@ -633,6 +634,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
         savedInstanceState.putParcelable("scheduleDrugDoParc", scheduleDrugDO);
         savedInstanceState.putBoolean("editMode", editMode);
+        savedInstanceState.putStringArray("drugnames",drugnames);
         // The call to super method must be at the end here
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -754,21 +756,15 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
             } else {
                 mProgressDialog.dismiss();
-                // 1. Instantiate an AlertDialog.Builder with its constructor
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-                // 2. Chain together various setter methods to set the dialog characteristics
                 builder.setMessage("Error")
                         .setTitle("an error as occurred");
-
-                // 3. Get the AlertDialog from create()
-                AlertDialog dialog = builder.create();
-
                 builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
                     }
                 });
+                AlertDialog dialog = builder.create();
                 dialog.show();
 
             }

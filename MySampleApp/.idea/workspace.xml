@@ -10,11 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ae45c68b-7891-4f4a-9dc6-e4b08b3e159c" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/BootReceiver.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/ServiceNotification.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/ServiceNotification.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java" />
     </list>
     <ignored path="MySampleApp.iws" />
@@ -47,47 +47,84 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="76" column="47" selection-start-line="76" selection-start-column="47" selection-end-line="76" selection-end-column="47" />
-              <folding />
+              <caret line="343" column="94" selection-start-line="343" selection-start-column="94" selection-end-line="343" selection-end-column="94" />
+              <folding>
+                <element signature="method#onCreate#0;class#HomeActivity#0" expanded="false" />
+                <element signature="e#3293#3324#0" expanded="true" />
+                <element signature="e#3326#3358#0" expanded="true" />
+                <element signature="method#onCreateOptionsMenu#0;class#HomeActivity#0" expanded="false" />
+                <element signature="method#onOptionsItemSelected#0;class#HomeActivity#0" expanded="false" />
+                <element signature="e#6214#6272#0" expanded="false" />
+                <element signature="e#6635#6678#0" expanded="false" />
+                <element signature="method#onNavigationItemSelected#0;class#HomeActivity#0" expanded="false" />
+                <element signature="e#8025#8068#0" expanded="true" />
+                <element signature="e#8113#8156#0" expanded="true" />
+                <element signature="method#onClick#0;class#HomeActivity#0" expanded="false" />
+                <element signature="method#setupSignInButtons#0;class#HomeActivity#0" expanded="false" />
+                <element signature="method#updateUserName#0;class#HomeActivity#0" expanded="false" />
+                <element signature="method#updateUserImage#0;class#HomeActivity#0" expanded="false" />
+                <element signature="method#onPostCreate#0;class#HomeActivity#0" expanded="false" />
+                <element signature="e#14302#14524#0" expanded="true" />
+                <element signature="e#14523#14524#0" expanded="true" />
+                <element signature="e#14584#14821#0" expanded="true" />
+                <element signature="e#14820#14821#0" expanded="true" />
+                <element signature="e#15760#15761#0" expanded="true" />
+                <element signature="e#15789#15790#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ScheduleFormFragment.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DocListFragment.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-3.4134614">
+              <caret line="69" column="72" selection-start-line="69" selection-start-column="72" selection-end-line="69" selection-end-column="72" />
+              <folding>
+                <element signature="method#DocListFragment#0;class#DocListFragment#0" expanded="false" />
+                <element signature="method#newInstance#0;class#DocListFragment#0" expanded="false" />
+                <element signature="method#onButtonPressed#0;class#DocListFragment#0" expanded="false" />
+                <element signature="method#onAttach#0;class#DocListFragment#0" expanded="false" />
+                <element signature="method#onDetach#0;class#DocListFragment#0" expanded="false" />
+                <element signature="class#OnFragmentInteractionListener#0;class#DocListFragment#0" expanded="false" />
+                <element signature="method#MyAsyncTask#0;class#MyAsyncTask#0;class#DocListFragment#0" expanded="false" />
+                <element signature="method#onPreExecute#0;class#MyAsyncTask#0;class#DocListFragment#0" expanded="false" />
+                <element signature="method#doInBackground#0;class#MyAsyncTask#0;class#DocListFragment#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ScheduleFormFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.37202382">
-              <caret line="729" column="0" selection-start-line="729" selection-start-column="0" selection-end-line="729" selection-end-column="0" />
+            <state vertical-scroll-proportion="-3.2413793">
+              <caret line="189" column="36" selection-start-line="189" selection-start-column="28" selection-end-line="189" selection-end-column="36" />
               <folding>
+                <element signature="imports" expanded="true" />
                 <element signature="docComment;class#ScheduleFormFragment#0" expanded="false" />
                 <element signature="method#ScheduleFormFragment#0;class#ScheduleFormFragment#0" expanded="false" />
                 <element signature="method#newInstance#0;class#ScheduleFormFragment#0" expanded="false" />
                 <element signature="method#onCreate#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="method#onCreateView#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="method#onViewCreated#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="e#6159#6188#0" expanded="false" />
-                <element signature="e#6472#6493#0" expanded="true" />
+                <element signature="e#6338#6367#0" expanded="false" />
                 <element signature="method#onButtonPressed#0;class#ScheduleFormFragment#0" expanded="false" />
                 <element signature="method#onAttach#0;class#ScheduleFormFragment#0" expanded="false" />
                 <element signature="method#onDetach#0;class#ScheduleFormFragment#0" expanded="false" />
                 <element signature="class#OnFragmentInteractionListener#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="method#initializeActivity#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="e#9527#9610#0" expanded="false" />
-                <element signature="e#9890#9923#0" expanded="false" />
-                <element signature="e#10262#10325#0" expanded="false" />
+                <element signature="e#9706#9789#0" expanded="false" />
+                <element signature="e#10069#10102#0" expanded="false" />
+                <element signature="e#10441#10504#0" expanded="false" />
                 <element signature="method#createStepContentView#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="e#10468#10558#0" expanded="false" />
+                <element signature="e#10647#10737#0" expanded="false" />
                 <element signature="method#onStepOpening#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="e#11503#11584#0" expanded="false" />
-                <element signature="e#11708#11764#0" expanded="false" />
-                <element signature="method#sendData#0;class#ScheduleFormFragment#0" expanded="false" />
+                <element signature="e#11682#11763#0" expanded="false" />
+                <element signature="e#11887#11943#0" expanded="false" />
                 <element signature="method#addDrugStep#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="class#13612:14055" expanded="false" />
-                <element signature="method#beforeTextChanged#0;class#13612:14055" expanded="false" />
-                <element signature="method#onTextChanged#0;class#13612:14055" expanded="false" />
-                <element signature="method#afterTextChanged#0;class#13612:14055" expanded="false" />
+                <element signature="class#13791:14234" expanded="false" />
+                <element signature="method#beforeTextChanged#0;class#13791:14234" expanded="false" />
+                <element signature="method#onTextChanged#0;class#13791:14234" expanded="false" />
+                <element signature="method#afterTextChanged#0;class#13791:14234" expanded="false" />
                 <element signature="method#createNotesStep#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="e#14619#14643#0" expanded="true" />
                 <element signature="method#createAlarmTimeStep#0;class#ScheduleFormFragment#0" expanded="false" />
                 <element signature="method#createAlarmDaysStep#0;class#ScheduleFormFragment#0" expanded="false" />
                 <element signature="method#setTimePicker#0;class#ScheduleFormFragment#0" expanded="false" />
@@ -96,23 +133,12 @@
                 <element signature="method#activateDay#0;class#ScheduleFormFragment#0" expanded="false" />
                 <element signature="method#deactivateDay#0;class#ScheduleFormFragment#0" expanded="false" />
                 <element signature="method#checkDays#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="e#21251#21298#0" expanded="true" />
                 <element signature="method#getDayLayout#0;class#ScheduleFormFragment#0" expanded="false" />
                 <element signature="method#checkIfExists#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="e#22238#22292#0" expanded="true" />
-                <element signature="e#22465#22521#0" expanded="true" />
-                <element signature="method#onSaveInstanceState#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="method#doInBackground#0;class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="method#onPostExecute#0;class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="method#onPreExecute#0;class#SaveTask#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="e#27065#27118#0" expanded="true" />
-                <element signature="e#27297#27338#0" expanded="true" />
-                <element signature="e#27542#27570#0" expanded="true" />
                 <element signature="method#setAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
-                <element signature="e#32199#32221#0" expanded="false" />
-                <element signature="e#32503#32568#0" expanded="false" />
-                <element signature="e#33619#33688#0" expanded="false" />
+                <element signature="e#32213#32235#0" expanded="false" />
+                <element signature="e#32517#32582#0" expanded="false" />
+                <element signature="e#33633#33702#0" expanded="false" />
                 <element signature="method#cancelAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
                 <element signature="method#updateAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
               </folding>
@@ -120,31 +146,69 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ServiceNotification.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/ServiceNotification.java">
+      <file leaf-file-name="DocFormFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="58" column="112" selection-start-line="58" selection-start-column="112" selection-end-line="58" selection-end-column="112" />
+            <state vertical-scroll-proportion="-7.413793">
+              <caret line="162" column="30" selection-start-line="148" selection-start-column="16" selection-end-line="162" selection-end-column="30" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="method#DocFormFragment#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="method#newInstance#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="e#5078#5095#0" expanded="true" />
+                <element signature="e#5163#5179#0" expanded="true" />
+                <element signature="e#5666#6678#0" expanded="true" />
+                <element signature="e#6074#6280#0" expanded="true" />
+                <element signature="e#6279#6280#0" expanded="true" />
+                <element signature="e#6336#6566#0" expanded="true" />
+                <element signature="e#6565#6566#0" expanded="true" />
+                <element signature="e#6677#6678#0" expanded="true" />
+                <element signature="method#onButtonPressed#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="method#onAttach#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="method#onDetach#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="docComment;class#OnFragmentInteractionListener#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="class#OnFragmentInteractionListener#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="method#createStepContentView#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="method#createNameStep#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="class#9363:9788" expanded="false" />
+                <element signature="method#onTextChanged#0;class#9363:9788" expanded="false" />
+                <element signature="method#createSurnameStep#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="class#10847:11272" expanded="false" />
+                <element signature="method#onTextChanged#0;class#10847:11272" expanded="false" />
+                <element signature="method#createEmailStep#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="class#12404:12821" expanded="false" />
+                <element signature="method#onTextChanged#0;class#12404:12821" expanded="false" />
+                <element signature="method#createActiveStep#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="method#createSPhoneNumberStep#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="class#15181:15602" expanded="false" />
+                <element signature="method#onTextChanged#0;class#15181:15602" expanded="false" />
+                <element signature="method#createAddressStep#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="class#16701:17113" expanded="false" />
+                <element signature="method#onTextChanged#0;class#16701:17113" expanded="false" />
+                <element signature="method#onStepOpening#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="e#18718#18777#0" expanded="false" />
+                <element signature="method#checkNameSurnameStep#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="e#20161#20222#0" expanded="true" />
+                <element signature="e#20275#20327#0" expanded="true" />
+                <element signature="method#isValidEmail#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="e#20834#20880#0" expanded="true" />
+                <element signature="method#isValidCellPhone#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="e#21304#21357#0" expanded="true" />
+                <element signature="method#isEmpty#0;class#DocFormFragment#0" expanded="false" />
+                <element signature="e#21805#21859#0" expanded="true" />
+                <element signature="e#24207#24208#0" expanded="true" />
+                <element signature="e#24246#24247#0" expanded="true" />
+                <element signature="e#24875#24946#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BootReceiver.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/BootReceiver.java">
+      <file leaf-file-name="DocFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFragment.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1537#1538#0" expanded="true" />
-                <element signature="e#1583#1584#0" expanded="true" />
-                <element signature="e#4488#4510#0" expanded="false" />
-                <element signature="e#4792#4857#0" expanded="false" />
-                <element signature="e#5779#5848#0" expanded="false" />
-              </folding>
+              <caret line="87" column="51" selection-start-line="87" selection-start-column="51" selection-end-line="87" selection-end-column="51" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -2893,19 +2957,19 @@
       <list>
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/vertical-stepper-form/src/main/java/ernestoyaquello/com/verticalstepperform/VerticalStepperFormLayout.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFragment.java" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/adapter/DrugAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/adapter/DocAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/AlarmService.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DemoNoSQLTableScheduleDrug.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/BootReceiver.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/ServiceNotification.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java" />
       </list>
     </option>
   </component>
@@ -2941,8 +3005,6 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -2983,6 +3045,56 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="MySampleApp" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vertical-stepper-form" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vertical-stepper-form" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="verticalstepperform" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vertical-stepper-form" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="verticalstepperform" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fragments" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -3048,6 +3160,14 @@
               <option name="myItemId" value="com" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysampleapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fragment" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -3059,12 +3179,70 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="manifests" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidManifestsGroupNode" />
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysampleapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="adapter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysampleapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="activity" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -3381,12 +3559,18 @@
       <option name="project" value="LOCAL" />
       <updated>1471794273713</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="added reschedule of notification on reboot(see comment of BootReceiver XD). added implementation of update schedule.">
+      <created>1471892657617</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1471892657617</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935154" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -3394,8 +3578,8 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39078498" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32935154" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41979522" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935154" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -3416,6 +3600,35 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34300342" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935154" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935154" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22314675" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -3433,13 +3646,111 @@
     <MESSAGE value="fixed schedule form fragment, TODO in service notification fix matching saved string int value of current day" />
     <MESSAGE value="first version on alarm setted according to the value in the db" />
     <MESSAGE value="Alarm setted according to the value in the db also for the first time, also added the code of cancel and update alarm manger to be invoked" />
-    <option name="LAST_COMMIT_MESSAGE" value="Alarm setted according to the value in the db also for the first time, also added the code of cancel and update alarm manger to be invoked" />
+    <MESSAGE value="added reschedule of notification on reboot(see comment of BootReceiver XD). added implementation of update schedule." />
+    <option name="LAST_COMMIT_MESSAGE" value="added reschedule of notification on reboot(see comment of BootReceiver XD). added implementation of update schedule." />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java</url>
+          <line>493</line>
+          <properties />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java</url>
+          <line>708</line>
+          <properties />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="2" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="76" column="47" selection-start-line="76" selection-start-column="47" selection-end-line="76" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#ScheduleFormFragment#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#newInstance#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#onCreate#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="e#6338#6367#0" expanded="false" />
+            <element signature="method#onButtonPressed#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#onAttach#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#onDetach#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="class#OnFragmentInteractionListener#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="e#9706#9789#0" expanded="false" />
+            <element signature="e#10069#10102#0" expanded="false" />
+            <element signature="e#10441#10504#0" expanded="false" />
+            <element signature="method#createStepContentView#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="e#10647#10737#0" expanded="false" />
+            <element signature="method#onStepOpening#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="e#11682#11763#0" expanded="false" />
+            <element signature="e#11887#11943#0" expanded="false" />
+            <element signature="method#addDrugStep#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="class#13791:14234" expanded="false" />
+            <element signature="method#beforeTextChanged#0;class#13791:14234" expanded="false" />
+            <element signature="method#onTextChanged#0;class#13791:14234" expanded="false" />
+            <element signature="method#afterTextChanged#0;class#13791:14234" expanded="false" />
+            <element signature="method#createNotesStep#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#createAlarmTimeStep#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#createAlarmDaysStep#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#setTimePicker#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#checkTitleStep#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#setTime#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#activateDay#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#deactivateDay#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#checkDays#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#getDayLayout#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#checkIfExists#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#setAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="e#32213#32235#0" expanded="false" />
+            <element signature="e#32517#32582#0" expanded="false" />
+            <element signature="e#33633#33702#0" expanded="false" />
+            <element signature="method#cancelAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#updateAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/ServiceNotification.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="58" column="112" selection-start-line="58" selection-start-column="112" selection-end-line="58" selection-end-column="112" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/BootReceiver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1537#1538#0" expanded="true" />
+            <element signature="e#1583#1584#0" expanded="true" />
+            <element signature="e#4488#4510#0" expanded="false" />
+            <element signature="e#4792#4857#0" expanded="false" />
+            <element signature="e#5779#5848#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -3453,35 +3764,30 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="557" column="56" selection-start-line="557" selection-start-column="56" selection-end-line="557" selection-end-column="56" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="docComment;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#ScheduleFormFragment#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#newInstance#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#onCreate#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onCreateView#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onViewCreated#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#6159#6188#0" expanded="false" />
-            <element signature="e#6472#6493#0" expanded="true" />
+            <element signature="e#6338#6367#0" expanded="false" />
             <element signature="method#onButtonPressed#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#onAttach#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#onDetach#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="class#OnFragmentInteractionListener#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#initializeActivity#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#9527#9610#0" expanded="false" />
-            <element signature="e#9890#9923#0" expanded="false" />
-            <element signature="e#10262#10325#0" expanded="false" />
+            <element signature="e#9706#9789#0" expanded="false" />
+            <element signature="e#10069#10102#0" expanded="false" />
+            <element signature="e#10441#10504#0" expanded="false" />
             <element signature="method#createStepContentView#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#10468#10558#0" expanded="false" />
+            <element signature="e#10647#10737#0" expanded="false" />
             <element signature="method#onStepOpening#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#11503#11584#0" expanded="false" />
-            <element signature="e#11708#11764#0" expanded="false" />
-            <element signature="method#sendData#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="e#11682#11763#0" expanded="false" />
+            <element signature="e#11887#11943#0" expanded="false" />
             <element signature="method#addDrugStep#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="class#13612:14055" expanded="false" />
-            <element signature="method#beforeTextChanged#0;class#13612:14055" expanded="false" />
-            <element signature="method#onTextChanged#0;class#13612:14055" expanded="false" />
-            <element signature="method#afterTextChanged#0;class#13612:14055" expanded="false" />
+            <element signature="class#13791:14234" expanded="false" />
+            <element signature="method#beforeTextChanged#0;class#13791:14234" expanded="false" />
+            <element signature="method#onTextChanged#0;class#13791:14234" expanded="false" />
+            <element signature="method#afterTextChanged#0;class#13791:14234" expanded="false" />
             <element signature="method#createNotesStep#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#14619#14643#0" expanded="true" />
             <element signature="method#createAlarmTimeStep#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#createAlarmDaysStep#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#setTimePicker#0;class#ScheduleFormFragment#0" expanded="false" />
@@ -3490,23 +3796,12 @@
             <element signature="method#activateDay#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#deactivateDay#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#checkDays#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#21251#21298#0" expanded="true" />
             <element signature="method#getDayLayout#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#checkIfExists#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#22238#22292#0" expanded="true" />
-            <element signature="e#22465#22521#0" expanded="true" />
-            <element signature="method#onSaveInstanceState#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#doInBackground#0;class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onPostExecute#0;class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onPreExecute#0;class#SaveTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#27065#27118#0" expanded="true" />
-            <element signature="e#27297#27338#0" expanded="true" />
-            <element signature="e#27542#27570#0" expanded="true" />
             <element signature="method#setAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#32199#32221#0" expanded="false" />
-            <element signature="e#32503#32568#0" expanded="false" />
-            <element signature="e#33619#33688#0" expanded="false" />
+            <element signature="e#32213#32235#0" expanded="false" />
+            <element signature="e#32517#32582#0" expanded="false" />
+            <element signature="e#33633#33702#0" expanded="false" />
             <element signature="method#cancelAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#updateAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
           </folding>
@@ -3518,53 +3813,47 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="168" column="36" selection-start-line="168" selection-start-column="36" selection-end-line="168" selection-end-column="36" />
           <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
             <element signature="docComment;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#ScheduleFormFragment#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#newInstance#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#onCreate#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onCreateView#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onViewCreated#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#6159#6188#0" expanded="false" />
-            <element signature="e#6472#6493#0" expanded="true" />
+            <element signature="e#6338#6367#0" expanded="false" />
             <element signature="method#onButtonPressed#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#onAttach#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#onDetach#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="class#OnFragmentInteractionListener#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#initializeActivity#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#9527#9610#0" expanded="false" />
-            <element signature="e#9890#9923#0" expanded="false" />
-            <element signature="e#10262#10325#0" expanded="false" />
+            <element signature="e#9706#9789#0" expanded="false" />
+            <element signature="e#10069#10102#0" expanded="false" />
+            <element signature="e#10441#10504#0" expanded="false" />
             <element signature="method#createStepContentView#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#10468#10558#0" expanded="false" />
+            <element signature="e#10647#10737#0" expanded="false" />
             <element signature="method#onStepOpening#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#11503#11584#0" expanded="false" />
-            <element signature="e#11708#11764#0" expanded="false" />
-            <element signature="method#sendData#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="e#11682#11763#0" expanded="false" />
+            <element signature="e#11887#11943#0" expanded="false" />
             <element signature="method#addDrugStep#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="class#13612:14055" expanded="false" />
-            <element signature="method#beforeTextChanged#0;class#13612:14055" expanded="false" />
-            <element signature="method#onTextChanged#0;class#13612:14055" expanded="false" />
-            <element signature="method#afterTextChanged#0;class#13612:14055" expanded="false" />
+            <element signature="class#13791:14234" expanded="false" />
+            <element signature="method#beforeTextChanged#0;class#13791:14234" expanded="false" />
+            <element signature="method#onTextChanged#0;class#13791:14234" expanded="false" />
+            <element signature="method#afterTextChanged#0;class#13791:14234" expanded="false" />
             <element signature="method#createNotesStep#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#14619#14643#0" expanded="true" />
             <element signature="method#createAlarmTimeStep#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#createAlarmDaysStep#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#setTimePicker#0;class#ScheduleFormFragment#0" expanded="false" />
@@ -3573,23 +3862,12 @@
             <element signature="method#activateDay#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#deactivateDay#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#checkDays#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#21251#21298#0" expanded="true" />
             <element signature="method#getDayLayout#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#checkIfExists#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#22238#22292#0" expanded="true" />
-            <element signature="e#22465#22521#0" expanded="true" />
-            <element signature="method#onSaveInstanceState#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#doInBackground#0;class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onPostExecute#0;class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onPreExecute#0;class#SaveTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#27065#27118#0" expanded="true" />
-            <element signature="e#27297#27338#0" expanded="true" />
-            <element signature="e#27542#27570#0" expanded="true" />
             <element signature="method#setAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#32199#32221#0" expanded="false" />
-            <element signature="e#32503#32568#0" expanded="false" />
-            <element signature="e#33619#33688#0" expanded="false" />
+            <element signature="e#32213#32235#0" expanded="false" />
+            <element signature="e#32517#32582#0" expanded="false" />
+            <element signature="e#33633#33702#0" expanded="false" />
             <element signature="method#cancelAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#updateAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
           </folding>
@@ -3600,7 +3878,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3609,35 +3886,30 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="docComment;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#ScheduleFormFragment#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#newInstance#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#onCreate#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onCreateView#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onViewCreated#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#6159#6188#0" expanded="false" />
-            <element signature="e#6472#6493#0" expanded="true" />
+            <element signature="e#6338#6367#0" expanded="false" />
             <element signature="method#onButtonPressed#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#onAttach#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#onDetach#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="class#OnFragmentInteractionListener#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#initializeActivity#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#9527#9610#0" expanded="false" />
-            <element signature="e#9890#9923#0" expanded="false" />
-            <element signature="e#10262#10325#0" expanded="false" />
+            <element signature="e#9706#9789#0" expanded="false" />
+            <element signature="e#10069#10102#0" expanded="false" />
+            <element signature="e#10441#10504#0" expanded="false" />
             <element signature="method#createStepContentView#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#10468#10558#0" expanded="false" />
+            <element signature="e#10647#10737#0" expanded="false" />
             <element signature="method#onStepOpening#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#11503#11584#0" expanded="false" />
-            <element signature="e#11708#11764#0" expanded="false" />
-            <element signature="method#sendData#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="e#11682#11763#0" expanded="false" />
+            <element signature="e#11887#11943#0" expanded="false" />
             <element signature="method#addDrugStep#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="class#13612:14055" expanded="false" />
-            <element signature="method#beforeTextChanged#0;class#13612:14055" expanded="false" />
-            <element signature="method#onTextChanged#0;class#13612:14055" expanded="false" />
-            <element signature="method#afterTextChanged#0;class#13612:14055" expanded="false" />
+            <element signature="class#13791:14234" expanded="false" />
+            <element signature="method#beforeTextChanged#0;class#13791:14234" expanded="false" />
+            <element signature="method#onTextChanged#0;class#13791:14234" expanded="false" />
+            <element signature="method#afterTextChanged#0;class#13791:14234" expanded="false" />
             <element signature="method#createNotesStep#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#14619#14643#0" expanded="true" />
             <element signature="method#createAlarmTimeStep#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#createAlarmDaysStep#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#setTimePicker#0;class#ScheduleFormFragment#0" expanded="false" />
@@ -3646,23 +3918,12 @@
             <element signature="method#activateDay#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#deactivateDay#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#checkDays#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#21251#21298#0" expanded="true" />
             <element signature="method#getDayLayout#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#checkIfExists#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#22238#22292#0" expanded="true" />
-            <element signature="e#22465#22521#0" expanded="true" />
-            <element signature="method#onSaveInstanceState#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#doInBackground#0;class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onPostExecute#0;class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onPreExecute#0;class#SaveTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#27065#27118#0" expanded="true" />
-            <element signature="e#27297#27338#0" expanded="true" />
-            <element signature="e#27542#27570#0" expanded="true" />
             <element signature="method#setAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#32199#32221#0" expanded="false" />
-            <element signature="e#32503#32568#0" expanded="false" />
-            <element signature="e#33619#33688#0" expanded="false" />
+            <element signature="e#32213#32235#0" expanded="false" />
+            <element signature="e#32517#32582#0" expanded="false" />
+            <element signature="e#33633#33702#0" expanded="false" />
             <element signature="method#cancelAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#updateAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
           </folding>
@@ -3673,7 +3934,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3682,35 +3942,30 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="docComment;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#ScheduleFormFragment#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#newInstance#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#onCreate#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onCreateView#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onViewCreated#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#6159#6188#0" expanded="false" />
-            <element signature="e#6472#6493#0" expanded="true" />
+            <element signature="e#6338#6367#0" expanded="false" />
             <element signature="method#onButtonPressed#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#onAttach#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#onDetach#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="class#OnFragmentInteractionListener#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#initializeActivity#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#9527#9610#0" expanded="false" />
-            <element signature="e#9890#9923#0" expanded="false" />
-            <element signature="e#10262#10325#0" expanded="false" />
+            <element signature="e#9706#9789#0" expanded="false" />
+            <element signature="e#10069#10102#0" expanded="false" />
+            <element signature="e#10441#10504#0" expanded="false" />
             <element signature="method#createStepContentView#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#10468#10558#0" expanded="false" />
+            <element signature="e#10647#10737#0" expanded="false" />
             <element signature="method#onStepOpening#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#11503#11584#0" expanded="false" />
-            <element signature="e#11708#11764#0" expanded="false" />
-            <element signature="method#sendData#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="e#11682#11763#0" expanded="false" />
+            <element signature="e#11887#11943#0" expanded="false" />
             <element signature="method#addDrugStep#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="class#13612:14055" expanded="false" />
-            <element signature="method#beforeTextChanged#0;class#13612:14055" expanded="false" />
-            <element signature="method#onTextChanged#0;class#13612:14055" expanded="false" />
-            <element signature="method#afterTextChanged#0;class#13612:14055" expanded="false" />
+            <element signature="class#13791:14234" expanded="false" />
+            <element signature="method#beforeTextChanged#0;class#13791:14234" expanded="false" />
+            <element signature="method#onTextChanged#0;class#13791:14234" expanded="false" />
+            <element signature="method#afterTextChanged#0;class#13791:14234" expanded="false" />
             <element signature="method#createNotesStep#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#14619#14643#0" expanded="true" />
             <element signature="method#createAlarmTimeStep#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#createAlarmDaysStep#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#setTimePicker#0;class#ScheduleFormFragment#0" expanded="false" />
@@ -3719,23 +3974,12 @@
             <element signature="method#activateDay#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#deactivateDay#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#checkDays#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#21251#21298#0" expanded="true" />
             <element signature="method#getDayLayout#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#checkIfExists#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#22238#22292#0" expanded="true" />
-            <element signature="e#22465#22521#0" expanded="true" />
-            <element signature="method#onSaveInstanceState#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#doInBackground#0;class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onPostExecute#0;class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onPreExecute#0;class#SaveTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#27065#27118#0" expanded="true" />
-            <element signature="e#27297#27338#0" expanded="true" />
-            <element signature="e#27542#27570#0" expanded="true" />
             <element signature="method#setAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#32199#32221#0" expanded="false" />
-            <element signature="e#32503#32568#0" expanded="false" />
-            <element signature="e#33619#33688#0" expanded="false" />
+            <element signature="e#32213#32235#0" expanded="false" />
+            <element signature="e#32517#32582#0" expanded="false" />
+            <element signature="e#33633#33702#0" expanded="false" />
             <element signature="method#cancelAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#updateAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
           </folding>
@@ -3760,7 +4004,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3785,22 +4028,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4384858">
-          <caret line="145" column="15" selection-start-line="145" selection-start-column="15" selection-end-line="145" selection-end-column="15" />
-          <folding>
-            <element signature="e#5486#6162#0" expanded="false" />
-            <element signature="e#6161#6162#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3812,21 +4043,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.310345">
-          <caret line="82" column="42" selection-start-line="82" selection-start-column="41" selection-end-line="82" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/adapter/DocAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="35" column="29" selection-start-line="35" selection-start-column="29" selection-end-line="35" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/adapter/DrugAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.15625">
@@ -3834,19 +4050,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.39432177">
-          <caret line="92" column="30" selection-start-line="92" selection-start-column="28" selection-end-line="92" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/amazonaws/mobile/AWSConfiguration.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
           <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3854,7 +4061,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
           <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3870,7 +4076,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33079848">
           <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3878,7 +4083,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.163498">
           <caret line="32" column="83" selection-start-line="32" selection-start-column="7" selection-end-line="32" selection-end-column="83" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3886,7 +4090,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5247148">
           <caret line="311" column="18" selection-start-line="311" selection-start-column="18" selection-end-line="311" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3894,7 +4097,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.46007603">
           <caret line="76" column="28" selection-start-line="76" selection-start-column="21" selection-end-line="76" selection-end-column="28" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3902,7 +4104,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.8326996">
           <caret line="186" column="23" selection-start-line="186" selection-start-column="23" selection-end-line="186" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3910,7 +4111,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6539924">
           <caret line="145" column="104" selection-start-line="145" selection-start-column="89" selection-end-line="145" selection-end-column="104" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3918,14 +4118,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.06341463">
           <caret line="105" column="0" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="76" column="47" selection-start-line="76" selection-start-column="47" selection-end-line="76" selection-end-column="47" />
           <folding />
         </state>
       </provider>
@@ -3940,9 +4132,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.11221122">
+        <state vertical-scroll-proportion="0.050147492">
           <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3951,7 +4142,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="58" column="112" selection-start-line="58" selection-start-column="112" selection-end-line="58" selection-end-column="112" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -3971,40 +4162,70 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/adapter/DocAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="35" column="29" selection-start-line="35" selection-start-column="29" selection-end-line="35" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="87" column="51" selection-start-line="87" selection-start-column="51" selection-end-line="87" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vertical-stepper-form/src/main/java/ernestoyaquello/com/verticalstepperform/fragments/BackConfirmationFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4551282">
+          <caret line="31" column="35" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
+          <folding>
+            <element signature="e#1239#1329#0" expanded="false" />
+            <element signature="e#1405#1488#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DoctorDO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="122" column="0" selection-start-line="122" selection-start-column="0" selection-end-line="122" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.37202382">
-          <caret line="729" column="0" selection-start-line="729" selection-start-column="0" selection-end-line="729" selection-end-column="0" />
+        <state vertical-scroll-proportion="-3.2413793">
+          <caret line="189" column="36" selection-start-line="189" selection-start-column="28" selection-end-line="189" selection-end-column="36" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="docComment;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#ScheduleFormFragment#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#newInstance#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#onCreate#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onCreateView#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onViewCreated#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#6159#6188#0" expanded="false" />
-            <element signature="e#6472#6493#0" expanded="true" />
+            <element signature="e#6338#6367#0" expanded="false" />
             <element signature="method#onButtonPressed#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#onAttach#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#onDetach#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="class#OnFragmentInteractionListener#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#initializeActivity#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#9527#9610#0" expanded="false" />
-            <element signature="e#9890#9923#0" expanded="false" />
-            <element signature="e#10262#10325#0" expanded="false" />
+            <element signature="e#9706#9789#0" expanded="false" />
+            <element signature="e#10069#10102#0" expanded="false" />
+            <element signature="e#10441#10504#0" expanded="false" />
             <element signature="method#createStepContentView#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#10468#10558#0" expanded="false" />
+            <element signature="e#10647#10737#0" expanded="false" />
             <element signature="method#onStepOpening#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#11503#11584#0" expanded="false" />
-            <element signature="e#11708#11764#0" expanded="false" />
-            <element signature="method#sendData#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="e#11682#11763#0" expanded="false" />
+            <element signature="e#11887#11943#0" expanded="false" />
             <element signature="method#addDrugStep#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="class#13612:14055" expanded="false" />
-            <element signature="method#beforeTextChanged#0;class#13612:14055" expanded="false" />
-            <element signature="method#onTextChanged#0;class#13612:14055" expanded="false" />
-            <element signature="method#afterTextChanged#0;class#13612:14055" expanded="false" />
+            <element signature="class#13791:14234" expanded="false" />
+            <element signature="method#beforeTextChanged#0;class#13791:14234" expanded="false" />
+            <element signature="method#onTextChanged#0;class#13791:14234" expanded="false" />
+            <element signature="method#afterTextChanged#0;class#13791:14234" expanded="false" />
             <element signature="method#createNotesStep#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#14619#14643#0" expanded="true" />
             <element signature="method#createAlarmTimeStep#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#createAlarmDaysStep#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#setTimePicker#0;class#ScheduleFormFragment#0" expanded="false" />
@@ -4013,25 +4234,117 @@
             <element signature="method#activateDay#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#deactivateDay#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#checkDays#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#21251#21298#0" expanded="true" />
             <element signature="method#getDayLayout#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#checkIfExists#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#22238#22292#0" expanded="true" />
-            <element signature="e#22465#22521#0" expanded="true" />
-            <element signature="method#onSaveInstanceState#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#doInBackground#0;class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onPostExecute#0;class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="method#onPreExecute#0;class#SaveTask#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#27065#27118#0" expanded="true" />
-            <element signature="e#27297#27338#0" expanded="true" />
-            <element signature="e#27542#27570#0" expanded="true" />
             <element signature="method#setAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
-            <element signature="e#32199#32221#0" expanded="false" />
-            <element signature="e#32503#32568#0" expanded="false" />
-            <element signature="e#33619#33688#0" expanded="false" />
+            <element signature="e#32213#32235#0" expanded="false" />
+            <element signature="e#32517#32582#0" expanded="false" />
+            <element signature="e#33633#33702#0" expanded="false" />
             <element signature="method#cancelAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
             <element signature="method#updateAlarm#0;class#ScheduleFormFragment#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.413793">
+          <caret line="162" column="30" selection-start-line="148" selection-start-column="16" selection-end-line="162" selection-end-column="30" />
+          <folding>
+            <element signature="method#DocFormFragment#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="method#newInstance#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="e#5078#5095#0" expanded="true" />
+            <element signature="e#5163#5179#0" expanded="true" />
+            <element signature="e#5666#6678#0" expanded="true" />
+            <element signature="e#6074#6280#0" expanded="true" />
+            <element signature="e#6279#6280#0" expanded="true" />
+            <element signature="e#6336#6566#0" expanded="true" />
+            <element signature="e#6565#6566#0" expanded="true" />
+            <element signature="e#6677#6678#0" expanded="true" />
+            <element signature="method#onButtonPressed#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="method#onAttach#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="method#onDetach#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="docComment;class#OnFragmentInteractionListener#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="class#OnFragmentInteractionListener#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="method#createStepContentView#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="method#createNameStep#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="class#9363:9788" expanded="false" />
+            <element signature="method#onTextChanged#0;class#9363:9788" expanded="false" />
+            <element signature="method#createSurnameStep#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="class#10847:11272" expanded="false" />
+            <element signature="method#onTextChanged#0;class#10847:11272" expanded="false" />
+            <element signature="method#createEmailStep#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="class#12404:12821" expanded="false" />
+            <element signature="method#onTextChanged#0;class#12404:12821" expanded="false" />
+            <element signature="method#createActiveStep#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="method#createSPhoneNumberStep#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="class#15181:15602" expanded="false" />
+            <element signature="method#onTextChanged#0;class#15181:15602" expanded="false" />
+            <element signature="method#createAddressStep#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="class#16701:17113" expanded="false" />
+            <element signature="method#onTextChanged#0;class#16701:17113" expanded="false" />
+            <element signature="method#onStepOpening#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="e#18718#18777#0" expanded="false" />
+            <element signature="method#checkNameSurnameStep#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="e#20161#20222#0" expanded="true" />
+            <element signature="e#20275#20327#0" expanded="true" />
+            <element signature="method#isValidEmail#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="e#20834#20880#0" expanded="true" />
+            <element signature="method#isValidCellPhone#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="e#21304#21357#0" expanded="true" />
+            <element signature="method#isEmpty#0;class#DocFormFragment#0" expanded="false" />
+            <element signature="e#21805#21859#0" expanded="true" />
+            <element signature="e#24207#24208#0" expanded="true" />
+            <element signature="e#24246#24247#0" expanded="true" />
+            <element signature="e#24875#24946#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="343" column="94" selection-start-line="343" selection-start-column="94" selection-end-line="343" selection-end-column="94" />
+          <folding>
+            <element signature="method#onCreate#0;class#HomeActivity#0" expanded="false" />
+            <element signature="e#3293#3324#0" expanded="true" />
+            <element signature="e#3326#3358#0" expanded="true" />
+            <element signature="method#onCreateOptionsMenu#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#onOptionsItemSelected#0;class#HomeActivity#0" expanded="false" />
+            <element signature="e#6214#6272#0" expanded="false" />
+            <element signature="e#6635#6678#0" expanded="false" />
+            <element signature="method#onNavigationItemSelected#0;class#HomeActivity#0" expanded="false" />
+            <element signature="e#8025#8068#0" expanded="true" />
+            <element signature="e#8113#8156#0" expanded="true" />
+            <element signature="method#onClick#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#setupSignInButtons#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#updateUserName#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#updateUserImage#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#onPostCreate#0;class#HomeActivity#0" expanded="false" />
+            <element signature="e#14302#14524#0" expanded="true" />
+            <element signature="e#14523#14524#0" expanded="true" />
+            <element signature="e#14584#14821#0" expanded="true" />
+            <element signature="e#14820#14821#0" expanded="true" />
+            <element signature="e#15760#15761#0" expanded="true" />
+            <element signature="e#15789#15790#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.4134614">
+          <caret line="69" column="72" selection-start-line="69" selection-start-column="72" selection-end-line="69" selection-end-column="72" />
+          <folding>
+            <element signature="method#DocListFragment#0;class#DocListFragment#0" expanded="false" />
+            <element signature="method#newInstance#0;class#DocListFragment#0" expanded="false" />
+            <element signature="method#onButtonPressed#0;class#DocListFragment#0" expanded="false" />
+            <element signature="method#onAttach#0;class#DocListFragment#0" expanded="false" />
+            <element signature="method#onDetach#0;class#DocListFragment#0" expanded="false" />
+            <element signature="class#OnFragmentInteractionListener#0;class#DocListFragment#0" expanded="false" />
+            <element signature="method#MyAsyncTask#0;class#MyAsyncTask#0;class#DocListFragment#0" expanded="false" />
+            <element signature="method#onPreExecute#0;class#MyAsyncTask#0;class#DocListFragment#0" expanded="false" />
+            <element signature="method#doInBackground#0;class#MyAsyncTask#0;class#DocListFragment#0" expanded="false" />
           </folding>
         </state>
       </provider>

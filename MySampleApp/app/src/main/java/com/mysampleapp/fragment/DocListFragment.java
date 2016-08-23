@@ -63,7 +63,20 @@ public class DocListFragment extends Fragment {
                 .getNoSQLTableByTableName("Doctor");
         operation = (DemoNoSQLOperation)demoTable.getOperationByName(getContext(),"ASD");
 
-        new MyAsyncTask().execute();
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+
+        if(savedInstanceState!=null){
+            //TODO CONTROLO SE RIAGGIONRNARE ANCHE SU SAVED INSTANCE????
+            items = (DoctorDO[]) savedInstanceState.getParcelableArray("items");
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mAdapter = new DocAdapter(getContext(), items);
+            mRecyclerView.setAdapter(mAdapter);
+        }else{
+            new MyAsyncTask().execute();
+        }
+
 
         return view;
     }
@@ -92,9 +105,6 @@ public class DocListFragment extends Fragment {
         // set nav menu item checked
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_doc);
-
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
-        mRecyclerView.setHasFixedSize(true);
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -141,6 +151,11 @@ public class DocListFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        savedInstanceState.putParcelableArray("items",items);
     }
 
     private class MyAsyncTask extends AsyncTask<Void, Void, Void> {

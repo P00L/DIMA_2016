@@ -3,6 +3,7 @@ package com.mysampleapp.activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -27,6 +29,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobile.user.IdentityManager;
@@ -141,16 +144,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
@@ -162,9 +155,9 @@ public class HomeActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_settings:
-                Log.w("ACTIVITY","premuto settings");
+                Log.w("ACTIVITY", "premuto settings");
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -331,10 +324,63 @@ public class HomeActivity extends AppCompatActivity
         toggle.syncState();
     }
 
+    @Override
+    public void onBackPressed() {
+        //TODO RIUAGGIUNGERE
+        /*
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+        */
+        Fragment myFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        //catch click of bottom back button and handle what to to according where we are
+        if (myFragment != null && myFragment.isVisible()) {
+            Log.w("Back", myFragment.getClass().toString());
+            switch (myFragment.getClass().toString()) {
+                case "class com.mysampleapp.fragment.DocFormFragment":
+                    //from the doc form we have to show dialog are you sure you wanna leave???
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage("All the information will be lost")
+                            .setTitle("Discard save");
+                    builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                        }
+                    });
+                    builder.setPositiveButton("confirm", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            getSupportFragmentManager().popBackStack();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    break;
+                default:
+                    Log.w("Back", getSupportFragmentManager().getBackStackEntryCount() + "");
+                    if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                        getSupportFragmentManager().popBackStack();
+                    } else {
+                        super.onBackPressed();
+                    }
+            }
+        } else {
+            Log.w("Back", getSupportFragmentManager().getBackStackEntryCount() + "");
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else {
+                super.onBackPressed();
+            }
+        }
+
+    }
+
     public void onFragmentInteraction(Uri uri) {
     }
 
-    public ActionBarDrawerToggle getToggle(){
+    public ActionBarDrawerToggle getToggle() {
         return toggle;
     }
 }

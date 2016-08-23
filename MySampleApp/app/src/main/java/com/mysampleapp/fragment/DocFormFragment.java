@@ -1,7 +1,10 @@
 package com.mysampleapp.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -9,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
@@ -54,6 +58,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     private DynamoDBMapper mapper;
     private DoctorDO docDO;
     private boolean editMode = false;
+    ProgressDialog mProgressDialog;
 
     private static final int NAME_STEP = 0;
     private EditText name_text;
@@ -93,13 +98,12 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_doc_form, container, false);
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             Log.w("entrato", "entrato");
             docDO = savedInstanceState.getParcelable("doctorDoParc");
             editMode = savedInstanceState.getBoolean("editMode");
-        }
-        else{
-            if(docDO == null)
+        } else {
+            if (docDO == null)
                 docDO = new DoctorDO();
         }
 
@@ -109,7 +113,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         activity = (AppCompatActivity) getActivity();
-        FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
 
         String[] mySteps = {"Name", "Surname", "E-mail", "Active", "Phone Number", "Address"};
@@ -128,7 +132,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
 
         fab.hide();
 
-        if(editMode)
+        if (editMode)
             activity.getSupportActionBar().setTitle(R.string.edit_doc);
         else
             activity.getSupportActionBar().setTitle(R.string.add_doc);
@@ -137,20 +141,26 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        ((HomeActivity)activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
-        ((HomeActivity)activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
+        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
+        ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
-                //TODO FORSE MEGLIO POPPARE DAL BACK STACK DA DOVE SI ARRIVA VISTO CHE QUI SI ARRIVA DA TRE PARTI
-                Fragment fragment = DocListFragment.newInstance();
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content_frame, fragment)
-                        .addToBackStack(null)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("All the information will be lost")
+                        .setTitle("Discard save");
+                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                builder.setPositiveButton("confirm", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        activity.getSupportFragmentManager().popBackStack();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
     }
@@ -229,12 +239,13 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         name_text.setInputType(InputType.TYPE_CLASS_TEXT);
         name_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        if(docDO.getName()!=null)
-                name_text.setText(docDO.getName());
+        if (docDO.getName() != null)
+            name_text.setText(docDO.getName());
 
         name_text.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -242,12 +253,13 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
         name_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(checkNameSurnameStep(v.getText().toString())) {
+                if (checkNameSurnameStep(v.getText().toString())) {
                     verticalStepperForm.goToNextStep();
                 }
                 return false;
@@ -264,11 +276,12 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         surname_text.setInputType(InputType.TYPE_CLASS_TEXT);
         surname_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        if (docDO.getSurname()!=null)
+        if (docDO.getSurname() != null)
             surname_text.setText(docDO.getSurname());
         surname_text.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -276,12 +289,13 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
         surname_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(checkNameSurnameStep(v.getText().toString())) {
+                if (checkNameSurnameStep(v.getText().toString())) {
                     verticalStepperForm.goToNextStep();
                 }
                 return false;
@@ -299,14 +313,15 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         email_text.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         email_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        if(docDO.getEmail()!=null){
+        if (docDO.getEmail() != null) {
             Log.w("email", docDO.getEmail().toString());
             email_text.setText(docDO.getEmail());
         }
 
         email_text.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -314,12 +329,13 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
         email_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(isValidEmail(v.getText().toString())) {
+                if (isValidEmail(v.getText().toString())) {
                     verticalStepperForm.goToNextStep();
                 }
                 return false;
@@ -332,16 +348,16 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     private View createActiveStep() {
         //TODO convertire a checkbox o simile
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        View rootView = inflater.inflate(R.layout.checkbox_active, null ,false);
+        View rootView = inflater.inflate(R.layout.checkbox_active, null, false);
 
-        cbactive = (CheckBox)rootView.findViewById(R.id.checkbox_active);
+        cbactive = (CheckBox) rootView.findViewById(R.id.checkbox_active);
 
-            if(docDO.getActive()!=null){
-                if(docDO.getActive())
-                    cbactive.setChecked(true);
-                else
-                    cbactive.setChecked(false);
-            }
+        if (docDO.getActive() != null) {
+            if (docDO.getActive())
+                cbactive.setChecked(true);
+            else
+                cbactive.setChecked(false);
+        }
 
 
         cbactive.setOnClickListener(new View.OnClickListener() {
@@ -349,12 +365,12 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             @Override
             public void onClick(View v) {
 
-                if(((CheckBox)v).isChecked()){
+                if (((CheckBox) v).isChecked()) {
                     Toast.makeText(getContext(), "checkato", Toast.LENGTH_SHORT).show();
+                } else {
                 }
-                    else {}
-                    }
-                });
+            }
+        });
         /*
         // Here we generate programmatically the view that will be added by the system to the step content layout
         active_text = new EditText(getActivity());
@@ -374,11 +390,12 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         phoneNumber_text.setInputType(InputType.TYPE_CLASS_PHONE);
         phoneNumber_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        if(docDO.getPhoneNumber()!=null)
+        if (docDO.getPhoneNumber() != null)
             phoneNumber_text.setText(String.valueOf(docDO.getPhoneNumber().intValue()));
         phoneNumber_text.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -386,12 +403,13 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
         phoneNumber_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(isValidCellPhone(v.getText().toString())) {
+                if (isValidCellPhone(v.getText().toString())) {
                     verticalStepperForm.goToNextStep();
                 }
                 return false;
@@ -410,12 +428,13 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         address_text.setInputType(InputType.TYPE_CLASS_TEXT);
         address_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        if(docDO.getAddress()!=null)
+        if (docDO.getAddress() != null)
             address_text.setText(docDO.getAddress());
 
         address_text.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -423,12 +442,13 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
         address_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(!isEmpty(v.getText().toString())) {
+                if (!isEmpty(v.getText().toString())) {
                     verticalStepperForm.goToNextStep();
                 }
                 return false;
@@ -474,7 +494,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         //Log.w("emailtextvalue", email_text.getText().toString());
         //Log.w("emailvalue", docDO.getEmail().toString());
         // TODO FIX controllo
-        if(cbactive.isChecked())
+        if (cbactive.isChecked())
             docDO.setActive(Boolean.TRUE);
         else
             docDO.setActive(Boolean.FALSE);
@@ -482,18 +502,8 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         docDO.setPhoneNumber(Double.parseDouble(tmp));
         docDO.setAddress(address_text.getText().toString());
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //#####################################################################
-                    //errore Null or empty value for key: public java.lang.String com.mysampleapp.demo.nosql.DoctorDO.getEmail()
-                    mapper.save(docDO);
-                } catch (final AmazonClientException ex) {
-                    Log.e("ASD", "Failed saving item : " + ex.getMessage(), ex);
-                }
-            }
-        }).start();
+        new SaveTask().execute();
+
 
         Fragment fragment = new DocListFragment();
         AppCompatActivity activity = (AppCompatActivity) getActivity();
@@ -510,7 +520,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         boolean wordIsCorrect = false;
 
         //check if correct!!
-        if(word.length() >= MIN_NAME_LENGTH && word.matches("[a-zA-Z]+")) {
+        if (word.length() >= MIN_NAME_LENGTH && word.matches("[a-zA-Z]+")) {
             wordIsCorrect = true;
 
             verticalStepperForm.setActiveStepAsCompleted();
@@ -518,7 +528,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
 
         } else {
             String wordErrorString;
-            if(word.length() < MIN_NAME_LENGTH)
+            if (word.length() < MIN_NAME_LENGTH)
                 wordErrorString = getResources().getString(R.string.error_title_min_characters);
             else
                 wordErrorString = getResources().getString(R.string.error_has_numbers);
@@ -530,40 +540,39 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
 
         return wordIsCorrect;
     }
+
     // email checker
     private boolean isValidEmail(String email) {
         Pattern pattern = Patterns.EMAIL_ADDRESS;
 
-        if(pattern.matcher(email).matches()){
+        if (pattern.matcher(email).matches()) {
             verticalStepperForm.setActiveStepAsCompleted();
-        }
-        else{
+        } else {
             String emailerror = getResources().getString(R.string.error_email);
             verticalStepperForm.setActiveStepAsUncompleted(emailerror);
         }
         return pattern.matcher(email).matches();
     }
+
     // phone number checker
     private boolean isValidCellPhone(String number) {
         Pattern pattern = Patterns.PHONE;
 
-        if(pattern.matcher(number).matches()){
+        if (pattern.matcher(number).matches()) {
             verticalStepperForm.setActiveStepAsCompleted();
-        }
-        else{
+        } else {
             String numbererror = getResources().getString(R.string.error_phone_number);
             verticalStepperForm.setActiveStepAsUncompleted(numbererror);
         }
         return pattern.matcher(number).matches();
     }
 
-    private boolean isEmpty(String content){
+    private boolean isEmpty(String content) {
         boolean isempty = false;
-        if(!content.isEmpty()){
+        if (!content.isEmpty()) {
             verticalStepperForm.setActiveStepAsCompleted();
             return isempty;
-        }
-        else{
+        } else {
             isempty = true;
             String emptycontent;
             emptycontent = getResources().getString(R.string.error_empty_content);
@@ -577,42 +586,42 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
 
-        if(docDO == null)
+        if (docDO == null)
             docDO = new DoctorDO();
         docDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
         // Saving name field
-        if(name_text != null) {
-            if(!name_text.getText().toString().isEmpty())
+        if (name_text != null) {
+            if (!name_text.getText().toString().isEmpty())
                 docDO.setName(name_text.getText().toString());
         }
         // Saving surname field
-        if(surname_text != null) {
-            if(!surname_text.getText().toString().isEmpty())
+        if (surname_text != null) {
+            if (!surname_text.getText().toString().isEmpty())
                 docDO.setSurname(surname_text.getText().toString());
         }
         // Saving email field
-        if(email_text != null) {
+        if (email_text != null) {
             Log.w("emailnotnull", email_text.getText().toString());
-            if(!email_text.getText().toString().isEmpty()){
+            if (!email_text.getText().toString().isEmpty()) {
                 docDO.setEmail(email_text.getText().toString());
                 Log.w("docdoval", docDO.getEmail().toString());
             }
         }
         // Saving active field
-        if(cbactive != null) {
-            if(cbactive.isChecked())
+        if (cbactive != null) {
+            if (cbactive.isChecked())
                 docDO.setActive(true);
             else
                 docDO.setActive(false);
         }
         // Saving phone_number field
-        if(phoneNumber_text != null) {
-            if(!phoneNumber_text.getText().toString().isEmpty())
+        if (phoneNumber_text != null) {
+            if (!phoneNumber_text.getText().toString().isEmpty())
                 docDO.setPhoneNumber(Double.parseDouble(phoneNumber_text.getText().toString()));
         }
         // Saving address field
-        if(address_text != null) {
-            if(!address_text.getText().toString().isEmpty())
+        if (address_text != null) {
+            if (!address_text.getText().toString().isEmpty())
                 docDO.setAddress(address_text.getText().toString());
         }
 
@@ -625,7 +634,64 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     public void setEditMode(boolean editMode) {
         this.editMode = editMode;
     }
-    public void setDoctor(DoctorDO doctor){
+
+    public void setDoctor(DoctorDO doctor) {
         this.docDO = doctor;
+    }
+
+    private class SaveTask extends AsyncTask<Void, Void, Void> {
+        private Boolean success;
+
+        public SaveTask() {
+            success = false;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Create a progressdialog
+            mProgressDialog = new ProgressDialog(getActivity());
+            // Set progressdialog title
+            mProgressDialog.setTitle("Save data");
+            // Set progressdialog message
+            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setIndeterminate(false);
+            // Show progressdialog
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                //#####################################################################
+                //errore Null or empty value for key: public java.lang.String com.mysampleapp.demo.nosql.DoctorDO.getEmail()
+                mapper.save(docDO);
+                success = true;
+            } catch (final AmazonClientException ex) {
+                Log.e("ASD", "Failed saving item : " + ex.getMessage(), ex);
+                success = false;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void args) {
+            if (success) {
+                mProgressDialog.dismiss();
+                activity.getSupportFragmentManager().popBackStack();
+            } else {
+                mProgressDialog.dismiss();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Error")
+                        .setTitle("an error as occurred");
+                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        }
     }
 }
