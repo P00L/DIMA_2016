@@ -38,6 +38,7 @@ import com.mysampleapp.fragment.DrugFragment;
 import com.mysampleapp.fragment.DrugListFragment;
 import com.mysampleapp.fragment.HomeFragment;
 import com.mysampleapp.fragment.MyDialogFragment;
+import com.mysampleapp.fragment.PendingScheduleFragment;
 import com.mysampleapp.fragment.ScheduleFormFragment;
 import com.mysampleapp.fragment.ScheduleFragment;
 import com.mysampleapp.fragment.ScheduleListFragment;
@@ -128,6 +129,16 @@ public class HomeActivity extends AppCompatActivity
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                             .commit();
                     navigationView.setCheckedItem(R.id.nav_home);
+                    break;
+                case "fragment_pending":
+                    fragment = PendingScheduleFragment.newInstance();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content_frame, fragment)
+                            .addToBackStack(null)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit();
+                    //navigationView.setCheckedItem(R.id.nav_home);
                     break;
             }
         } else {
@@ -351,6 +362,23 @@ public class HomeActivity extends AppCompatActivity
                         backConfirmation.show(getSupportFragmentManager(), null);
                         break;
                     case "class com.mysampleapp.fragment.DrugFormFragment":
+                        backConfirmation = new MyDialogFragment();
+                        backConfirmation.setOnConfirmBack(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //do nothing
+                            }
+                        });
+                        backConfirmation.setOnNotConfirmBack(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //discard data
+                                getSupportFragmentManager().popBackStack();
+                            }
+                        });
+                        backConfirmation.show(getSupportFragmentManager(), null);
+                        break;
+                    case "class com.mysampleapp.fragment.ScheduleFormFragment":
                         backConfirmation = new MyDialogFragment();
                         backConfirmation.setOnConfirmBack(new DialogInterface.OnClickListener() {
                             @Override

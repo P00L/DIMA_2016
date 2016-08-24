@@ -14,13 +14,15 @@ import com.mysampleapp.R;
 import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 import com.mysampleapp.fragment.ScheduleFragment;
 
+import java.util.ArrayList;
+
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> {
 
     private Context mContext;
-    private ScheduleDrugDO[] mList;
+    private ArrayList<ScheduleDrugDO> mList;
 
-    public ScheduleAdapter(Context contexts, ScheduleDrugDO[] list) {
+    public ScheduleAdapter(Context contexts, ArrayList<ScheduleDrugDO> list) {
         this.mContext = contexts;
         this.mList = list;
     }
@@ -34,16 +36,16 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.titleTextView.setText(mList[position].getDrug());
+        holder.titleTextView.setText(mList.get(position).getDrug());
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
                 if (isLongClick) {
-                    Toast.makeText(mContext, "#" + position + " - " + mList[position] + " (Long click)", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "#" + position + " - " + mList.get(position) + " (Long click)", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(mContext, "#" + position + " - " + mList[position], Toast.LENGTH_SHORT).show();
-                    ScheduleFragment fragment = ScheduleFragment.newInstance();
-                    fragment.setResult(mList[position]);
+                    Toast.makeText(mContext, "#" + position + " - " + mList.get(position), Toast.LENGTH_SHORT).show();
+                    ScheduleFragment fragment = ScheduleFragment.newInstance(mList.get(position));
+                    fragment.setResult(mList.get(position));
                     AppCompatActivity activity = (AppCompatActivity) mContext;
                     activity.getSupportFragmentManager()
                             .beginTransaction()
@@ -58,7 +60,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return mList.length;
+        return mList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder

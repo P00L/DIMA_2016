@@ -74,25 +74,31 @@ import ernestoyaquello.com.verticalstepperform.interfaces.VerticalStepperForm;
  */
 public class ScheduleFormFragment extends Fragment implements VerticalStepperForm {
 
+    private static final String ARG_SCHEDULEDO = "param1";
+    private static final String ARG_EDITMODE = "param2";
+    private static final String ARG_SCHEDULELIST = "param3";
+    private static final String ARG_DRUGLIST = "param4";
     public final static String ALARM_ID_EXTRA = "alarm_id";
     public final static String DRUG_EXTRA = "drug_name";
+
     private OnFragmentInteractionListener mListener;
     private AppCompatActivity activity;
     private DynamoDBMapper mapper;
-    DemoNoSQLOperation operation;
+    private DemoNoSQLOperation operation;
+    private ArrayList<ScheduleDrugDO> scheduleDrugDOArrayList;
     private ArrayList<DrugDO> druglist;
-    String[] drugnames;
+    private String[] drugnames;
     private ScheduleDrugDO scheduleDrugDO;
     private boolean editMode = false;
-    ProgressDialog mProgressDialog;
+    private ProgressDialog mProgressDialog;
 
-    public static final String NEW_ALARM_ADDED = "new_alarm_added";
 
     // Information about the steps/fields of the form
     private static final int DRUG_STEP_NUM = 0;
     private static final int NOTES_STEP_NUM = 1;
     private static final int TIME_STEP_NUM = 2;
     private static final int DAYS_STEP_NUM = 3;
+    private static final int CONFIRM_STEP_NUM = 4;
 
     // drug step
     private AutoCompleteTextView autoDrugTextView;
@@ -105,8 +111,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     private TextView timeTextView;
     private TimePickerDialog timePicker;
     private Pair<Integer, Integer> time;
-    public static final String STATE_TIME_HOUR = "time_hour";
-    public static final String STATE_TIME_MINUTES = "time_minutes";
+
 
     // Week days step
     private String[] weekDaysString = {"L", "MA", "ME", "G", "V", "S", "D"};
@@ -114,7 +119,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     String daysToSave;
     private boolean[] weekDaysBool;
     private LinearLayout daysStepContent;
-    public static final String STATE_WEEK_DAYS = "week_days";
 
     private VerticalStepperFormLayout verticalStepperForm;
 
@@ -122,15 +126,24 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         // Required empty public constructor
     }
 
-    public static ScheduleFormFragment newInstance() {
+    public static ScheduleFormFragment newInstance(ScheduleDrugDO scheduleDrugDO, Boolean editMode, ArrayList<ScheduleDrugDO> scheduleDrugDOArrayList) {
         ScheduleFormFragment fragment = new ScheduleFormFragment();
         Bundle args = new Bundle();
+        args.putParcelable(ARG_SCHEDULEDO, scheduleDrugDO);
+        args.putBoolean(ARG_EDITMODE, editMode);
+        args.putParcelableArrayList(ARG_SCHEDULELIST, scheduleDrugDOArrayList);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (getArguments() != null) {
+            scheduleDrugDO = getArguments().getParcelable(ARG_SCHEDULEDO);
+            editMode = getArguments().getBoolean(ARG_EDITMODE);
+            scheduleDrugDOArrayList = getArguments().getParcelableArrayList(ARG_SCHEDULELIST);
+            druglist = getArguments().getParcelableArrayList(ARG_DRUGLIST);
+        }
         super.onCreate(savedInstanceState);
 
     }
@@ -140,23 +153,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_schedule_form, container, false);
-        //activity = (AppCompatActivity) getActivity();
-        DemoNoSQLTableBase demoTable = DemoNoSQLTableFactory.instance(getContext())
-                .getNoSQLTableByTableName("Drug");
-        operation = (DemoNoSQLOperation) demoTable.getOperationByName(getContext(), "ASD");
-
-        if (savedInstanceState != null) {
-            Log.w("entrato", "entrato");
-            scheduleDrugDO = savedInstanceState.getParcelable("scheduleDrugDoParc");
-            editMode = savedInstanceState.getBoolean("editMode");
-            //TODO manca controllo se dobbiamo riaggiornare la lista se arriviamo da un insert new drug
-            drugnames = savedInstanceState.getStringArray("drugnames");
-
-        } else {
-            new MyAsyncTask(view).execute();
-            if (scheduleDrugDO == null)
-                scheduleDrugDO = new ScheduleDrugDO();
-        }
         return view;
     }
 
@@ -165,34 +161,57 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
         fab.hide();
+
+        DemoNoSQLTableBase demoTable = DemoNoSQLTableFactory.instance(getContext())
+                .getNoSQLTableByTableName("Drug");
+        operation = (DemoNoSQLOperation) demoTable.getOperationByName(getContext(), "ASD");
+
+        if (drugnames == null) {
+            new MyAsyncTask().execute();
+        }
+
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+
 
         //inizialize vertical stepper
         //initializeActivity(view);
         //new MyAsyncTask(view).execute();
         initializeActivity(view);
 
-        if (editMode)
+        if (editMode) {
             activity.getSupportActionBar().setTitle(R.string.edit_schedule_drug);
-        else
+            verticalStepperForm.setStepAsCompleted(DRUG_STEP_NUM);
+            verticalStepperForm.setStepAsCompleted(NOTES_STEP_NUM);
+            verticalStepperForm.setStepAsCompleted(TIME_STEP_NUM);
+            verticalStepperForm.setStepAsCompleted(DAYS_STEP_NUM);
+            verticalStepperForm.setStepAsCompleted(CONFIRM_STEP_NUM);
+        } else
             activity.getSupportActionBar().setTitle(R.string.add_schedule);
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_schedule);
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
+        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_x);
         ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
-                Fragment fragment = ScheduleListFragment.newInstance();
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content_frame, fragment)
-                        .addToBackStack(null)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
+                MyDialogFragment backConfirmation = new MyDialogFragment();
+                backConfirmation.setOnConfirmBack(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //do nothing
+                    }
+                });
+                backConfirmation.setOnNotConfirmBack(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //discard data
+                        activity.getSupportFragmentManager().popBackStack();
+                    }
+                });
+                backConfirmation.show(activity.getSupportFragmentManager(), null);
 
             }
         });
@@ -230,7 +249,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     }
 
     private void initializeActivity(View view) {
-
         //se trova gia salvato in savedInstanceState
         if (scheduleDrugDO.getHour() != null && scheduleDrugDO.getHour().matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")) {
             String[] hourmin = scheduleDrugDO.getHour().split(":");
@@ -346,8 +364,35 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         // Get a reference to the AutoCompleteTextView in the layout
         autoDrugTextView = (AutoCompleteTextView) addDrugView.findViewById(R.id.autocomplete_drug);
 
+        FloatingActionButton fab2 = (FloatingActionButton) addDrugView.findViewById(R.id.fab2);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = DrugFormFragment.newInstance(new DrugDO(), false, druglist);
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+            }
+        });
+
         if (scheduleDrugDO.getDrug() != null)
             autoDrugTextView.setText(scheduleDrugDO.getDrug());
+
+        if (druglist != null) {
+            drugnames = new String[druglist.size()];
+            int n = 0;
+            for (DrugDO drugDO : druglist) {
+                drugnames[n] = drugDO.getName();
+                Log.w("nomedrug", drugnames[n]);
+                n++;
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, drugnames);
+            autoDrugTextView.setAdapter(adapter);
+        }
 
         autoDrugTextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -590,69 +635,10 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         }
     }
 
-    // SAVING THE STATE
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-
-        if (scheduleDrugDO == null)
-            scheduleDrugDO = new ScheduleDrugDO();
-        scheduleDrugDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-
-        // Saving drug field
-        if (autoDrugTextView != null) {
-            if (!autoDrugTextView.getText().toString().isEmpty())
-                scheduleDrugDO.setDrug(autoDrugTextView.getText().toString());
-        }
-        // Saving notes field
-        if (notesEditText != null) {
-            if (!notesEditText.getText().toString().isEmpty())
-                scheduleDrugDO.setNotes(notesEditText.getText().toString());
-        }
-        // Saving hour field
-        if (timeTextView != null) {
-            if (!timeTextView.getText().toString().isEmpty())
-                scheduleDrugDO.setHour(timeTextView.getText().toString());
-        }
-        // Saving days field
-        if (weekDaysBool != null) {
-            boolean addFirst = true;
-            for (int i = 0; i < weekDaysString.length; i++) {
-                if (weekDaysBool[i]) {
-                    //se è il primo elemento
-                    if (addFirst) {
-                        daysToSave = weekDaysString[i];
-                        addFirst = false;
-                    } else {
-                        //se siamo dopo il primo aggiungo il separatore
-                        daysToSave = daysToSave + "/" + weekDaysString[i];
-                    }
-                }
-            }
-            scheduleDrugDO.setDay(daysToSave);
-        }
-
-        savedInstanceState.putParcelable("scheduleDrugDoParc", scheduleDrugDO);
-        savedInstanceState.putBoolean("editMode", editMode);
-        savedInstanceState.putStringArray("drugnames",drugnames);
-        // The call to super method must be at the end here
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    public void setScheduleDrugDO(ScheduleDrugDO schedule) {
-        this.scheduleDrugDO = schedule;
-    }
-
-    public void setEditMode(boolean editMode) {
-        this.editMode = editMode;
-    }
-
     private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        private View view;
 
-        public MyAsyncTask(View view) {
-            this.view = view;
+        public MyAsyncTask() {
         }
 
         @Override
@@ -742,17 +728,8 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                     updateAlarm();
                 else
                     setAlarm();
-
-
-                //TODO DEVE DIVENTARE UNA POP
-                Fragment fragment = new ScheduleListFragment();
-                AppCompatActivity activity = (AppCompatActivity) getActivity();
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content_frame, fragment)
-                        .addToBackStack(null)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
+                scheduleDrugDOArrayList.add(scheduleDrugDO);
+                activity.getSupportFragmentManager().popBackStack();
 
             } else {
                 mProgressDialog.dismiss();
@@ -919,5 +896,51 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     public void updateAlarm() {
         cancelAlarm();
         setAlarm();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        ScheduleDrugDO scheduleDO_tmp = new ScheduleDrugDO();
+
+        scheduleDO_tmp.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+
+        // Saving drug field
+        if (autoDrugTextView != null) {
+            if (!autoDrugTextView.getText().toString().isEmpty())
+                scheduleDO_tmp.setDrug(autoDrugTextView.getText().toString());
+        }
+        // Saving notes field
+        if (notesEditText != null) {
+            if (!notesEditText.getText().toString().isEmpty())
+                scheduleDO_tmp.setNotes(notesEditText.getText().toString());
+        }
+        // Saving hour field
+        if (timeTextView != null) {
+            if (!timeTextView.getText().toString().isEmpty())
+                scheduleDO_tmp.setHour(timeTextView.getText().toString());
+        }
+        // Saving days field
+        if (weekDaysBool != null) {
+            boolean addFirst = true;
+            for (int i = 0; i < weekDaysString.length; i++) {
+                if (weekDaysBool[i]) {
+                    //se è il primo elemento
+                    if (addFirst) {
+                        daysToSave = weekDaysString[i];
+                        addFirst = false;
+                    } else {
+                        //se siamo dopo il primo aggiungo il separatore
+                        daysToSave = daysToSave + "/" + weekDaysString[i];
+                    }
+                }
+            }
+            scheduleDO_tmp.setDay(daysToSave);
+        }
+
+        getArguments().putParcelable(ARG_SCHEDULEDO, scheduleDO_tmp);
+        getArguments().putBoolean(ARG_EDITMODE, editMode);
+        getArguments().putParcelableArrayList(ARG_DRUGLIST, druglist);
+        getArguments().putParcelableArrayList(ARG_SCHEDULELIST, scheduleDrugDOArrayList);
     }
 }

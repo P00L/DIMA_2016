@@ -33,7 +33,7 @@ import java.util.List;
 public class BootReceiver extends BroadcastReceiver {
 
     DemoNoSQLOperation operation;
-    ScheduleDrugDO[] items;
+    ArrayList<ScheduleDrugDO> items;
 
     @Override
     public void onReceive(Context context, Intent intent) {

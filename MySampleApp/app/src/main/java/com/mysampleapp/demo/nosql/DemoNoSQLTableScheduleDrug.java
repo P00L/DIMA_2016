@@ -166,8 +166,12 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
             return false;
         }
 
-        public ScheduleDrugDO[] getResultArray(){
-            return results.toArray(new ScheduleDrugDO[0]);
+        public ArrayList<ScheduleDrugDO> getResultArray(){
+            ArrayList<ScheduleDrugDO> list = new ArrayList<>();
+            for (ScheduleDrugDO d:results){
+                list.add(d);
+            }
+            return list;
         }
 
         @Override

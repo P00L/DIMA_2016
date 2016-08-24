@@ -170,21 +170,21 @@ public class ServiceNotification extends IntentService {
         NotificationCompat.InboxStyle inboxStyle =
                 new NotificationCompat.InboxStyle();
 
-// Sets a title for the Inbox in expanded layout
+        // Sets a title for the Inbox in expanded layout
         inboxStyle.setBigContentTitle("Drug reminder");
-// Moves events into the expanded layout
+        // Moves events into the expanded layout
         for (String s : set_result) {
             inboxStyle.addLine(s.split("/")[1]);
         }
-// Moves the expanded layout object into the notification object.
+        // Moves the expanded layout object into the notification object.
         mBuilder.setStyle(inboxStyle);
 
         Intent resultIntent = new Intent(context, HomeActivity.class);
-        resultIntent.putExtra(SplashActivity.ACTIVITY_HOME_FRAGMENT_EXTRA, "fragment_home");
+        resultIntent.putExtra(SplashActivity.ACTIVITY_HOME_FRAGMENT_EXTRA, "fragment_pending");
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(HomeActivity.class);
 
-// Adds the Intent that starts the Activity to the top of the stack
+        // Adds the Intent that starts the Activity to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(resultPendingIntent);

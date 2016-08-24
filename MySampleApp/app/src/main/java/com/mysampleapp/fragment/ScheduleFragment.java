@@ -19,6 +19,8 @@ import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 
+import java.util.ArrayList;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -29,6 +31,7 @@ import com.mysampleapp.demo.nosql.ScheduleDrugDO;
  */
 public class ScheduleFragment extends Fragment {
 
+    private static final String ARG_SCHEDULEDRUGDO = "param1";
     private AppCompatActivity activity;
     private OnFragmentInteractionListener mListener;
     private ScheduleDrugDO scheduleDrugDO;
@@ -38,16 +41,19 @@ public class ScheduleFragment extends Fragment {
     }
 
 
-    // TODO: Rename and change types and number of parameters
-    public static ScheduleFragment newInstance() {
+    public static ScheduleFragment newInstance(ScheduleDrugDO scheduleDrugDO) {
         ScheduleFragment fragment = new ScheduleFragment();
-        Bundle args = new Bundle();;
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_SCHEDULEDRUGDO, scheduleDrugDO);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (getArguments() != null) {
+            scheduleDrugDO = getArguments().getParcelable(ARG_SCHEDULEDRUGDO);
+        }
         super.onCreate(savedInstanceState);
     }
 
@@ -61,9 +67,6 @@ public class ScheduleFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
-        if (savedInstanceState != null){
-            scheduleDrugDO = savedInstanceState.getParcelable("scheduleDrugDoParc");
-        }
         //Log.w("docdo", doctorDO.getName());
         activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
@@ -73,9 +76,7 @@ public class ScheduleFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //il fab manda al form di edit e passa doctorDO come parametro da salvare nel Bundle
-                ScheduleFormFragment fragment = ScheduleFormFragment.newInstance();
-                fragment.setScheduleDrugDO(scheduleDrugDO);
-                fragment.setEditMode(true);
+                ScheduleFormFragment fragment = ScheduleFormFragment.newInstance(scheduleDrugDO,true,new ArrayList<ScheduleDrugDO>());
                 activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
@@ -97,13 +98,7 @@ public class ScheduleFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
-                Fragment fragment = ScheduleListFragment.newInstance();
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content_frame, fragment)
-                        .addToBackStack(null)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
+                activity.getSupportFragmentManager().popBackStack();
 
             }
         });
@@ -111,14 +106,7 @@ public class ScheduleFragment extends Fragment {
         // TODO: Rename method, update a
 
         TextView textView = (TextView) view.findViewById(R.id.schedule_name);
-        if(scheduleDrugDO != null){
-            if(scheduleDrugDO.getDrug() != null)
-                textView.setText(scheduleDrugDO.getDrug());
-            else
-                Log.w("scheduledrugdo", "getdrugNULL");
-        }
-        else
-            Log.w("scheduledrugdo", "ScheduledrugDoNULL");
+        textView.setText(scheduleDrugDO.getDrug());
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -166,9 +154,9 @@ public class ScheduleFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("scheduleDrugDoParc", scheduleDrugDO);
+    public void onPause() {
+        super.onPause();
+        getArguments().putParcelable(ARG_SCHEDULEDRUGDO, scheduleDrugDO);
     }
 
 }
