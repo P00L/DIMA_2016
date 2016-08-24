@@ -850,8 +850,16 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                         break;
                     }
                 }
+                if(next_day_index == 8){
+                    for (String s : list) {
+                        if (Integer.parseInt(s) < calNow.get(Calendar.DAY_OF_WEEK)) {
+                            next_day_index = list.indexOf(s);
+                            break;
+                        }
+                    }
+                }
             }
-
+            Log.w("list", list.toString());
             Log.w("next day index", next_day_index + "");
             Log.w("next day ", list.get(next_day_index) + "");
 

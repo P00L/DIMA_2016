@@ -171,6 +171,14 @@ public class BootReceiver extends BroadcastReceiver {
                         break;
                     }
                 }
+                if(next_day_index == 8){
+                    for (String s : list) {
+                        if (Integer.parseInt(s) < calNow.get(Calendar.DAY_OF_WEEK)) {
+                            next_day_index = list.indexOf(s);
+                            break;
+                        }
+                    }
+                }
             }
 
             //get nex day Calendar format
