@@ -44,6 +44,7 @@ import com.mysampleapp.fragment.DrugFormFragment;
 import com.mysampleapp.fragment.DrugFragment;
 import com.mysampleapp.fragment.DrugListFragment;
 import com.mysampleapp.fragment.HomeFragment;
+import com.mysampleapp.fragment.MyDialogFragment;
 import com.mysampleapp.fragment.ScheduleFormFragment;
 import com.mysampleapp.fragment.ScheduleFragment;
 import com.mysampleapp.fragment.ScheduleListFragment;
@@ -168,6 +169,7 @@ public class HomeActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+
         android.support.v4.app.FragmentManager supportFragmentManager = getSupportFragmentManager();
         supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
@@ -326,52 +328,54 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        //TODO RIUAGGIUNGERE
-        /*
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
-        }
-        */
-        Fragment myFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
-        //catch click of bottom back button and handle what to to according where we are
-        if (myFragment != null && myFragment.isVisible()) {
-            Log.w("Back", myFragment.getClass().toString());
-            switch (myFragment.getClass().toString()) {
-                case "class com.mysampleapp.fragment.DocFormFragment":
-                    //from the doc form we have to show dialog are you sure you wanna leave???
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setMessage("All the information will be lost")
-                            .setTitle("Discard save");
-                    builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // User cancelled the dialog
-                        }
-                    });
-                    builder.setPositiveButton("confirm", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+            Fragment myFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+            //catch click of bottom back button and handle what to to according where we are
+            if (myFragment != null && myFragment.isVisible()) {
+                Log.w("Back pressed", "current fragment"+myFragment.getClass().toString());
+                switch (myFragment.getClass().toString()) {
+                    case "class com.mysampleapp.fragment.HomeFragment":
+                        //if we are in the home a back press le it finish
+                        finish();
+                        break;
+                    case "class com.mysampleapp.fragment.DocFormFragment":
+                        MyDialogFragment backConfirmation = new MyDialogFragment();
+                        backConfirmation.setOnConfirmBack(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //do nothing
+                            }
+                        });
+                        backConfirmation.setOnNotConfirmBack(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //discard data
+                                getSupportFragmentManager().popBackStack();
+                            }
+                        });
+                        backConfirmation.show(getSupportFragmentManager(), null);
+                        break;
+                    default:
+                        Log.w("Back pressed", "number of fragment"+getSupportFragmentManager().getBackStackEntryCount() + "");
+                        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                            Log.w("Back pressed","POP");
                             getSupportFragmentManager().popBackStack();
+                        } else {
+                            Log.w("Back pressed","only one fragmente in back stack turn to home ");
+                            fragment = HomeFragment.newInstance();
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.content_frame, fragment)
+                                    .addToBackStack(null)
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                    .commit();
+                            navigationView.setCheckedItem(R.id.nav_home);
                         }
-                    });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                    break;
-                default:
-                    Log.w("Back", getSupportFragmentManager().getBackStackEntryCount() + "");
-                    if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                        getSupportFragmentManager().popBackStack();
-                    } else {
-                        super.onBackPressed();
-                    }
-            }
-        } else {
-            Log.w("Back", getSupportFragmentManager().getBackStackEntryCount() + "");
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                getSupportFragmentManager().popBackStack();
-            } else {
-                super.onBackPressed();
+                }
             }
         }
 
@@ -383,4 +387,5 @@ public class HomeActivity extends AppCompatActivity
     public ActionBarDrawerToggle getToggle() {
         return toggle;
     }
+
 }

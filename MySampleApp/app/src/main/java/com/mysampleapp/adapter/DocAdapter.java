@@ -14,12 +14,14 @@ import com.mysampleapp.R;
 import com.mysampleapp.demo.nosql.DoctorDO;
 import com.mysampleapp.fragment.DocFragment;
 
+import java.util.ArrayList;
+
 public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
     private Context mContext;
-    private DoctorDO[] mList;
+    private ArrayList<DoctorDO> mList;
 
-    public DocAdapter(Context contexts, DoctorDO[] list) {
+    public DocAdapter(Context contexts, ArrayList<DoctorDO> list) {
         this.mContext = contexts;
         this.mList = list;
     }
@@ -34,16 +36,14 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         //TODO togliere toast
-        holder.titleTextView.setText(mList[position].getName());
+        holder.titleTextView.setText(mList.get(position).getName());
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
                 if (isLongClick) {
-                    Toast.makeText(mContext, "#" + position + " - " + mList[position] + " (Long click)", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "#" + position + " - " + mList.get(position) + " (Long click)", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(mContext, "#" + position + " - " + mList[position], Toast.LENGTH_SHORT).show();
-                    DocFragment fragment = DocFragment.newInstance();
-                    fragment.setResult(mList[position]);
+                    DocFragment fragment = DocFragment.newInstance(mList.get(position));
                     AppCompatActivity activity = (AppCompatActivity) mContext;
                     activity.getSupportFragmentManager()
                             .beginTransaction()
@@ -58,7 +58,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mList.length;
+        return mList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder

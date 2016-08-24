@@ -16,9 +16,12 @@ import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DoctorDO;
 
+import java.util.ArrayList;
+
 
 public class DocFragment extends Fragment {
 
+    private static final String ARG_DOCDO = "param1";
     private DoctorDO doctorDO;
     private AppCompatActivity activity;
 
@@ -26,16 +29,19 @@ public class DocFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static DocFragment newInstance() {
+    public static DocFragment newInstance(DoctorDO doctorDO) {
         DocFragment fragment = new DocFragment();
         Bundle args = new Bundle();
+        args.putParcelable(ARG_DOCDO, doctorDO);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (getArguments() != null) {
+            doctorDO = getArguments().getParcelable(ARG_DOCDO);
+        }
         super.onCreate(savedInstanceState);
     }
 
@@ -50,9 +56,6 @@ public class DocFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (savedInstanceState != null){
-           doctorDO = savedInstanceState.getParcelable("doctorDoParc");
-        }
         //Log.w("docdo", doctorDO.getName());
         activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
@@ -62,9 +65,7 @@ public class DocFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //il fab manda al form di edit e passa doctorDO come parametro da salvare nel Bundle
-                DocFormFragment fragment = DocFormFragment.newInstance();
-                fragment.setDoctor(doctorDO);
-                fragment.setEditMode(true);
+                DocFormFragment fragment = DocFormFragment.newInstance(doctorDO,true,new ArrayList<DoctorDO>());
                 activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
@@ -106,14 +107,10 @@ public class DocFragment extends Fragment {
         super.onDetach();
     }
 
-    public void setResult(final DoctorDO result) {
-        this.doctorDO = result;
-    }
-
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("doctorDoParc", doctorDO);
+    public void onPause() {
+        super.onPause();
+        getArguments().putParcelable(ARG_DOCDO, doctorDO);
     }
 
 }

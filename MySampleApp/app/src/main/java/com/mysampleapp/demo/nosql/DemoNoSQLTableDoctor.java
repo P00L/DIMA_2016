@@ -160,8 +160,13 @@ public class DemoNoSQLTableDoctor extends DemoNoSQLTableBase {
             return false;
         }
 
-        public DoctorDO[] getResultArray(){
-            return results.toArray(new DoctorDO[0]);
+        public ArrayList<DoctorDO> getResultArray(){
+            //return results.toArray(new DoctorDO[0]);
+            ArrayList<DoctorDO> list = new ArrayList<>();
+            for (DoctorDO d:results){
+                list.add(d);
+            }
+            return list;
         }
         @Override
         public List<DemoNoSQLResult> getNextResultGroup() {

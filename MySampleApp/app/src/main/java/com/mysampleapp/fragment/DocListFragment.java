@@ -14,10 +14,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.amazonaws.AmazonClientException;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.adapter.DocAdapter;
@@ -27,16 +30,21 @@ import com.mysampleapp.demo.nosql.DemoNoSQLTableDoctor;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
 import com.mysampleapp.demo.nosql.DoctorDO;
 
+import java.util.ArrayList;
+
 public class DocListFragment extends Fragment {
 
+    private static final String ARG_DOCLIST = "param1";
     private OnFragmentInteractionListener mListener;
-    RecyclerView mRecyclerView;
-    RecyclerView.Adapter mAdapter;
-    RecyclerView.LayoutManager mLayoutManager;
-    DoctorDO[] items;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private ArrayList<DoctorDO> items;
     private AppCompatActivity activity;
-    ProgressDialog mProgressDialog;
-    DemoNoSQLOperation operation;
+    private ProgressDialog mProgressDialog;
+    private DemoNoSQLOperation operation;
+    private  TextView noDataTextView;
+
 
     public DocListFragment() {
         // Required empty public constructor
@@ -51,6 +59,9 @@ public class DocListFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (getArguments() != null) {
+            items = getArguments().getParcelableArrayList(ARG_DOCLIST);
+        }
         super.onCreate(savedInstanceState);
     }
 
@@ -58,39 +69,40 @@ public class DocListFragment extends Fragment {
                              final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_doc_list, container, false);
-        activity = (AppCompatActivity) getActivity();
-        DemoNoSQLTableBase demoTable= DemoNoSQLTableFactory.instance(getContext())
-                .getNoSQLTableByTableName("Doctor");
-        operation = (DemoNoSQLOperation)demoTable.getOperationByName(getContext(),"ASD");
-
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-
-        if(savedInstanceState!=null){
-            //TODO CONTROLO SE RIAGGIONRNARE ANCHE SU SAVED INSTANCE????
-            items = (DoctorDO[]) savedInstanceState.getParcelableArray("items");
-            mLayoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new DocAdapter(getContext(), items);
-            mRecyclerView.setAdapter(mAdapter);
-        }else{
-            new MyAsyncTask().execute();
-        }
-
-
         return view;
     }
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        // on click fab launch form doc
-        FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
+        activity = (AppCompatActivity) getActivity();
+        DemoNoSQLTableBase demoTable = DemoNoSQLTableFactory.instance(getContext())
+                .getNoSQLTableByTableName("Doctor");
+        operation = (DemoNoSQLOperation) demoTable.getOperationByName(getContext(), "ASD");
+
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(false);
+        noDataTextView = (TextView) view.findViewById(R.id.no_data);
+        if (items == null){
+            Log.w("SAVED","SAVED");
+            new MyAsyncTask().execute();
+        } else {
+            Log.w("SAVED","SAVED");
+            if (items.size() > 0) {
+                mLayoutManager = new LinearLayoutManager(getActivity());
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mAdapter = new DocAdapter(getContext(), items);
+                mRecyclerView.setAdapter(mAdapter);
+            } else {
+                noDataTextView.setVisibility(View.VISIBLE);
+            }
+        }
+        final FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
         if (!fab.isShown())
             fab.show();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = DocFormFragment.newInstance();
+                Fragment fragment = DocFormFragment.newInstance(new DoctorDO(),false,items);
                 activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
@@ -108,8 +120,8 @@ public class DocListFragment extends Fragment {
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        ((HomeActivity)activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_hamburger);
-        ((HomeActivity)activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
+        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_hamburger);
+        ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
@@ -124,7 +136,6 @@ public class DocListFragment extends Fragment {
         });
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -153,12 +164,8 @@ public class DocListFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState){
-        savedInstanceState.putParcelableArray("items",items);
-    }
-
     private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
+        Boolean success = false;
 
         public MyAsyncTask() {
 
@@ -180,18 +187,33 @@ public class DocListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            operation.executeOperation();
-            items = ((DemoNoSQLTableDoctor.DemoQueryWithPartitionKeyOnly)operation).getResultArray();
+            try {
+                success = operation.executeOperation();
+                items = ((DemoNoSQLTableDoctor.DemoQueryWithPartitionKeyOnly) operation).getResultArray();
+            } catch (final AmazonClientException ex) {
+                success = false;
+            }
             return null;
         }
+
         @Override
         protected void onPostExecute(Void args) {
-
-            mLayoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new DocAdapter(getContext(), items);
-            mRecyclerView.setAdapter(mAdapter);
-            mProgressDialog.dismiss();
+            if (success && items.size() > 0) {
+                mLayoutManager = new LinearLayoutManager(getActivity());
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mAdapter = new DocAdapter(getContext(), items);
+                mRecyclerView.setAdapter(mAdapter);
+                mProgressDialog.dismiss();
+            } else {
+                mProgressDialog.dismiss();
+                noDataTextView.setVisibility(View.VISIBLE);
+            }
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getArguments().putParcelableArrayList(ARG_DOCLIST, items);
     }
 }
