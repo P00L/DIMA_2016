@@ -160,8 +160,11 @@ public class DemoNoSQLTableDrug extends DemoNoSQLTableBase {
             return false;
         }
 
-        public DrugDO[] getResultArray(){
-            return results.toArray(new DrugDO[0]);
+        public ArrayList<DrugDO> getResultArray(){
+            ArrayList<DrugDO> list = new ArrayList<>();
+            for(DrugDO d : results)
+                list.add(d);
+            return list;
         }
 
         @Override

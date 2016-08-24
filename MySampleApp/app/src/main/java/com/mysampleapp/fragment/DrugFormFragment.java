@@ -1,14 +1,17 @@
 package com.mysampleapp.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
@@ -29,6 +32,8 @@ import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DrugDO;
 
+import java.util.ArrayList;
+
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormLayout;
 import ernestoyaquello.com.verticalstepperform.interfaces.VerticalStepperForm;
 
@@ -42,12 +47,19 @@ import ernestoyaquello.com.verticalstepperform.interfaces.VerticalStepperForm;
  */
 public class DrugFormFragment extends Fragment implements VerticalStepperForm {
 
-    private OnFragmentInteractionListener mListener;
+    private static final String ARG_DRUGDO = "param1";
+    private static final String ARG_EDITMODE = "param2";
+    private static final String ARG_DRUGLIST = "param3";
 
+    private OnFragmentInteractionListener mListener;
+    private ArrayList<DrugDO> drug_list;
     private VerticalStepperFormLayout verticalStepperForm;
     private DynamoDBMapper mapper;
     private DrugDO drugDO;
+    private DrugDO drugDO_tmp;
+    private boolean assign_tmp = true;
     private boolean editMode = false;
+    private ProgressDialog mProgressDialog;
 
     private final static int NAME_STEP = 0;
     private EditText name_text;
@@ -62,21 +74,29 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
     private final static int NOTES_STEP = 5;
     private EditText notes_text;
     private AppCompatActivity activity;
-
+    private final static int CONFIRM_STEP = 6;
 
     public DrugFormFragment() {
         // Required empty public constructor
     }
 
-    public static DrugFormFragment newInstance() {
+    public static DrugFormFragment newInstance(DrugDO drugDO, Boolean editMode, ArrayList<DrugDO> drug_list) {
         DrugFormFragment fragment = new DrugFormFragment();
         Bundle args = new Bundle();
+        args.putParcelable(ARG_DRUGDO, drugDO);
+        args.putBoolean(ARG_EDITMODE, editMode);
+        args.putParcelableArrayList(ARG_DRUGLIST, drug_list);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (getArguments() != null) {
+            drugDO = getArguments().getParcelable(ARG_DRUGDO);
+            editMode = getArguments().getBoolean(ARG_EDITMODE);
+            drug_list = getArguments().getParcelableArrayList(ARG_DRUGLIST);
+        }
         super.onCreate(savedInstanceState);
     }
 
@@ -85,21 +105,11 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_drug_form, container, false);
-        if (savedInstanceState != null){
-            Log.w("entrato", "entrato");
-            drugDO = savedInstanceState.getParcelable("drugDoParc");
-            editMode = savedInstanceState.getBoolean("editMode");
-        }
-        else{
-            if(drugDO == null)
-                drugDO = new DrugDO();
-        }
         return view;
     }
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
-
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
         activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton)  activity.findViewById(R.id.fab);
@@ -121,8 +131,28 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         if (fab.isShown())
             fab.hide();
 
-        if(editMode)
+        //se in edit mode e assign_tmp == true, inizializzo drugDO_tmp a quello attuale;
+        //se giro il display in onpause setto assign_tmp a false in modo da non riassegnare i campi
+        if(editMode){
+            if(assign_tmp){
+                drugDO_tmp = new DrugDO();
+                drugDO_tmp.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+                drugDO_tmp.setName(drugDO.getName());
+                drugDO_tmp.setType(drugDO.getType());
+                drugDO_tmp.setQuantity(drugDO.getQuantity());
+                drugDO_tmp.setWeight(drugDO.getWeight());
+                drugDO_tmp.setMinqty(drugDO.getMinqty());
+                drugDO_tmp.setNotes(drugDO.getNotes());
+            }
             activity.getSupportActionBar().setTitle(R.string.edit_drug);
+            verticalStepperForm.setStepAsCompleted(NAME_STEP);
+            verticalStepperForm.setStepAsCompleted(TYPE_STEP);
+            verticalStepperForm.setStepAsCompleted(QTY_STEP);
+            verticalStepperForm.setStepAsCompleted(WEIGHT_STEP);
+            verticalStepperForm.setStepAsCompleted(MINQTY_STEP);
+            verticalStepperForm.setStepAsCompleted(NOTES_STEP);
+            verticalStepperForm.setStepAsCompleted(CONFIRM_STEP);
+        }
         else
             activity.getSupportActionBar().setTitle(R.string.add_drug);
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
@@ -135,15 +165,21 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
-                //TODO FORSE MEGLIO POPPARE DAL BACK STACK DA DOVE SI ARRIVA VISTO CHE QUI SI ARRIVA DA TRE PARTI
-                Fragment fragment = DrugListFragment.newInstance();
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content_frame, fragment)
-                        .addToBackStack(null)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-
+                MyDialogFragment backConfirmation = new MyDialogFragment();
+                backConfirmation.setOnConfirmBack(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //do nothing
+                    }
+                });
+                backConfirmation.setOnNotConfirmBack(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //discard data
+                        activity.getSupportFragmentManager().popBackStack();
+                    }
+                });
+                backConfirmation.show(activity.getSupportFragmentManager(), null);
             }
         });
 
@@ -441,26 +477,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         tmp = weight_text.getText().toString();
         drugDO.setWeight(Double.parseDouble(tmp));
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mapper.save(drugDO);
-                } catch (final AmazonClientException ex) {
-                    Log.e("ASD", "Failed saving item : " + ex.getMessage(), ex);
-                }
-            }
-        }).start();
-
-        Fragment fragment = DrugListFragment.newInstance();
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .addToBackStack(null)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .commit();
-
+        new SaveTask(editMode).execute();
     }
 
     public boolean isValidQtyWeigh(String number){
@@ -514,8 +531,82 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         return isempty;
     }
 
+    private class SaveTask extends AsyncTask<Void, Void, Void> {
+        private Boolean success;
+        private Boolean editMode = false;
+
+        public SaveTask(Boolean editMode) {
+            success = false;
+            this.editMode = editMode;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //TODO NON RIMANE SULLA ROTAZIONE
+            // Create a progressdialog
+            mProgressDialog = new ProgressDialog(getActivity());
+            // Set progressdialog title
+            mProgressDialog.setTitle("Save data");
+            // Set progressdialog message
+            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setIndeterminate(false);
+            // Show progressdialog
+            mProgressDialog.show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                //#####################################################################
+                //errore Null or empty value for key: public java.lang.String com.mysampleapp.demo.nosql.DoctorDO.getEmail()
+                if(editMode){
+                    if(drugDO_tmp != null){
+                        Log.w("drugdotempnotNULL", "drugdotempnotNULL");
+                        mapper.delete(drugDO_tmp);
+                    }
+                }
+                mapper.save(drugDO);
+                success = true;
+
+            } catch (final AmazonClientException ex) {
+                Log.e("ASD", "Failed saving item : " + ex.getMessage(), ex);
+                success = false;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void args) {
+            if (success) {
+                mProgressDialog.dismiss();
+                //TODO CONTROLLORA SE CONTROLLO SU EDIT MODE NON SETTARE ADD SULLA LISTA DUMMY
+                drug_list.add(drugDO);
+                activity.getSupportFragmentManager().popBackStack();
+            } else {
+                mProgressDialog.dismiss();
+                //TODO se qualcosa non va bisogna resettare docDO ai valori precedenti se viene premuto discard
+                //o forse meglio usare un oggetto temporaneo per salvare tutto se va bene settare anche quello giusto
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Error")
+                        .setTitle("an error as occurred");
+                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        }
+    }
+
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onPause() {
+        super.onPause();
+        DrugDO drugDo_tmp = new DrugDO();
+        drugDo_tmp.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
 
         if(drugDO == null)
             drugDO = new DrugDO();
@@ -552,19 +643,12 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         // Saving notes field
         if(notes_text != null) {
             if(!notes_text.getText().toString().isEmpty())
-               drugDO.setNotes(notes_text.getText().toString());
+                drugDO.setNotes(notes_text.getText().toString());
         }
 
-        savedInstanceState.putParcelable("drugDoParc", drugDO);
-        savedInstanceState.putBoolean("editMode", editMode);
-        // The call to super method must be at the end here
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    public void setEditMode(boolean editMode) {
-        this.editMode = editMode;
-    }
-    public void setDrug(DrugDO drug){
-        this.drugDO = drug;
+        assign_tmp = false;
+        getArguments().putParcelable(ARG_DRUGDO, drugDO);
+        getArguments().putBoolean(ARG_EDITMODE, editMode);
+        getArguments().putParcelableArrayList(ARG_DRUGLIST, drug_list);
     }
 }

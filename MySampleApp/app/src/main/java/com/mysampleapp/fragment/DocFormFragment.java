@@ -510,7 +510,6 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         docDO.setAddress(address_text.getText().toString());
 
         new SaveTask().execute();
-
     }
 
     // name/surname checker

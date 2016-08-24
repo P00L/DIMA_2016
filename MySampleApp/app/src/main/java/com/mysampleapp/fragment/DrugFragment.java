@@ -18,6 +18,8 @@ import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DrugDO;
 
+import java.util.ArrayList;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -29,16 +31,17 @@ import com.mysampleapp.demo.nosql.DrugDO;
  */
 public class DrugFragment extends Fragment {
 
+    private static final String ARG_DRUGDO = "param1";
     private OnFragmentInteractionListener mListener;
     private DrugDO drugDO;
-
     private AppCompatActivity activity;
 
 
     // TODO: Rename and change types and number of parameters
-    public static DrugFragment newInstance() {
+    public static DrugFragment newInstance(DrugDO drugDO) {
         DrugFragment fragment = new DrugFragment();
         Bundle args = new Bundle();
+        args.putParcelable(ARG_DRUGDO, drugDO);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,6 +51,8 @@ public class DrugFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if(getArguments() != null)
+            drugDO = getArguments().getParcelable(ARG_DRUGDO);
         super.onCreate(savedInstanceState);
     }
 
@@ -62,9 +67,6 @@ public class DrugFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (savedInstanceState != null){
-            drugDO = savedInstanceState.getParcelable("drugDoParc");
-        }
         activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
         if (!fab.isShown())
@@ -72,9 +74,7 @@ public class DrugFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DrugFormFragment fragment = DrugFormFragment.newInstance();
-                fragment.setDrug(drugDO);
-                fragment.setEditMode(true);
+                DrugFormFragment fragment = DrugFormFragment.newInstance(drugDO, true, new ArrayList<DrugDO>());
                 activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
@@ -134,16 +134,6 @@ public class DrugFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
@@ -154,9 +144,9 @@ public class DrugFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("drugDoParc", drugDO);
+    public void onPause() {
+        super.onPause();
+        getArguments().putParcelable(ARG_DRUGDO, drugDO);
     }
 
 }

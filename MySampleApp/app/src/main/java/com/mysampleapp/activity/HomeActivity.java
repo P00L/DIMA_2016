@@ -1,11 +1,7 @@
 package com.mysampleapp.activity;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -19,7 +15,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -29,12 +24,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobile.user.IdentityManager;
 import com.amazonaws.mobile.user.IdentityProvider;
-import com.mysampleapp.AlarmReceiver;
 import com.mysampleapp.R;
 import com.mysampleapp.demo.DemoConfiguration;
 import com.mysampleapp.demo.nosql.NoSQLSelectTableDemoFragment;
@@ -48,9 +41,6 @@ import com.mysampleapp.fragment.MyDialogFragment;
 import com.mysampleapp.fragment.ScheduleFormFragment;
 import com.mysampleapp.fragment.ScheduleFragment;
 import com.mysampleapp.fragment.ScheduleListFragment;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -74,6 +64,7 @@ public class HomeActivity extends AppCompatActivity
     NavigationView navigationView;
     Fragment fragment;
     ActionBar actionBar;
+    private MyDialogFragment backConfirmation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -343,7 +334,24 @@ public class HomeActivity extends AppCompatActivity
                         finish();
                         break;
                     case "class com.mysampleapp.fragment.DocFormFragment":
-                        MyDialogFragment backConfirmation = new MyDialogFragment();
+                        backConfirmation = new MyDialogFragment();
+                        backConfirmation.setOnConfirmBack(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //do nothing
+                            }
+                        });
+                        backConfirmation.setOnNotConfirmBack(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //discard data
+                                getSupportFragmentManager().popBackStack();
+                            }
+                        });
+                        backConfirmation.show(getSupportFragmentManager(), null);
+                        break;
+                    case "class com.mysampleapp.fragment.DrugFormFragment":
+                        backConfirmation = new MyDialogFragment();
                         backConfirmation.setOnConfirmBack(new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

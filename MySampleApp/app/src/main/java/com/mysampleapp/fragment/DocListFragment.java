@@ -43,7 +43,7 @@ public class DocListFragment extends Fragment {
     private AppCompatActivity activity;
     private ProgressDialog mProgressDialog;
     private DemoNoSQLOperation operation;
-    private  TextView noDataTextView;
+    private TextView noDataTextView;
 
 
     public DocListFragment() {
@@ -102,7 +102,7 @@ public class DocListFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = DocFormFragment.newInstance(new DoctorDO(),false,items);
+                Fragment fragment = DocFormFragment.newInstance(new DoctorDO(), false, items);
                 activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)

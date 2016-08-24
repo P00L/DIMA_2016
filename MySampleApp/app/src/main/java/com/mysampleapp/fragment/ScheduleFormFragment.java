@@ -80,7 +80,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     private AppCompatActivity activity;
     private DynamoDBMapper mapper;
     DemoNoSQLOperation operation;
-    DrugDO[] druglist;
+    private ArrayList<DrugDO> druglist;
     String[] drugnames;
     private ScheduleDrugDO scheduleDrugDO;
     private boolean editMode = false;
@@ -664,7 +664,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         protected Void doInBackground(Void... params) {
             operation.executeOperation();
             druglist = ((DemoNoSQLTableDrug.DemoQueryWithPartitionKeyOnly) operation).getResultArray();
-            drugnames = new String[druglist.length];
+            drugnames = new String[druglist.size()];
             return null;
         }
 

@@ -18,7 +18,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.amazonaws.AmazonClientException;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.adapter.DrugAdapter;
@@ -27,6 +29,8 @@ import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableDrug;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
 import com.mysampleapp.demo.nosql.DrugDO;
+
+import java.util.ArrayList;
 
 
 /**
@@ -39,20 +43,21 @@ import com.mysampleapp.demo.nosql.DrugDO;
  */
 public class DrugListFragment extends Fragment  {
 
+    private static final String ARG_DRUGLIST = "param1";
     private OnFragmentInteractionListener mListener;
-    RecyclerView mRecyclerView;
-    RecyclerView.Adapter mAdapter;
-    RecyclerView.LayoutManager mLayoutManager;
-    DrugDO[] items;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private ArrayList<DrugDO> items;
     private AppCompatActivity activity;
-    ProgressDialog mProgressDialog;
-    DemoNoSQLOperation operation;
+    private ProgressDialog mProgressDialog;
+    private DemoNoSQLOperation operation;
+    private TextView noDataTextView;
 
 
     public DrugListFragment() {
         // Required empty public constructor
     }
-
 
     public static DrugListFragment newInstance() {
         DrugListFragment fragment = new DrugListFragment();
@@ -63,6 +68,9 @@ public class DrugListFragment extends Fragment  {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (getArguments() != null) {
+            items = getArguments().getParcelableArrayList(ARG_DRUGLIST);
+        }
         super.onCreate(savedInstanceState);
     }
 
@@ -71,26 +79,44 @@ public class DrugListFragment extends Fragment  {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_drug_list, container, false);
-        activity = (AppCompatActivity) getActivity();
-        DemoNoSQLTableBase demoTable= DemoNoSQLTableFactory.instance(getContext())
-                .getNoSQLTableByTableName("Drug");
-        operation = (DemoNoSQLOperation)demoTable.getOperationByName(getContext(),"ASD");
-
-        new MyAsyncTask().execute();
-
         return view;
     }
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+
+        activity = (AppCompatActivity) getActivity();
+        DemoNoSQLTableBase demoTable= DemoNoSQLTableFactory.instance(getContext())
+                .getNoSQLTableByTableName("Drug");
+        operation = (DemoNoSQLOperation)demoTable.getOperationByName(getContext(),"ASD");
+
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(false);
+        noDataTextView = (TextView) view.findViewById(R.id.no_data);
+        if (items == null){
+            Log.w("SAVED","SAVED");
+            new MyAsyncTask().execute();
+        } else {
+            Log.w("SAVED","SAVED");
+            if (items.size() > 0) {
+                mLayoutManager = new LinearLayoutManager(getActivity());
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mAdapter = new DrugAdapter(getContext(), items);
+                mRecyclerView.setAdapter(mAdapter);
+            } else {
+                noDataTextView.setVisibility(View.VISIBLE);
+            }
+        }
+
+
+        final FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
         if (!fab.isShown())
             fab.show();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Click action
-                Fragment fragment = DrugFormFragment.newInstance();
+                Fragment fragment = DrugFormFragment.newInstance(new DrugDO(), false, items);
                 activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
@@ -101,7 +127,6 @@ public class DrugListFragment extends Fragment  {
         });
 
         activity.getSupportActionBar().setTitle(R.string.drugs);
-
         // set nav menu item checked
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_drug);
@@ -156,6 +181,7 @@ public class DrugListFragment extends Fragment  {
     }
 
     private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
+        Boolean success = false;
 
         public MyAsyncTask() {
 
@@ -177,18 +203,31 @@ public class DrugListFragment extends Fragment  {
 
         @Override
         protected Void doInBackground(Void... params) {
-            operation.executeOperation();
-            items = ((DemoNoSQLTableDrug.DemoQueryWithPartitionKeyOnly)operation).getResultArray();
+            try {
+                success = operation.executeOperation();
+                items = ((DemoNoSQLTableDrug.DemoQueryWithPartitionKeyOnly) operation).getResultArray();
+            } catch (final AmazonClientException ex) {
+                success = false;
+            }
             return null;
         }
         @Override
         protected void onPostExecute(Void args) {
-
-            mLayoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new DrugAdapter(getContext(), items);
-            mRecyclerView.setAdapter(mAdapter);
-            mProgressDialog.dismiss();
+            if (success && items.size() > 0) {
+                mLayoutManager = new LinearLayoutManager(getActivity());
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mAdapter = new DrugAdapter(getContext(), items);
+                mRecyclerView.setAdapter(mAdapter);
+                mProgressDialog.dismiss();
+            } else {
+                mProgressDialog.dismiss();
+                noDataTextView.setVisibility(View.VISIBLE);
+            }
         }
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        getArguments().putParcelableArrayList(ARG_DRUGLIST, items);
     }
 }
