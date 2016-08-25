@@ -466,6 +466,7 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
             DemoSampleDataGenerator.getRandomSampleString("hour"));
         firstItem.setNotes(
             DemoSampleDataGenerator.getRandomSampleString("notes"));
+        firstItem.setQuantity(DemoSampleDataGenerator.getRandomSampleNumber());
         AmazonClientException lastException = null;
 
         try {
@@ -484,6 +485,7 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
             item.setDrug(DemoSampleDataGenerator.getRandomSampleString("drug"));
             item.setHour(DemoSampleDataGenerator.getRandomSampleString("hour"));
             item.setNotes(DemoSampleDataGenerator.getRandomSampleString("notes"));
+            item.setQuantity(DemoSampleDataGenerator.getRandomSampleNumber());
 
             items[count] = item;
         }
@@ -600,9 +602,9 @@ public class DemoNoSQLTableScheduleDrug extends DemoNoSQLTableBase {
     }
 
     public DemoNoSQLOperation getOperationByNameSingle(Context context, String operation, Double alarmID) {
-            if(operation == "one")
-                return new DemoGetWithPartitionKeyAndSortKey(context,alarmID);
-            else
-                return null;
+        if(operation == "one")
+            return new DemoGetWithPartitionKeyAndSortKey(context,alarmID);
+        else
+            return null;
     }
 }

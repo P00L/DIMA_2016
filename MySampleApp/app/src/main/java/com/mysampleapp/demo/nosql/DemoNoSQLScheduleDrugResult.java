@@ -105,6 +105,8 @@ public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
         final TextView hourValueTextView;
         final TextView notesKeyTextView;
         final TextView notesValueTextView;
+        final TextView quantityKeyTextView;
+        final TextView quantityValueTextView;
         if (convertView == null) {
             layout = new LinearLayout(context);
             layout.setOrientation(LinearLayout.VERTICAL);
@@ -148,6 +150,12 @@ public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
             setKeyAndValueTextViewStyles(notesKeyTextView, notesValueTextView);
             layout.addView(notesKeyTextView);
             layout.addView(notesValueTextView);
+
+            quantityKeyTextView = new TextView(context);
+            quantityValueTextView = new TextView(context);
+            setKeyAndValueTextViewStyles(quantityKeyTextView, quantityValueTextView);
+            layout.addView(quantityKeyTextView);
+            layout.addView(quantityValueTextView);
         } else {
             layout = (LinearLayout) convertView;
             resultNumberTextView = (TextView) layout.getChildAt(0);
@@ -169,6 +177,9 @@ public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
 
             notesKeyTextView = (TextView) layout.getChildAt(11);
             notesValueTextView = (TextView) layout.getChildAt(12);
+
+            quantityKeyTextView = (TextView) layout.getChildAt(13);
+            quantityValueTextView = (TextView) layout.getChildAt(14);
         }
 
         resultNumberTextView.setText(String.format("#%d", + position+1));
@@ -184,6 +195,8 @@ public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
         hourValueTextView.setText(result.getHour());
         notesKeyTextView.setText("notes");
         notesValueTextView.setText(result.getNotes());
+        quantityKeyTextView.setText("quantity");
+        quantityValueTextView.setText("" + result.getQuantity().longValue());
         return layout;
     }
 }

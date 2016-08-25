@@ -17,6 +17,7 @@ public class ScheduleDrugDO implements Parcelable {
     private String _drug;
     private String _hour;
     private String _notes;
+    private Double _quantity;
 
     @DynamoDBHashKey(attributeName = "userId")
     @DynamoDBAttribute(attributeName = "userId")
@@ -68,6 +69,14 @@ public class ScheduleDrugDO implements Parcelable {
     public void setNotes(final String _notes) {
         this._notes = _notes;
     }
+    @DynamoDBAttribute(attributeName = "quantity")
+    public Double getQuantity() {
+        return _quantity;
+    }
+
+    public void setQuantity(final Double _quantity) {
+        this._quantity = _quantity;
+    }
 
     public ScheduleDrugDO(){}
 
@@ -78,6 +87,7 @@ public class ScheduleDrugDO implements Parcelable {
         _drug = in.readString();
         _hour = in.readString();
         _notes = in.readString();
+        _quantity = in.readByte() == 0x00 ? null : in.readDouble();
     }
 
     @Override
@@ -98,6 +108,12 @@ public class ScheduleDrugDO implements Parcelable {
         dest.writeString(_drug);
         dest.writeString(_hour);
         dest.writeString(_notes);
+        if (_quantity == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(_quantity);
+        }
     }
 
     @SuppressWarnings("unused")

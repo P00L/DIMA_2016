@@ -134,7 +134,7 @@ public class NoSQLSelectTableDemoFragment extends DemoFragmentBase {
 
                 getActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.content_frame, fragment)
+                    .replace(R.id.main_fragment_container, fragment)
                     .addToBackStack(null)
                     .commit();
             }
