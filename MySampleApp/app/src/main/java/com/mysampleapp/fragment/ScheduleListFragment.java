@@ -34,6 +34,8 @@ import com.mysampleapp.demo.nosql.DoctorDO;
 import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class ScheduleListFragment extends Fragment {
@@ -94,7 +96,7 @@ public class ScheduleListFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = ScheduleFormFragment.newInstance(new ScheduleDrugDO(),false,items);
+                Fragment fragment = ScheduleFormFragment.newInstance(new ScheduleDrugDO(), false, items);
                 activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
@@ -118,6 +120,12 @@ public class ScheduleListFragment extends Fragment {
             if (items.size() > 0) {
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
+                Collections.sort(items, (new Comparator<ScheduleDrugDO>() {
+                    @Override
+                    public int compare(ScheduleDrugDO s1, ScheduleDrugDO s2) {
+                        return s1.getDrug().compareTo(s2.getDrug());   //or whatever your sorting algorithm
+                    }
+                }));
                 mAdapter = new ScheduleAdapter(getContext(), items);
                 mRecyclerView.setAdapter(mAdapter);
             } else {
@@ -219,6 +227,13 @@ public class ScheduleListFragment extends Fragment {
             if (success && items.size() > 0) {
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
+                //TODO controlloare se server sortatre
+                Collections.sort(items, (new Comparator<ScheduleDrugDO>() {
+                    @Override
+                    public int compare(ScheduleDrugDO s1, ScheduleDrugDO s2) {
+                        return s1.getDrug().compareTo(s2.getDrug());   //or whatever your sorting algorithm
+                    }
+                }));
                 mAdapter = new ScheduleAdapter(getContext(), items);
                 mRecyclerView.setAdapter(mAdapter);
                 mProgressDialog.dismiss();

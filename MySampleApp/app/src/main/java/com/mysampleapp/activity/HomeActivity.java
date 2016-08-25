@@ -54,6 +54,7 @@ public class HomeActivity extends AppCompatActivity
         ScheduleListFragment.OnFragmentInteractionListener,
         ScheduleFormFragment.OnFragmentInteractionListener,
         ScheduleFragment.OnFragmentInteractionListener,
+        PendingScheduleFragment.OnFragmentInteractionListener,
         View.OnClickListener {
 
     private Button signOutButton;

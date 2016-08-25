@@ -1,6 +1,5 @@
 package com.mysampleapp;
 
-import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,19 +12,10 @@ import android.util.Log;
 
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.activity.SplashActivity;
-import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
-import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
-import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
-import com.mysampleapp.demo.nosql.DemoNoSQLTableScheduleDrug;
 import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 import com.mysampleapp.fragment.ScheduleFormFragment;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class ServiceNotification extends IntentService {
@@ -38,10 +28,9 @@ public class ServiceNotification extends IntentService {
     }
 
     protected void onHandleIntent(Intent intent) {
-        Log.w("Service", "service running");
+        Log.w("ServiceNotification", "service running");
         // 0 invalid number fo an alarm id
-        int alarm_id = intent.getIntExtra(ScheduleFormFragment.ALARM_ID_EXTRA, 0);
-        final String drugName = intent.getStringExtra(ScheduleFormFragment.DRUG_EXTRA);
+        ScheduleDrugDO scheduleDrugDO = intent.getParcelableExtra(AlarmService.SCHEDULE_EXTRA);
 
         //get shared pref file
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(
@@ -52,110 +41,16 @@ public class ServiceNotification extends IntentService {
         Set<String> s = new HashSet<String>(sharedPref.getStringSet(getApplicationContext().getString(R.string.pending_alarm),
                 new HashSet<String>()));
         SharedPreferences.Editor editor = sharedPref.edit();
-        s.add(alarm_id + "/" + drugName);
+        s.add(scheduleDrugDO.getAlarmId().intValue() + "/" + scheduleDrugDO.getDrug());
         editor.putStringSet(getApplicationContext().getString(R.string.pending_alarm), s);
         //persist immediatly the data in the shared pref
         editor.apply();
-        //TODO METTERE UN CONTROLLO SULLA CONNESSIONE COSA FACCIAMO PER RIAGGIORNARE SE MANCA LA CONNESSIONE????
-        //rischedula alarm per il prossimo giorno qui si che adesso ci vuole la query da db ma solo
-        //per recuperare una specifica entry
-        final DemoNoSQLOperation operation;
-        DemoNoSQLTableBase demoTable = DemoNoSQLTableFactory.instance(getApplicationContext())
-                .getNoSQLTableByTableName("ScheduleDrug");
-        operation = ((DemoNoSQLTableScheduleDrug) demoTable).getOperationByNameSingle(getApplicationContext(), "one", Double.parseDouble(alarm_id + ""));
-        final int finalAlarmID = alarm_id;
 
-        Boolean bb = operation.executeOperation();
-        Log.w("SUCCESSO", bb.toString());
-        ScheduleDrugDO item = ((DemoNoSQLTableScheduleDrug.DemoGetWithPartitionKeyAndSortKey) operation).getResult();
-        Log.w("ALARM ID EXTRA", finalAlarmID + "");
-        Log.w("ALARM ID DB", item.getAlarmId() + "");
-
-        //TODO fare un metodo forse da usare anche la prima volta che si setta
-        //modifica dopo cambio da Set<String> a String
-        // la stringa salvata e ritornata da getDay() deve essere formattata "day1/day2/dayn"
-        String days = item.getDay();
-        String[] splitday = days.split("/");
-        List<String> list = new ArrayList<String>();
-        //convert string format of day to int to match Calendar day
-        for (String day : splitday)
-            switch (day) {
-                case "L":
-                    list.add("2");
-                    break;
-                case "MA":
-                    list.add("3");
-                    break;
-                case "ME":
-                    list.add("4");
-                    break;
-                case "G":
-                    list.add("5");
-                    break;
-                case "V":
-                    list.add("6");
-                    break;
-                case "S":
-                    list.add("7");
-                    break;
-                case "D":
-                    list.add("1");
-                    break;
-                default:
-                    list.add("x");
-                    break;
-            }
-        Collections.sort(list);
-
-        Log.w("SERVICE LIST", list.toString());
-        //get today
-        Calendar calNow = Calendar.getInstance();
-        Log.w("SERVICE CAL", calNow.get(Calendar.DAY_OF_WEEK) + "");
-
-        Log.w("index of", list.indexOf(calNow.get(Calendar.DAY_OF_WEEK) + "") + "");
-        //get today index inside scheduled day alarm
-        int today_index = list.indexOf(calNow.get(Calendar.DAY_OF_WEEK) + "");
-
-        //getting nex index to set alarm
-        int next_day_index;
-        if (today_index == list.size() - 1) {
-            next_day_index = 0;
-        } else {
-            next_day_index = today_index + 1;
-        }
-        Log.w("next day index", next_day_index + "");
-        Log.w("next day ", list.get(next_day_index) + "");
-
-        //get nex day Calendar format
-        Calendar next_day = Calendar.getInstance();
-        while (next_day.get(Calendar.DAY_OF_WEEK) != Integer.parseInt(list.get(next_day_index))) {
-            next_day.add(Calendar.DATE, 1);
-        }
-        //setting hour and minute
-        String[] hourmin = item.getHour().split(":");
-        next_day.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourmin[0]));
-        next_day.set(Calendar.MINUTE, Integer.parseInt(hourmin[1]));
-
-
-        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy 'at' h:mm a");
-        Log.w("TODAY", format.format(calNow.getTime()));
-        Log.w("NEXT DAY", format.format(next_day.getTime()));
-
-        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        // Define our intention of executing AlertReceiver
-        Intent alertIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
-
-        alertIntent.putExtra(ScheduleFormFragment.ALARM_ID_EXTRA, finalAlarmID);
-        alertIntent.putExtra(ScheduleFormFragment.DRUG_EXTRA, drugName);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), finalAlarmID, alertIntent, PendingIntent.FLAG_ONE_SHOT);
-
-        //set up time difference from now to next alarm
-        long timeDiff = next_day.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
-        long alarmDelay = Calendar.getInstance().getTimeInMillis() + timeDiff;
-
-        Log.w("alarm delay", alarmDelay + "");
-
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmDelay, alarmIntent);
+        //start service to keep update or set alarm
+        Intent i = new Intent(getApplicationContext(), AlarmService.class);
+        i.putExtra(AlarmService.SCHEDULE_EXTRA, scheduleDrugDO);
+        i.putExtra(AlarmService.ACTION_EXTRA, "set");
+        getApplicationContext().startService(i);
 
         createNotification(getApplicationContext(), intent, s);
 

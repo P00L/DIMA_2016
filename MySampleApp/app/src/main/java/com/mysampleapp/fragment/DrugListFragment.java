@@ -41,7 +41,7 @@ import java.util.ArrayList;
  * Use the {@link DrugListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DrugListFragment extends Fragment  {
+public class DrugListFragment extends Fragment {
 
     private static final String ARG_DRUGLIST = "param1";
     private OnFragmentInteractionListener mListener;
@@ -86,18 +86,16 @@ public class DrugListFragment extends Fragment  {
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
 
         activity = (AppCompatActivity) getActivity();
-        DemoNoSQLTableBase demoTable= DemoNoSQLTableFactory.instance(getContext())
+        DemoNoSQLTableBase demoTable = DemoNoSQLTableFactory.instance(getContext())
                 .getNoSQLTableByTableName("Drug");
-        operation = (DemoNoSQLOperation)demoTable.getOperationByName(getContext(),"ASD");
+        operation = (DemoNoSQLOperation) demoTable.getOperationByName(getContext(), "ASD");
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(false);
         noDataTextView = (TextView) view.findViewById(R.id.no_data);
-        if (items == null){
-            Log.w("SAVED","SAVED");
+        if (items == null) {
             new MyAsyncTask().execute();
         } else {
-            Log.w("SAVED","SAVED");
             if (items.size() > 0) {
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
@@ -107,7 +105,6 @@ public class DrugListFragment extends Fragment  {
                 noDataTextView.setVisibility(View.VISIBLE);
             }
         }
-
 
         final FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
         if (!fab.isShown())
@@ -136,8 +133,8 @@ public class DrugListFragment extends Fragment  {
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        ((HomeActivity)activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_hamburger);
-        ((HomeActivity)activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
+        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_hamburger);
+        ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
@@ -151,6 +148,7 @@ public class DrugListFragment extends Fragment  {
             }
         });
     }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -211,6 +209,7 @@ public class DrugListFragment extends Fragment  {
             }
             return null;
         }
+
         @Override
         protected void onPostExecute(Void args) {
             if (success && items.size() > 0) {
@@ -225,6 +224,7 @@ public class DrugListFragment extends Fragment  {
             }
         }
     }
+
     @Override
     public void onPause() {
         super.onPause();

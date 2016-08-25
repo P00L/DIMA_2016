@@ -1,15 +1,11 @@
 package com.mysampleapp.fragment;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -43,8 +39,7 @@ import android.widget.TimePicker;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.mysampleapp.AlarmReceiver;
-import com.mysampleapp.BootReceiver;
+import com.mysampleapp.AlarmService;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
@@ -54,11 +49,7 @@ import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
 import com.mysampleapp.demo.nosql.DrugDO;
 import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
 
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormLayout;
 import ernestoyaquello.com.verticalstepperform.interfaces.VerticalStepperForm;
@@ -78,8 +69,9 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     private static final String ARG_EDITMODE = "param2";
     private static final String ARG_SCHEDULELIST = "param3";
     private static final String ARG_DRUGLIST = "param4";
-    public final static String ALARM_ID_EXTRA = "alarm_id";
-    public final static String DRUG_EXTRA = "drug_name";
+    private static final String ARG_SCHEDULEDOTMP = "param5";
+    private static final String ARG_SCHEDULEDOLD = "param6";
+    private static final String ARG_ASSIGNEDTMP = "param7";
 
     private OnFragmentInteractionListener mListener;
     private AppCompatActivity activity;
@@ -88,8 +80,11 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     private ArrayList<ScheduleDrugDO> scheduleDrugDOArrayList;
     private ArrayList<DrugDO> druglist;
     private String[] drugnames;
+    private ScheduleDrugDO scheduleDrugDO_tmp;
     private ScheduleDrugDO scheduleDrugDO;
+    private ScheduleDrugDO scheduleDrugDO_old;
     private boolean editMode = false;
+    private Boolean assigned_tmp = false;
     private ProgressDialog mProgressDialog;
 
 
@@ -132,6 +127,17 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         args.putParcelable(ARG_SCHEDULEDO, scheduleDrugDO);
         args.putBoolean(ARG_EDITMODE, editMode);
         args.putParcelableArrayList(ARG_SCHEDULELIST, scheduleDrugDOArrayList);
+
+        ScheduleDrugDO scheduleDrugDO_duplicate = new ScheduleDrugDO();
+        scheduleDrugDO_duplicate.setHour(scheduleDrugDO.getHour());
+        scheduleDrugDO_duplicate.setUserId(scheduleDrugDO.getUserId());
+        scheduleDrugDO_duplicate.setDay(scheduleDrugDO.getDay());
+        scheduleDrugDO_duplicate.setNotes(scheduleDrugDO.getNotes());
+        scheduleDrugDO_duplicate.setAlarmId(scheduleDrugDO.getAlarmId());
+        scheduleDrugDO_duplicate.setQuantity(scheduleDrugDO.getQuantity());
+        scheduleDrugDO_duplicate.setDrug(scheduleDrugDO.getDrug());
+
+        args.putParcelable(ARG_SCHEDULEDOTMP, scheduleDrugDO);
         fragment.setArguments(args);
         return fragment;
     }
@@ -140,9 +146,12 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     public void onCreate(Bundle savedInstanceState) {
         if (getArguments() != null) {
             scheduleDrugDO = getArguments().getParcelable(ARG_SCHEDULEDO);
+            scheduleDrugDO_old = getArguments().getParcelable(ARG_SCHEDULEDOLD);
+            scheduleDrugDO_tmp = getArguments().getParcelable(ARG_SCHEDULEDOTMP);
             editMode = getArguments().getBoolean(ARG_EDITMODE);
             scheduleDrugDOArrayList = getArguments().getParcelableArrayList(ARG_SCHEDULELIST);
             druglist = getArguments().getParcelableArrayList(ARG_DRUGLIST);
+            assigned_tmp = getArguments().getBoolean(ARG_ASSIGNEDTMP);
         }
         super.onCreate(savedInstanceState);
 
@@ -179,6 +188,18 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         initializeActivity(view);
 
         if (editMode) {
+            if (!assigned_tmp) {
+                if (scheduleDrugDO_old == null)
+                    scheduleDrugDO_old = new ScheduleDrugDO();
+                scheduleDrugDO_old.setHour(scheduleDrugDO_tmp.getHour());
+                scheduleDrugDO_old.setUserId(scheduleDrugDO_tmp.getUserId());
+                scheduleDrugDO_old.setDay(scheduleDrugDO_tmp.getDay());
+                scheduleDrugDO_old.setNotes(scheduleDrugDO_tmp.getNotes());
+                scheduleDrugDO_old.setAlarmId(scheduleDrugDO_tmp.getAlarmId());
+                scheduleDrugDO_old.setQuantity(scheduleDrugDO_tmp.getQuantity());
+                scheduleDrugDO_old.setDrug(scheduleDrugDO_tmp.getDrug());
+                assigned_tmp = true;
+            }
             activity.getSupportActionBar().setTitle(R.string.edit_schedule_drug);
             verticalStepperForm.setStepAsCompleted(DRUG_STEP_NUM);
             verticalStepperForm.setStepAsCompleted(NOTES_STEP_NUM);
@@ -250,8 +271,8 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
     private void initializeActivity(View view) {
         //se trova gia salvato in savedInstanceState
-        if (scheduleDrugDO.getHour() != null && scheduleDrugDO.getHour().matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")) {
-            String[] hourmin = scheduleDrugDO.getHour().split(":");
+        if (scheduleDrugDO_tmp.getHour() != null && scheduleDrugDO_tmp.getHour().matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")) {
+            String[] hourmin = scheduleDrugDO_tmp.getHour().split(":");
             Log.w("hourmin", hourmin[0]);
             Log.w("hourmin", hourmin[1]);
             //setTime(Integer.getInteger(hourmin[0]), Integer.getInteger(hourmin[1]));
@@ -335,9 +356,9 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
     @Override
     public void sendData() {
-        scheduleDrugDO.setDrug(autoDrugTextView.getText().toString());
-        scheduleDrugDO.setNotes(notesEditText.getText().toString());
-        scheduleDrugDO.setHour(timeTextView.getText().toString());
+        scheduleDrugDO_tmp.setDrug(autoDrugTextView.getText().toString());
+        scheduleDrugDO_tmp.setNotes(notesEditText.getText().toString());
+        scheduleDrugDO_tmp.setHour(timeTextView.getText().toString());
 
         boolean addFirst = true;
         for (int i = 0; i < weekDaysString.length; i++) {
@@ -352,7 +373,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                 }
             }
         }
-        scheduleDrugDO.setDay(daysToSave);
+        scheduleDrugDO_tmp.setDay(daysToSave);
         new SaveTask().execute();
     }
 
@@ -378,15 +399,14 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
             }
         });
 
-        if (scheduleDrugDO.getDrug() != null)
-            autoDrugTextView.setText(scheduleDrugDO.getDrug());
+        if (scheduleDrugDO_tmp.getDrug() != null)
+            autoDrugTextView.setText(scheduleDrugDO_tmp.getDrug());
 
         if (druglist != null) {
             drugnames = new String[druglist.size()];
             int n = 0;
             for (DrugDO drugDO : druglist) {
                 drugnames[n] = drugDO.getName();
-                Log.w("nomedrug", drugnames[n]);
                 n++;
             }
 
@@ -426,8 +446,8 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         notesEditText.setHint(R.string.anything_useful);
         notesEditText.setSingleLine(true);
         notesEditText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        if (scheduleDrugDO.getNotes() != null)
-            notesEditText.setText(scheduleDrugDO.getNotes());
+        if (scheduleDrugDO_tmp.getNotes() != null)
+            notesEditText.setText(scheduleDrugDO_tmp.getNotes());
         notesEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -443,9 +463,9 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         LayoutInflater inflater = LayoutInflater.from(getContext());
         LinearLayout timeStepContent =
                 (LinearLayout) inflater.inflate(R.layout.step_time_layout, null, false);
-        if (scheduleDrugDO.getHour() != null) {
+        if (scheduleDrugDO_tmp.getHour() != null) {
             timeTextView = (TextView) timeStepContent.findViewById(R.id.time);
-            timeTextView.setText(scheduleDrugDO.getHour());
+            timeTextView.setText(scheduleDrugDO_tmp.getHour());
         } else
             timeTextView = (TextView) timeStepContent.findViewById(R.id.time);
         timeTextView.setOnClickListener(new View.OnClickListener() {
@@ -463,11 +483,9 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                 R.layout.step_days_of_week_layout, null, false);
 
         //controllo che non abbia una instance salvata
-        if (scheduleDrugDO.getDay() != null) {
-            daysToSave = scheduleDrugDO.getDay();
-            daysaved = scheduleDrugDO.getDay().split("/");
-            Log.w("DAY to save", daysToSave);
-            Log.w("DAY saved", daysaved.toString());
+        if (scheduleDrugDO_tmp.getDay() != null) {
+            daysToSave = scheduleDrugDO_tmp.getDay();
+            daysaved = scheduleDrugDO_tmp.getDay().split("/");
         }
 
         int count = 0;
@@ -659,7 +677,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
             int n = 0;
             for (DrugDO drugDO : druglist) {
                 drugnames[n] = drugDO.getName();
-                Log.w("nomedrug", drugnames[n]);
                 n++;
             }
 
@@ -694,6 +711,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         protected Void doInBackground(Void... params) {
             //if it isn't edit mode we have to generate a new alarm id otherwise we keep using the old one
             if (!editMode) {
+                Log.w("ScheduleFormFragment","generate new alarm id");
                 //setting the alarmID field retriving the value from shared pref
                 SharedPreferences sharedPref = getContext().getSharedPreferences(
                         getContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
@@ -701,15 +719,19 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                 int old_alarm_id = sharedPref.getInt(getContext().getString(R.string.alarm_id), 0);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 int alarm_id = old_alarm_id + 1;
-                Log.w("alarm id", alarm_id + "");
+                Log.w("ScheduleFormFragment","alarm id "+alarm_id);
                 editor.putInt(getString(R.string.alarm_id), alarm_id);
                 editor.apply();
-                scheduleDrugDO.setAlarmId(Double.parseDouble(alarm_id + ""));
+                scheduleDrugDO_tmp.setAlarmId(Double.parseDouble(alarm_id + ""));
             }
-            scheduleDrugDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+            Log.w("ScheduleFormFragment","alarm id "+ scheduleDrugDO_tmp.getAlarmId().intValue());
+            scheduleDrugDO_tmp.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
             //save into db
             try {
-                mapper.save(scheduleDrugDO);
+                if (editMode) {
+                        mapper.delete(scheduleDrugDO_old);
+                    }
+                mapper.save(scheduleDrugDO_tmp);
                 success = true;
             } catch (final AmazonClientException ex) {
                 Log.e("ScheduleFormFragment", "Failed saving item : " + ex.getMessage(), ex);
@@ -723,12 +745,27 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         protected void onPostExecute(Void args) {
             //handle success or fail of db insertion
             if (success) {
+
+                scheduleDrugDO.setHour(scheduleDrugDO_tmp.getHour());
+                scheduleDrugDO.setUserId(scheduleDrugDO_tmp.getUserId());
+                scheduleDrugDO.setDay(scheduleDrugDO_tmp.getDay());
+                scheduleDrugDO.setNotes(scheduleDrugDO_tmp.getNotes());
+                scheduleDrugDO.setAlarmId(scheduleDrugDO_tmp.getAlarmId());
+                scheduleDrugDO.setQuantity(scheduleDrugDO_tmp.getQuantity());
+                scheduleDrugDO.setDrug(scheduleDrugDO_tmp.getDrug());
                 mProgressDialog.dismiss();
-                if (editMode)
-                    updateAlarm();
-                else
-                    setAlarm();
-                scheduleDrugDOArrayList.add(scheduleDrugDO);
+
+                //start service to keep update or set alarm
+                Intent i = new Intent(getContext(), AlarmService.class);
+                i.putExtra(AlarmService.SCHEDULE_EXTRA, scheduleDrugDO_tmp);
+                if (editMode) {
+                    i.putExtra(AlarmService.ACTION_EXTRA, "update");
+                    i.putExtra(AlarmService.SCHEDULE_OLD_EXTRA, scheduleDrugDO_old);
+                } else
+                    i.putExtra(AlarmService.ACTION_EXTRA, "set");
+                getContext().startService(i);
+
+                scheduleDrugDOArrayList.add(scheduleDrugDO_tmp);
                 activity.getSupportFragmentManager().popBackStack();
 
             } else {
@@ -748,185 +785,26 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         }
     }
 
-    public void setAlarm() {
-
-        // Restart alarm if device is rebooted
-        ComponentName receiver = new ComponentName(getContext(), BootReceiver.class);
-        PackageManager pm = getContext().getPackageManager();
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-
-        String days = scheduleDrugDO.getDay();
-        String[] splitday = days.split("/");
-        List<String> list = new ArrayList<String>();
-        //convert string format of day to int to match Calendar day
-        for (String s : splitday)
-            switch (s) {
-                case "L":
-                    list.add("2");
-                    break;
-                case "MA":
-                    list.add("3");
-                    break;
-                case "ME":
-                    list.add("4");
-                    break;
-                case "G":
-                    list.add("5");
-                    break;
-                case "V":
-                    list.add("6");
-                    break;
-                case "S":
-                    list.add("7");
-                    break;
-                case "D":
-                    list.add("1");
-                    break;
-                default:
-                    list.add("x");
-                    break;
-            }
-        Collections.sort(list);
-        //get today
-        Calendar calNow = Calendar.getInstance();
-        //get next day inizialized to today
-        Calendar nextDay = Calendar.getInstance();
-        long timeDiff;
-        long alarmDelay;
-        Log.w("TODAY DAY", calNow.get(Calendar.DAY_OF_WEEK) + "");
-        Log.w("index of today", list.indexOf(calNow.get(Calendar.DAY_OF_WEEK) + "") + "");
-        String[] hourmin = scheduleDrugDO.getHour().split(":");
-        //get today index inside scheduled day alarm
-        int today_index = list.indexOf(calNow.get(Calendar.DAY_OF_WEEK) + "");
-
-        if (today_index != -1) {
-            // schedule alarm today if in the future time or next day
-            nextDay.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourmin[0]));
-            nextDay.set(Calendar.MINUTE, Integer.parseInt(hourmin[1]));
-
-            if (Calendar.getInstance().getTimeInMillis() < nextDay.getTimeInMillis()) {
-                //schedule alarm today
-                //set up time difference from now to next alarm
-                timeDiff = nextDay.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
-                alarmDelay = Calendar.getInstance().getTimeInMillis() + timeDiff;
-
-            } else {
-                //schedule alarm next day starting searching from today ---> easy
-                //getting next index to set alarm
-                int next_day_index;
-                if (today_index == list.size() - 1) {
-                    next_day_index = 0;
-                } else {
-                    next_day_index = today_index + 1;
-                }
-                Log.w("next day index", next_day_index + "");
-                Log.w("next day ", list.get(next_day_index) + "");
-
-                //get nex day Calendar format
-                while (nextDay.get(Calendar.DAY_OF_WEEK) != Integer.parseInt(list.get(next_day_index))) {
-                    nextDay.add(Calendar.DATE, 1);
-                }
-                //setting hour and minute
-                nextDay.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourmin[0]));
-                nextDay.set(Calendar.MINUTE, Integer.parseInt(hourmin[1]));
-
-                timeDiff = nextDay.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
-                alarmDelay = Calendar.getInstance().getTimeInMillis() + timeDiff;
-            }
-        } else {
-            //schedule alarm next day searching next value from today ---> harder
-            //getting next index to set alarm
-            int next_day_index = 8;
-            if (calNow.get(Calendar.DAY_OF_WEEK) == 7) {
-                //find smallest value in list
-                next_day_index = 0;
-            } else {
-                //find first value greater than today
-                for (String s : list) {
-                    if (Integer.parseInt(s) > calNow.get(Calendar.DAY_OF_WEEK)) {
-                        next_day_index = list.indexOf(s);
-                        break;
-                    }
-                }
-                if(next_day_index == 8){
-                    for (String s : list) {
-                        if (Integer.parseInt(s) < calNow.get(Calendar.DAY_OF_WEEK)) {
-                            next_day_index = list.indexOf(s);
-                            break;
-                        }
-                    }
-                }
-            }
-            Log.w("list", list.toString());
-            Log.w("next day index", next_day_index + "");
-            Log.w("next day ", list.get(next_day_index) + "");
-
-            //get nex day Calendar format
-            while (nextDay.get(Calendar.DAY_OF_WEEK) != Integer.parseInt(list.get(next_day_index))) {
-                nextDay.add(Calendar.DATE, 1);
-            }
-            //setting hour and minute
-            nextDay.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourmin[0]));
-            nextDay.set(Calendar.MINUTE, Integer.parseInt(hourmin[1]));
-
-            timeDiff = nextDay.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
-            alarmDelay = Calendar.getInstance().getTimeInMillis() + timeDiff;
-
-        }
-
-
-        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy 'at' h:mm a");
-        Log.w("TODAY", format.format(calNow.getTime()));
-        Log.w("NEXT DAY", format.format(nextDay.getTime()));
-
-        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        // Define our intention of executing AlertReceiver
-        Intent alertIntent = new Intent(getContext(), AlarmReceiver.class);
-
-        alertIntent.putExtra(ScheduleFormFragment.ALARM_ID_EXTRA, scheduleDrugDO.getAlarmId().intValue());
-        alertIntent.putExtra(ScheduleFormFragment.DRUG_EXTRA, scheduleDrugDO.getDrug());
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(), scheduleDrugDO.getAlarmId().intValue(), alertIntent, PendingIntent.FLAG_ONE_SHOT);
-
-        Log.w("alarm delay", alarmDelay + "");
-
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmDelay, alarmIntent);
-    }
-
-    public void cancelAlarm() {
-        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
-        Intent alertIntent = new Intent(getContext(), AlarmReceiver.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(), scheduleDrugDO.getAlarmId().intValue(), alertIntent, PendingIntent.FLAG_ONE_SHOT);
-        alarmManager.cancel(alarmIntent);
-    }
-
-    public void updateAlarm() {
-        cancelAlarm();
-        setAlarm();
-    }
-
     @Override
     public void onPause() {
         super.onPause();
-        ScheduleDrugDO scheduleDO_tmp = new ScheduleDrugDO();
 
-        scheduleDO_tmp.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+        scheduleDrugDO_tmp.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
 
         // Saving drug field
         if (autoDrugTextView != null) {
             if (!autoDrugTextView.getText().toString().isEmpty())
-                scheduleDO_tmp.setDrug(autoDrugTextView.getText().toString());
+                scheduleDrugDO_tmp.setDrug(autoDrugTextView.getText().toString());
         }
         // Saving notes field
         if (notesEditText != null) {
             if (!notesEditText.getText().toString().isEmpty())
-                scheduleDO_tmp.setNotes(notesEditText.getText().toString());
+                scheduleDrugDO_tmp.setNotes(notesEditText.getText().toString());
         }
         // Saving hour field
         if (timeTextView != null) {
             if (!timeTextView.getText().toString().isEmpty())
-                scheduleDO_tmp.setHour(timeTextView.getText().toString());
+                scheduleDrugDO_tmp.setHour(timeTextView.getText().toString());
         }
         // Saving days field
         if (weekDaysBool != null) {
@@ -943,11 +821,14 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                     }
                 }
             }
-            scheduleDO_tmp.setDay(daysToSave);
+            scheduleDrugDO_tmp.setDay(daysToSave);
         }
 
-        getArguments().putParcelable(ARG_SCHEDULEDO, scheduleDO_tmp);
+        getArguments().putParcelable(ARG_SCHEDULEDO, scheduleDrugDO);
+        getArguments().putParcelable(ARG_SCHEDULEDOLD, scheduleDrugDO_old);
+        getArguments().putParcelable(ARG_ASSIGNEDTMP, scheduleDrugDO_tmp);
         getArguments().putBoolean(ARG_EDITMODE, editMode);
+        getArguments().putBoolean(ARG_ASSIGNEDTMP, assigned_tmp);
         getArguments().putParcelableArrayList(ARG_DRUGLIST, druglist);
         getArguments().putParcelableArrayList(ARG_SCHEDULELIST, scheduleDrugDOArrayList);
     }

@@ -42,6 +42,9 @@
         <service
             android:name=".ServiceNotification"
             android:exported="false"/>
+        <service
+            android:name=".AlarmService"
+            android:exported="false"/>
 
         <activity
             android:name=".activity.SplashActivity"

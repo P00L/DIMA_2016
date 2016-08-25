@@ -83,10 +83,8 @@ public class DocListFragment extends Fragment {
         mRecyclerView.setHasFixedSize(false);
         noDataTextView = (TextView) view.findViewById(R.id.no_data);
         if (items == null){
-            Log.w("SAVED","SAVED");
             new MyAsyncTask().execute();
         } else {
-            Log.w("SAVED","SAVED");
             if (items.size() > 0) {
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
