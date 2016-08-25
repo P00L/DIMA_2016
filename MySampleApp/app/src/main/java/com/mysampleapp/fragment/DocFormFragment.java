@@ -54,13 +54,17 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     private static final String ARG_DOCDO = "param1";
     private static final String ARG_EDITMODE = "param2";
     private static final String ARG_DOCLIST = "param3";
+    private static final String ARG_ASSIGNEDTMP = "param4";
+    private static final String ARG_DOCDOTMP = "param5";
 
     private OnFragmentInteractionListener mListener;
     private ArrayList<DoctorDO> doc_list;
     private VerticalStepperFormLayout verticalStepperForm;
     private DynamoDBMapper mapper;
     private DoctorDO docDO;
-    private boolean editMode = false;
+    private DoctorDO docDO_tmp;
+    private Boolean assigned_tmp = false;
+    private Boolean editMode = false;
     private ProgressDialog mProgressDialog;
 
     private static final int NAME_STEP = 0;
@@ -98,7 +102,9 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     public void onCreate(Bundle savedInstanceState) {
         if (getArguments() != null) {
             docDO = getArguments().getParcelable(ARG_DOCDO);
+            docDO_tmp = getArguments().getParcelable(ARG_DOCDOTMP);
             editMode = getArguments().getBoolean(ARG_EDITMODE);
+            assigned_tmp = getArguments().getBoolean(ARG_ASSIGNEDTMP);
             doc_list = getArguments().getParcelableArrayList(ARG_DOCLIST);
         }
         super.onCreate(savedInstanceState);
@@ -135,6 +141,23 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         fab.hide();
 
         if (editMode) {
+            if(!assigned_tmp){
+                if(docDO_tmp == null)
+                    docDO_tmp = new DoctorDO();
+                docDO_tmp.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+                docDO_tmp.setName(docDO.getName());
+                docDO_tmp.setSurname(docDO.getSurname());
+                docDO_tmp.setEmail(docDO.getEmail());
+                if (cbactive != null) {
+                    if (cbactive.isChecked())
+                        docDO_tmp.setActive(true);
+                    else
+                        docDO_tmp.setActive(false);
+                }
+                docDO_tmp.setPhoneNumber(docDO.getPhoneNumber());
+                docDO_tmp.setAddress(docDO.getAddress());
+                assigned_tmp = true;
+            }
             activity.getSupportActionBar().setTitle(R.string.edit_doc);
             verticalStepperForm.setStepAsCompleted(NAME_STEP);
             verticalStepperForm.setStepAsCompleted(SURNAME_STEP);
@@ -509,7 +532,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         docDO.setPhoneNumber(Double.parseDouble(tmp));
         docDO.setAddress(address_text.getText().toString());
 
-        new SaveTask().execute();
+        new SaveTask(editMode, doc_list).execute();
     }
 
     // name/surname checker
@@ -580,9 +603,15 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
 
     private class SaveTask extends AsyncTask<Void, Void, Void> {
         private Boolean success;
+        private Boolean editMode;
+        private ArrayList<DoctorDO> docs;
 
-        public SaveTask() {
-            success = false;
+        public SaveTask(Boolean editMode, ArrayList<DoctorDO> doc_list) {
+            this.success = false;
+            this.editMode = editMode;
+            //prova con passaggio parametro
+            this.docs = doc_list;
+            Log.w("listacontiene", docs.size()+"");
         }
 
         @Override
@@ -605,6 +634,15 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             try {
                 //#####################################################################
                 //errore Null or empty value for key: public java.lang.String com.mysampleapp.demo.nosql.DoctorDO.getEmail()
+                if(editMode){
+                    Log.w("entratoedit", "entratoedit");
+                    if(docDO_tmp != null){
+                        Log.w("docdotempnotNULL", "docdotempnotNULL");
+                        if(docDO_tmp.getName() != null)
+                            Log.w("drugdo_tmp", docDO_tmp.getName());
+                        mapper.delete(docDO_tmp);
+                    }
+                }
                 mapper.save(docDO);
                 success = true;
             } catch (final AmazonClientException ex) {
@@ -619,7 +657,13 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             if (success) {
                 mProgressDialog.dismiss();
                 //TODO CONTROLLORA SE CONTROLLO SU EDIT MODE NON SETTARE ADD SULLA LISTA DUMMY
-                doc_list.add(docDO);
+                if(!editMode)
+                    docs.add(docDO);
+                else{
+                    Log.w("listacontiene", docs.size()+"");
+                    //qui dovrebbe fare l'update ma essendo vuoto va in ArrayIndexOutOfBoundsException
+                    docs.set(docs.indexOf(docDO_tmp), docDO);
+                }
                 activity.getSupportFragmentManager().popBackStack();
             } else {
                 mProgressDialog.dismiss();
@@ -681,7 +725,9 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         }
 
         getArguments().putParcelable(ARG_DOCDO, docDo_tmp);
+        getArguments().putParcelable(ARG_DOCDOTMP, docDO_tmp);
         getArguments().putBoolean(ARG_EDITMODE, editMode);
+        getArguments().putBoolean(ARG_ASSIGNEDTMP, assigned_tmp);
         getArguments().putParcelableArrayList(ARG_DOCLIST, doc_list);
     }
 }

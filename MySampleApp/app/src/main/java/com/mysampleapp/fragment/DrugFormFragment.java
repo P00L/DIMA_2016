@@ -50,6 +50,8 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
     private static final String ARG_DRUGDO = "param1";
     private static final String ARG_EDITMODE = "param2";
     private static final String ARG_DRUGLIST = "param3";
+    private static final String ARG_ASSIGNEDTMP = "param4";
+    private static final String ARG_DRUGDOTMP = "param5";
 
     private OnFragmentInteractionListener mListener;
     private ArrayList<DrugDO> drug_list;
@@ -57,8 +59,8 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
     private DynamoDBMapper mapper;
     private DrugDO drugDO;
     private DrugDO drugDO_tmp;
-    private boolean assign_tmp = true;
-    private boolean editMode = false;
+    private Boolean assigned_tmp = false;
+    private Boolean editMode = false;
     private ProgressDialog mProgressDialog;
 
     private final static int NAME_STEP = 0;
@@ -94,7 +96,9 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
     public void onCreate(Bundle savedInstanceState) {
         if (getArguments() != null) {
             drugDO = getArguments().getParcelable(ARG_DRUGDO);
+            drugDO_tmp = getArguments().getParcelable(ARG_DRUGDOTMP);
             editMode = getArguments().getBoolean(ARG_EDITMODE);
+            assigned_tmp = getArguments().getBoolean(ARG_ASSIGNEDTMP);
             drug_list = getArguments().getParcelableArrayList(ARG_DRUGLIST);
         }
         super.onCreate(savedInstanceState);
@@ -134,8 +138,9 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         //se in edit mode e assign_tmp == true, inizializzo drugDO_tmp a quello attuale;
         //se giro il display in onpause setto assign_tmp a false in modo da non riassegnare i campi
         if(editMode){
-            if(assign_tmp){
-                drugDO_tmp = new DrugDO();
+            if(!assigned_tmp){
+                if(drugDO_tmp == null)
+                    drugDO_tmp = new DrugDO();
                 drugDO_tmp.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
                 drugDO_tmp.setName(drugDO.getName());
                 drugDO_tmp.setType(drugDO.getType());
@@ -143,6 +148,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                 drugDO_tmp.setWeight(drugDO.getWeight());
                 drugDO_tmp.setMinqty(drugDO.getMinqty());
                 drugDO_tmp.setNotes(drugDO.getNotes());
+                assigned_tmp = true;
             }
             activity.getSupportActionBar().setTitle(R.string.edit_drug);
             verticalStepperForm.setStepAsCompleted(NAME_STEP);
@@ -562,8 +568,11 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                 //#####################################################################
                 //errore Null or empty value for key: public java.lang.String com.mysampleapp.demo.nosql.DoctorDO.getEmail()
                 if(editMode){
+                    Log.w("entratoedit", "entratoedit");
                     if(drugDO_tmp != null){
                         Log.w("drugdotempnotNULL", "drugdotempnotNULL");
+                        if(drugDO_tmp.getName() != null)
+                            Log.w("drugdo_tmp", drugDO_tmp.getName());
                         mapper.delete(drugDO_tmp);
                     }
                 }
@@ -582,7 +591,12 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
             if (success) {
                 mProgressDialog.dismiss();
                 //TODO CONTROLLORA SE CONTROLLO SU EDIT MODE NON SETTARE ADD SULLA LISTA DUMMY
-                drug_list.add(drugDO);
+                if(!editMode)
+                    drug_list.add(drugDO);
+                else{
+                    //qui dovrebbe fare l'update ma essendo vuoto va in ArrayIndexOutOfBoundsException
+                    drug_list.set(drug_list.indexOf(drugDO_tmp), drugDO);
+                }
                 activity.getSupportFragmentManager().popBackStack();
             } else {
                 mProgressDialog.dismiss();
@@ -608,47 +622,45 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         DrugDO drugDo_tmp = new DrugDO();
         drugDo_tmp.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
 
-        if(drugDO == null)
-            drugDO = new DrugDO();
-        drugDO.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
         // Saving name field
         if(name_text != null) {
             if(!name_text.getText().toString().isEmpty())
-                drugDO.setName(name_text.getText().toString());
+                drugDo_tmp.setName(name_text.getText().toString());
         }
 
         // Saving type field
         if(type_text != null) {
             if(!type_text.getText().toString().isEmpty())
-                drugDO.setType(type_text.getText().toString());
+                drugDo_tmp.setType(type_text.getText().toString());
         }
 
         // Saving quantity field
         if(qty_text != null) {
             if(!qty_text.getText().toString().isEmpty())
-                drugDO.setQuantity(Double.parseDouble(qty_text.getText().toString()));
+                drugDo_tmp.setQuantity(Double.parseDouble(qty_text.getText().toString()));
         }
         // Saving weight field
         if(weight_text != null) {
             if(!qty_text.getText().toString().isEmpty())
-                drugDO.setWeight(Double.parseDouble(weight_text.getText().toString()));
+                drugDo_tmp.setWeight(Double.parseDouble(weight_text.getText().toString()));
         }
 
         // Saving sottoscorta field
         if(minqty_text != null) {
             if(!minqty_text.getText().toString().isEmpty())
-                drugDO.setMinqty(Double.parseDouble(minqty_text.getText().toString()));
+                drugDo_tmp.setMinqty(Double.parseDouble(minqty_text.getText().toString()));
         }
 
         // Saving notes field
         if(notes_text != null) {
             if(!notes_text.getText().toString().isEmpty())
-                drugDO.setNotes(notes_text.getText().toString());
+                drugDo_tmp.setNotes(notes_text.getText().toString());
         }
 
-        assign_tmp = false;
-        getArguments().putParcelable(ARG_DRUGDO, drugDO);
+        getArguments().putParcelable(ARG_DRUGDOTMP, drugDO_tmp);
+        getArguments().putParcelable(ARG_DRUGDO, drugDo_tmp);
         getArguments().putBoolean(ARG_EDITMODE, editMode);
+        getArguments().putBoolean(ARG_ASSIGNEDTMP, assigned_tmp);
         getArguments().putParcelableArrayList(ARG_DRUGLIST, drug_list);
     }
 }
