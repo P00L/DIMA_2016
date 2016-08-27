@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -34,6 +35,8 @@ import com.mysampleapp.fragment.ScheduleFormFragment;
 import com.mysampleapp.fragment.ScheduleFragment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingScheduleAdapter.ViewHolder> {
     private final static String LOG_TAG = PendingScheduleAdapter.class.getSimpleName();
@@ -97,8 +100,10 @@ public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingSchedule
         holder.skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO implementare
                 Log.w("adapter","skip");
+                mList.remove(scheduleDrugDO);
+                PendingScheduleAdapter.this.notifyDataSetChanged();
+                clearSharedPref(scheduleDrugDO);
             }
         });
         //skip button listener
@@ -207,8 +212,7 @@ public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingSchedule
                 mProgressDialog.dismiss();
                 mList.remove(scheduleDrugDO);
                 PendingScheduleAdapter.this.notifyDataSetChanged();
-
-                //TODO clean shared preferences
+                clearSharedPref(scheduleDrugDO);
 
             } else {
                 mProgressDialog.dismiss();
@@ -226,5 +230,25 @@ public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingSchedule
                 dialog.show();
             }
         }
+    }
+
+    private void clearSharedPref(ScheduleDrugDO scheduleDrugDO){
+        SharedPreferences sharedPref = mContext.getSharedPreferences(
+                mContext.getString(R.string.preference_file_name), Context.MODE_PRIVATE);
+
+        //getting data from shared pref and add the new alarm manager as pending
+        //returning the pending list of id alarm manager as string or an empty set
+        Set<String> s = new HashSet<String>(sharedPref.getStringSet(mContext.getString(R.string.pending_alarm),
+                new HashSet<String>()));
+        Log.w("AlarmService", "pending notification " + s.toString());
+        String pending_id = scheduleDrugDO.getAlarmId().intValue() + "/" + scheduleDrugDO.getDrug();
+        Log.w("AlarmService", "pending id " + pending_id);
+        //if there are pending notification in the shared pref we delete it
+        Boolean removed = s.remove(pending_id);
+        Log.w("AlarmService", "removed " + removed);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putStringSet(mContext.getString(R.string.pending_alarm), s);
+        editor.apply();
+
     }
 }
