@@ -4,6 +4,18 @@
     <shared>
       <config />
     </shared>
+    <layouts>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/menu/activity_home_drawer.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/menu/home.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
+    </layouts>
   </component>
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
@@ -12,21 +24,20 @@
     <bookmark url="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleListFragment.java" line="235" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae45c68b-7891-4f4a-9dc6-e4b08b3e159c" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/AlarmService.java" />
+    <list default="true" id="ae45c68b-7891-4f4a-9dc6-e4b08b3e159c" name="Default" comment="fixed all form and so many thing i can't remember XD.&#10;">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/cardview_v7_23_0_1.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/adapter/PendingScheduleAdapter.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_pending_schedule.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/AlarmReceiver.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/AlarmReceiver.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/BootReceiver.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/BootReceiver.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/ServiceNotification.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/ServiceNotification.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DrugFormFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DrugFormFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DrugFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DrugFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DrugListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DrugListFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DemoNoSQLTableDrug.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DemoNoSQLTableDrug.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/PendingScheduleFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/PendingScheduleFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleListFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_pending_schedule.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_pending_schedule.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/menu/activity_home_drawer.xml" afterPath="$PROJECT_DIR$/app/src/main/res/menu/activity_home_drawer.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/menu/home.xml" afterPath="$PROJECT_DIR$/app/src/main/res/menu/home.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
     </list>
     <ignored path="MySampleApp.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -54,35 +65,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ScheduleFormFragment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java">
+      <file leaf-file-name="PendingScheduleAdapter.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/adapter/PendingScheduleAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="827" column="56" selection-start-line="827" selection-start-column="55" selection-end-line="827" selection-end-column="56" />
+            <state vertical-scroll-proportion="0.5540541">
+              <caret line="191" column="151" selection-start-line="191" selection-start-column="151" selection-end-line="191" selection-end-column="151" />
               <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ScheduleListFragment.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleListFragment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33221477">
-              <caret line="229" column="54" selection-start-line="229" selection-start-column="54" selection-end-line="229" selection-end-column="54" />
-              <folding>
-                <element signature="method#ScheduleListFragment#0;class#ScheduleListFragment#0" expanded="false" />
-                <element signature="method#newInstance#0;class#ScheduleListFragment#0" expanded="false" />
-                <element signature="method#onCreate#0;class#ScheduleListFragment#0" expanded="false" />
-                <element signature="method#onCreateView#0;class#ScheduleListFragment#0" expanded="false" />
-                <element signature="method#onButtonPressed#0;class#ScheduleListFragment#0" expanded="false" />
-                <element signature="method#onAttach#0;class#ScheduleListFragment#0" expanded="false" />
-                <element signature="method#onDetach#0;class#ScheduleListFragment#0" expanded="false" />
-                <element signature="class#OnFragmentInteractionListener#0;class#ScheduleListFragment#0" expanded="false" />
-                <element signature="method#MyAsyncTask#0;class#MyAsyncTask#0;class#ScheduleListFragment#0" expanded="false" />
-                <element signature="method#onPreExecute#0;class#MyAsyncTask#0;class#ScheduleListFragment#0" expanded="false" />
-                <element signature="method#onPause#0;class#ScheduleListFragment#0" expanded="false" />
+                <element signature="method#PendingScheduleAdapter#0;class#PendingScheduleAdapter#0" expanded="false" />
+                <element signature="method#onCreateViewHolder#0;class#PendingScheduleAdapter#0" expanded="false" />
+                <element signature="class#ViewHolder#0;class#PendingScheduleAdapter#0" expanded="false" />
+                <element signature="method#ViewHolder#0;class#ViewHolder#0;class#PendingScheduleAdapter#0" expanded="false" />
+                <element signature="method#setClickListener#0;class#ViewHolder#0;class#PendingScheduleAdapter#0" expanded="false" />
+                <element signature="method#onLongClick#0;class#ViewHolder#0;class#PendingScheduleAdapter#0" expanded="false" />
+                <element signature="method#onPreExecute#0;class#SaveTask#0;class#PendingScheduleAdapter#0" expanded="false" />
+                <element signature="e#6244#6277#0" expanded="false" />
+                <element signature="e#8330#8425#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -91,19 +88,59 @@
       <file leaf-file-name="DrugFormFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DrugFormFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="596" column="17" selection-start-line="596" selection-start-column="17" selection-end-line="596" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DocFormFragment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="650" column="17" selection-start-line="650" selection-start-column="17" selection-end-line="650" selection-end-column="17" />
-              <folding />
+            <state vertical-scroll-proportion="-3.9655173">
+              <caret line="511" column="41" selection-start-line="511" selection-start-column="8" selection-end-line="511" selection-end-column="41" />
+              <folding>
+                <element signature="docComment;class#DrugFormFragment#0" expanded="false" />
+                <element signature="method#DrugFormFragment#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="method#onCreate#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="method#onCreateView#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="e#6312#6392#0" expanded="false" />
+                <element signature="method#onButtonPressed#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="method#onAttach#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="method#onDetach#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="class#OnFragmentInteractionListener#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="method#createStepContentView#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="method#createNameStep#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="class#11921:12333" expanded="false" />
+                <element signature="method#beforeTextChanged#0;class#11921:12333" expanded="false" />
+                <element signature="method#onTextChanged#0;class#11921:12333" expanded="false" />
+                <element signature="method#afterTextChanged#0;class#11921:12333" expanded="false" />
+                <element signature="method#createTypeStep#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="class#13334:13751" expanded="false" />
+                <element signature="method#beforeTextChanged#0;class#13334:13751" expanded="false" />
+                <element signature="method#onTextChanged#0;class#13334:13751" expanded="false" />
+                <element signature="method#afterTextChanged#0;class#13334:13751" expanded="false" />
+                <element signature="class#14816:15236" expanded="false" />
+                <element signature="method#beforeTextChanged#0;class#14816:15236" expanded="false" />
+                <element signature="method#onTextChanged#0;class#14816:15236" expanded="false" />
+                <element signature="method#afterTextChanged#0;class#14816:15236" expanded="false" />
+                <element signature="method#createWeightStep#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="class#16315:16735" expanded="false" />
+                <element signature="method#beforeTextChanged#0;class#16315:16735" expanded="false" />
+                <element signature="method#onTextChanged#0;class#16315:16735" expanded="false" />
+                <element signature="method#afterTextChanged#0;class#16315:16735" expanded="false" />
+                <element signature="method#createSottoscortaStep#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="class#17830:18250" expanded="false" />
+                <element signature="method#beforeTextChanged#0;class#17830:18250" expanded="false" />
+                <element signature="method#onTextChanged#0;class#17830:18250" expanded="false" />
+                <element signature="method#afterTextChanged#0;class#17830:18250" expanded="false" />
+                <element signature="method#createNotesStep#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="method#onStepOpening#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="e#20405#20426#0" expanded="false" />
+                <element signature="method#isValidQtyWeigh#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="method#hasNoNumbers#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="method#isEmpty#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="class#SaveTask#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="method#SaveTask#0;class#SaveTask#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="method#onPreExecute#0;class#SaveTask#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="e#23223#23256#0" expanded="false" />
+                <element signature="method#doInBackground#0;class#SaveTask#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="e#23792#23863#0" expanded="false" />
+                <element signature="method#onPostExecute#0;class#SaveTask#0;class#DrugFormFragment#0" expanded="false" />
+                <element signature="e#25757#25852#0" expanded="false" />
+                <element signature="method#onPause#0;class#DrugFormFragment#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -113,8 +150,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="layoutResourceFile_vertical" />
         <option value="Class" />
+        <option value="layoutResourceFile_vertical" />
       </list>
     </option>
   </component>
@@ -637,6 +674,11 @@
                 <option name="description" value="Prepare com.android.support:appcompat-v7:24.0.0" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="prepareComAndroidSupportAppcompatV72400Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:cardview-v7:23.0.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComAndroidSupportCardviewV72301Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.android.support:design:23.4.0" />
@@ -1420,6 +1462,11 @@
                 <option name="description" value="Prepare com.android.support:appcompat-v7:24.0.0" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="prepareComAndroidSupportAppcompatV72400Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:cardview-v7:23.0.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="prepareComAndroidSupportCardviewV72301Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.android.support:design:23.4.0" />
@@ -2344,7 +2391,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="5886825847241" />
+        <entry key="$PROJECT_DIR$" value="5887137950209" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -2652,6 +2699,7 @@
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/external/lombok/lombok-ast/0.2.3/lombok-ast-0.2.3-sources.jar" />
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/external/lombok/lombok-ast/0.2.3/lombok-ast-0.2.3.jar" />
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/abego/treelayout/org.abego.treelayout.core/1.0.1/org.abego.treelayout.core-1.0.1.jar" />
+                            <option value="$USER_HOME$/AppData/Local/Android/sdk/extras/android/m2repository/com/android/support/cardview-v7/23.0.1/cardview-v7-23.0.1.aar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-core/2.2.18/802a5fa1642253476592c2ee55930578e499fe63/aws-android-sdk-core-2.2.18.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-cognito/2.2.18/c4bf9dca3b2cbf00f5a3c7c95d4b69f4f14094dd/aws-android-sdk-cognito-2.2.18.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-ddb/2.2.18/88caede5170508d7f3a7d1297eab570d9f80c26c/aws-android-sdk-ddb-2.2.18.jar" />
@@ -2661,12 +2709,12 @@
                             <option value="$USER_HOME$/AppData/Local/Android/sdk/extras/android/m2repository/com/android/support/design/23.4.0/design-23.4.0.aar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-s3/2.2.18/2b3576bbfdb287d7f1f3ec5f17ccfce41fb0d96/aws-android-sdk-s3-2.2.18.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-android/1.2.0/6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd/bolts-android-1.2.0.jar" />
-                            <option value="$USER_HOME$/AppData/Local/Android/sdk/extras/android/m2repository/com/android/support/recyclerview-v7/23.4.0/recyclerview-v7-23.4.0.aar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support/appcompat-v7/24.0.0/56f1c949431817df40e342fea3e2289366716a42/appcompat-v7-24.0.0.aar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support/support-vector-drawable/24.0.0/b301036e6bc2b3a6f7949feca6a3d034145d5509/support-vector-drawable-24.0.0.aar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support/animated-vector-drawable/24.0.0/9fe84792a065924aebf9c7f3c5ef44d34d6a2f75/animated-vector-drawable-24.0.0.aar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support/support-v4/24.0.0/93dbc95082794e79d1968e6f843833d72cdf7454/support-v4-24.0.0.aar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support/support-annotations/24.0.0/2943c74db6d4346ab8c6531adac91fa05c137c40/support-annotations-24.0.0.jar" />
+                            <option value="$USER_HOME$/AppData/Local/Android/sdk/extras/android/m2repository/com/android/support/recyclerview-v7/23.4.0/recyclerview-v7-23.4.0.aar" />
                           </list>
                         </option>
                         <option name="path" value="$PROJECT_DIR$/app" />
@@ -2853,7 +2901,6 @@
       <list>
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/vertical-stepper-form/src/main/java/ernestoyaquello/com/verticalstepperform/VerticalStepperFormLayout.java" />
-        <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/adapter/DrugAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DoctorDO.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DrugDO.java" />
@@ -2870,10 +2917,7 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/autocomplete_drug.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/adapter/AutocompleteAdapter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_pending_schedule.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/PendingScheduleFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/UpdateCancelService.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/AlarmReceiver.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/BootReceiver.java" />
@@ -2881,8 +2925,17 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/AlarmService.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DrugFormFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleListFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/menu/activity_home_drawer.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_pending_schedule.xml" />
+        <option value="$PROJECT_DIR$/app/build.gradle" />
+        <option value="$PROJECT_DIR$/app/src/main/res/menu/home.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/PendingScheduleFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/item_pending_schedule.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DemoNoSQLTableDrug.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/adapter/PendingScheduleAdapter.java" />
       </list>
     </option>
   </component>
@@ -2924,6 +2977,16 @@
               <option name="myItemId" value="MySampleApp" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Gradle Scripts" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -2933,6 +2996,46 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="menu" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="layout" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -3014,11 +3117,127 @@
               <option name="myItemId" value="com" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysampleapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysampleapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nosql" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysampleapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="adapter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysampleapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="activity" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -3053,7 +3272,9 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -3411,7 +3632,13 @@
       <option name="project" value="LOCAL" />
       <updated>1472051734757</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="fixed all form and so many thing i can't remember XD.&#10;">
+      <created>1472156964052</created>
+      <option name="number" value="00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1472156964052</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -3424,7 +3651,8 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39419794" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39761093" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27609682" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935154" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935154" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -3432,7 +3660,7 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23373677" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2927383" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935154" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -3445,7 +3673,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27609682" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -3500,109 +3727,16 @@
     <MESSAGE value="fixed navigation in doctor do" />
     <MESSAGE value="fixed schedule navigation. added dummy fragment click notification" />
     <MESSAGE value="fixed bug in schedule alarm nex day" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed bug in schedule alarm nex day" />
+    <MESSAGE value="fixed all form and so many thing i can't remember XD.&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed all form and so many thing i can't remember XD.&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="8" />
+      <option name="time" value="9" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/ServiceNotification.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="122" column="94" selection-start-line="122" selection-start-column="94" selection-end-line="122" selection-end-column="94" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.78356165">
-          <caret line="20" column="73" selection-start-line="20" selection-start-column="73" selection-end-line="20" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/amazonaws/mobile/AWSConfiguration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/Application.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.163498">
-          <caret line="32" column="83" selection-start-line="32" selection-start-column="7" selection-end-line="32" selection-end-column="83" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-core/2.2.18/910001857e523c9d08a89d3fe1b4f11ab9c2e6e2/aws-android-sdk-core-2.2.18-sources.jar!/com/amazonaws/auth/AWSAbstractCognitoIdentityProvider.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5247148">
-          <caret line="311" column="18" selection-start-line="311" selection-start-column="18" selection-end-line="311" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-core/2.2.18/910001857e523c9d08a89d3fe1b4f11ab9c2e6e2/aws-android-sdk-core-2.2.18-sources.jar!/com/amazonaws/auth/AWSBasicCognitoIdentityProvider.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.46007603">
-          <caret line="76" column="28" selection-start-line="76" selection-start-column="21" selection-end-line="76" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/amazonaws/mobile/AWSMobileClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.8326996">
-          <caret line="186" column="23" selection-start-line="186" selection-start-column="23" selection-end-line="186" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/amazonaws/mobile/user/IdentityManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.06341463">
-          <caret line="105" column="0" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/ScheduleDrugDO.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -3642,7 +3776,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.6759582">
           <caret line="133" column="16" selection-start-line="133" selection-start-column="16" selection-end-line="133" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3681,27 +3814,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DemoNoSQLTableScheduleDrug.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.9260274">
-          <caret line="137" column="17" selection-start-line="137" selection-start-column="17" selection-end-line="137" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_doc_list.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.61904764">
           <caret line="18" column="33" selection-start-line="11" selection-start-column="4" selection-end-line="18" selection-end-column="33" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_schedule_list.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8754579">
-          <caret line="18" column="33" selection-start-line="18" selection-start-column="33" selection-end-line="18" selection-end-column="33" />
+          <folding />
         </state>
       </provider>
       <provider editor-type-id="android-designer">
@@ -3712,7 +3829,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33231708">
           <caret line="549" column="53" selection-start-line="549" selection-start-column="53" selection-end-line="549" selection-end-column="53" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3721,24 +3837,6 @@
         <state vertical-scroll-proportion="0.52469134">
           <caret line="47" column="26" selection-start-line="47" selection-start-column="26" selection-end-line="47" selection-end-column="26" />
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/adapter/DocAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4722222">
-          <caret line="52" column="38" selection-start-line="45" selection-start-column="20" selection-end-line="52" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/drug_choice.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFragment.java">
@@ -3769,27 +3867,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_pending_schedule.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5483871">
-          <caret line="10" column="44" selection-start-line="10" selection-start-column="44" selection-end-line="10" selection-end-column="44" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vertical-stepper-form/src/main/java/ernestoyaquello/com/verticalstepperform/VerticalStepperFormLayout.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="172" column="0" selection-start-line="172" selection-start-column="0" selection-end-line="172" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/PendingScheduleFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3320158">
-          <caret line="85" column="0" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -3798,17 +3879,6 @@
         <state vertical-scroll-proportion="0.7988722">
           <caret line="45" column="40" selection-start-line="45" selection-start-column="40" selection-end-line="45" selection-end-column="40" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="56" column="62" selection-start-line="56" selection-start-column="62" selection-end-line="56" selection-end-column="62" />
-          <folding>
-            <element signature="e#18662#18663#0" expanded="true" />
-            <element signature="e#18691#18692#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3826,43 +3896,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/ServiceNotification.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/AlarmService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="237" column="38" selection-start-line="237" selection-start-column="38" selection-end-line="237" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#5745#5767#0" expanded="false" />
-            <element signature="e#6121#6186#0" expanded="false" />
-            <element signature="e#7294#7363#0" expanded="false" />
-            <element signature="method#cancelDrug#0;class#AlarmService#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DrugFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.2067901">
           <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
-          <folding>
-            <element signature="docComment;class#DrugFragment#0" expanded="false" />
-            <element signature="method#newInstance#0;class#DrugFragment#0" expanded="false" />
-            <element signature="method#DrugFragment#0;class#DrugFragment#0" expanded="false" />
-            <element signature="method#onCreate#0;class#DrugFragment#0" expanded="false" />
-            <element signature="method#onCreateView#0;class#DrugFragment#0" expanded="false" />
-            <element signature="method#onButtonPressed#0;class#DrugFragment#0" expanded="false" />
-            <element signature="method#onAttach#0;class#DrugFragment#0" expanded="false" />
-            <element signature="method#onDetach#0;class#DrugFragment#0" expanded="false" />
-            <element signature="class#OnFragmentInteractionListener#0;class#DrugFragment#0" expanded="false" />
-            <element signature="method#onPause#0;class#DrugFragment#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3870,7 +3907,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="39" column="4" selection-start-line="39" selection-start-column="4" selection-end-line="39" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3878,44 +3914,49 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="88" column="24" selection-start-line="88" selection-start-column="24" selection-end-line="88" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DrugFormFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_schedule.xml">
+      <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="596" column="17" selection-start-line="596" selection-start-column="17" selection-end-line="596" selection-end-column="17" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_schedule_list.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.875">
+          <caret line="22" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFormFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="650" column="17" selection-start-line="650" selection-start-column="17" selection-end-line="650" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="827" column="56" selection-start-line="827" selection-start-column="55" selection-end-line="827" selection-end-column="56" />
+          <caret line="158" column="8" selection-start-line="158" selection-start-column="8" selection-end-line="158" selection-end-column="19" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleListFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33221477">
-          <caret line="229" column="54" selection-start-line="229" selection-start-column="54" selection-end-line="229" selection-end-column="54" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="70" column="9" selection-start-line="68" selection-start-column="7" selection-end-line="70" selection-end-column="9" />
           <folding>
+            <element signature="imports" expanded="false" />
             <element signature="method#ScheduleListFragment#0;class#ScheduleListFragment#0" expanded="false" />
             <element signature="method#newInstance#0;class#ScheduleListFragment#0" expanded="false" />
-            <element signature="method#onCreate#0;class#ScheduleListFragment#0" expanded="false" />
             <element signature="method#onCreateView#0;class#ScheduleListFragment#0" expanded="false" />
             <element signature="method#onButtonPressed#0;class#ScheduleListFragment#0" expanded="false" />
             <element signature="method#onAttach#0;class#ScheduleListFragment#0" expanded="false" />
@@ -3923,7 +3964,370 @@
             <element signature="class#OnFragmentInteractionListener#0;class#ScheduleListFragment#0" expanded="false" />
             <element signature="method#MyAsyncTask#0;class#MyAsyncTask#0;class#ScheduleListFragment#0" expanded="false" />
             <element signature="method#onPreExecute#0;class#MyAsyncTask#0;class#ScheduleListFragment#0" expanded="false" />
-            <element signature="method#onPause#0;class#ScheduleListFragment#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_doc.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6049822">
+          <caret line="10" column="15" selection-start-line="0" selection-start-column="0" selection-end-line="10" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/drawables.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_drug.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.54448396">
+          <caret line="9" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="10" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="47" column="47" selection-start-line="47" selection-start-column="47" selection-end-line="47" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/adapter/DocAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="79" column="9" selection-start-line="79" selection-start-column="9" selection-end-line="79" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="4.214286">
+          <caret line="227" column="50" selection-start-line="227" selection-start-column="50" selection-end-line="227" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/activity_home_drawer.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5064516">
+          <caret line="26" column="51" selection-start-line="26" selection-start-column="51" selection-end-line="26" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/home.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6032258">
+          <caret line="11" column="70" selection-start-line="11" selection-start-column="70" selection-end-line="11" selection-end-column="70" />
+          <folding>
+            <element signature="e#649#674#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/NoSQLSelectTableDemoFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.20238096">
+          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35416666">
+          <caret line="34" column="4" selection-start-line="34" selection-start-column="4" selection-end-line="34" selection-end-column="77" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/drug_choice.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="23" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_pending_schedule.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2777778">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_pending_schedule.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36716416">
+          <caret line="43" column="78" selection-start-line="43" selection-start-column="78" selection-end-line="43" selection-end-column="78" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/PendingScheduleFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.0">
+          <caret line="250" column="0" selection-start-line="250" selection-start-column="0" selection-end-line="250" selection-end-column="0" />
+          <folding>
+            <element signature="docComment;class#PendingScheduleFragment#0" expanded="false" />
+            <element signature="method#PendingScheduleFragment#0;class#PendingScheduleFragment#0" expanded="false" />
+            <element signature="method#newInstance#0;class#PendingScheduleFragment#0" expanded="false" />
+            <element signature="method#onCreate#0;class#PendingScheduleFragment#0" expanded="false" />
+            <element signature="method#onCreateView#0;class#PendingScheduleFragment#0" expanded="false" />
+            <element signature="method#onButtonPressed#0;class#PendingScheduleFragment#0" expanded="false" />
+            <element signature="method#onAttach#0;class#PendingScheduleFragment#0" expanded="false" />
+            <element signature="method#onDetach#0;class#PendingScheduleFragment#0" expanded="false" />
+            <element signature="docComment;class#OnFragmentInteractionListener#0;class#PendingScheduleFragment#0" expanded="false" />
+            <element signature="class#OnFragmentInteractionListener#0;class#PendingScheduleFragment#0" expanded="false" />
+            <element signature="method#onCreateOptionsMenu#0;class#PendingScheduleFragment#0" expanded="false" />
+            <element signature="method#onOptionsItemSelected#0;class#PendingScheduleFragment#0" expanded="false" />
+            <element signature="e#8180#8204#0" expanded="false" />
+            <element signature="method#onPause#0;class#PendingScheduleFragment#0" expanded="false" />
+            <element signature="method#MyAsyncTask#0;class#MyAsyncTask#0;class#PendingScheduleFragment#0" expanded="false" />
+            <element signature="method#onPostExecute#0;class#MyAsyncTask#0;class#PendingScheduleFragment#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/ServiceNotification.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33076924">
+          <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-ddb-mapper/2.2.18/75c02659bd77626c5c176cbac56cde167f62f777/aws-android-sdk-ddb-mapper-2.2.18-sources.jar!/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/DynamoDBMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3324468">
+          <caret line="686" column="35" selection-start-line="686" selection-start-column="35" selection-end-line="686" selection-end-column="35" />
+          <folding>
+            <element signature="e#26671#26672#0" expanded="true" />
+            <element signature="e#26713#26714#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DemoNoSQLTableScheduleDrug.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.69414896">
+          <caret line="66" column="9" selection-start-line="64" selection-start-column="6" selection-end-line="66" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/AlarmService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5100865">
+          <caret line="264" column="62" selection-start-line="264" selection-start-column="62" selection-end-line="264" selection-end-column="62" />
+          <folding>
+            <element signature="method#onHandleIntent#0;class#AlarmService#0" expanded="false" />
+            <element signature="method#setAlarm#0;class#AlarmService#0" expanded="false" />
+            <element signature="e#5745#5767#0" expanded="false" />
+            <element signature="e#6121#6186#0" expanded="false" />
+            <element signature="e#7294#7363#0" expanded="false" />
+            <element signature="method#updateAlarm#0;class#AlarmService#0" expanded="false" />
+            <element signature="method#cancelAlarm#0;class#AlarmService#0" expanded="false" />
+            <element signature="e#10489#10561#0" expanded="false" />
+            <element signature="method#updateDrug#0;class#AlarmService#0" expanded="false" />
+            <element signature="method#cancelDrug#0;class#AlarmService#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/demo/nosql/DemoNoSQLTableDrug.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4069149">
+          <caret line="39" column="82" selection-start-line="39" selection-start-column="82" selection-end-line="39" selection-end-column="82" />
+          <folding>
+            <element signature="docComment;field#RESULTS_PER_RESULT_GROUP#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="docComment;field#MAX_BATCH_SIZE_FOR_DELETE#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="docComment;class#DemoGetWithPartitionKeyAndSortKey#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="class#DemoGetWithPartitionKeyAndSortKey#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#DemoGetWithPartitionKeyAndSortKey#0;class#DemoGetWithPartitionKeyAndSortKey#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#executeOperation#0;class#DemoGetWithPartitionKeyAndSortKey#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#getNextResultGroup#0;class#DemoGetWithPartitionKeyAndSortKey#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="class#DemoQueryWithPartitionKeyAndSortKeyCondition#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#DemoQueryWithPartitionKeyAndSortKeyCondition#0;class#DemoQueryWithPartitionKeyAndSortKeyCondition#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#executeOperation#0;class#DemoQueryWithPartitionKeyAndSortKeyCondition#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="docComment;method#getNextResultGroup#0;class#DemoQueryWithPartitionKeyAndSortKeyCondition#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#getNextResultGroup#0;class#DemoQueryWithPartitionKeyAndSortKeyCondition#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="class#DemoQueryWithPartitionKeyOnly#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#DemoQueryWithPartitionKeyOnly#0;class#DemoQueryWithPartitionKeyOnly#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#executeOperation#0;class#DemoQueryWithPartitionKeyOnly#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#getResultArray#0;class#DemoQueryWithPartitionKeyOnly#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#getNextResultGroup#0;class#DemoQueryWithPartitionKeyOnly#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="class#DemoQueryWithPartitionKeyAndFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#DemoQueryWithPartitionKeyAndFilter#0;class#DemoQueryWithPartitionKeyAndFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#executeOperation#0;class#DemoQueryWithPartitionKeyAndFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="e#8291#8364#0" expanded="false" />
+            <element signature="method#getNextResultGroup#0;class#DemoQueryWithPartitionKeyAndFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="class#DemoQueryWithPartitionKeySortKeyConditionAndFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#DemoQueryWithPartitionKeySortKeyConditionAndFilter#0;class#DemoQueryWithPartitionKeySortKeyConditionAndFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#executeOperation#0;class#DemoQueryWithPartitionKeySortKeyConditionAndFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="e#11071#11144#0" expanded="false" />
+            <element signature="method#getNextResultGroup#0;class#DemoQueryWithPartitionKeySortKeyConditionAndFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="docComment;class#DemoScanWithFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="class#DemoScanWithFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#DemoScanWithFilter#0;class#DemoScanWithFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#executeOperation#0;class#DemoScanWithFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="e#13360#13433#0" expanded="false" />
+            <element signature="method#getNextResultGroup#0;class#DemoScanWithFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="class#DemoScanWithoutFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#DemoScanWithoutFilter#0;class#DemoScanWithoutFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#executeOperation#0;class#DemoScanWithoutFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#getNextResultGroup#0;class#DemoScanWithoutFilter#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="docComment;method#getNextResultsGroupFromIterator#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#getNextResultsGroupFromIterator#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="docComment;field#mapper#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#DemoNoSQLTableDrug#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#insertSampleData#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#removeSampleData#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="e#21872#21933#0" expanded="false" />
+            <element signature="method#getSupportedDemoOperations#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#getSupportedDemoOperations#1;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#getOperationByName#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+            <element signature="method#getOperationByNameSingle#0;class#DemoNoSQLTableDrug#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DrugFormFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.9655173">
+          <caret line="511" column="41" selection-start-line="511" selection-start-column="8" selection-end-line="511" selection-end-column="41" />
+          <folding>
+            <element signature="docComment;class#DrugFormFragment#0" expanded="false" />
+            <element signature="method#DrugFormFragment#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="method#onCreate#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="method#onCreateView#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="e#6312#6392#0" expanded="false" />
+            <element signature="method#onButtonPressed#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="method#onAttach#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="method#onDetach#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="class#OnFragmentInteractionListener#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="method#createStepContentView#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="method#createNameStep#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="class#11921:12333" expanded="false" />
+            <element signature="method#beforeTextChanged#0;class#11921:12333" expanded="false" />
+            <element signature="method#onTextChanged#0;class#11921:12333" expanded="false" />
+            <element signature="method#afterTextChanged#0;class#11921:12333" expanded="false" />
+            <element signature="method#createTypeStep#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="class#13334:13751" expanded="false" />
+            <element signature="method#beforeTextChanged#0;class#13334:13751" expanded="false" />
+            <element signature="method#onTextChanged#0;class#13334:13751" expanded="false" />
+            <element signature="method#afterTextChanged#0;class#13334:13751" expanded="false" />
+            <element signature="class#14816:15236" expanded="false" />
+            <element signature="method#beforeTextChanged#0;class#14816:15236" expanded="false" />
+            <element signature="method#onTextChanged#0;class#14816:15236" expanded="false" />
+            <element signature="method#afterTextChanged#0;class#14816:15236" expanded="false" />
+            <element signature="method#createWeightStep#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="class#16315:16735" expanded="false" />
+            <element signature="method#beforeTextChanged#0;class#16315:16735" expanded="false" />
+            <element signature="method#onTextChanged#0;class#16315:16735" expanded="false" />
+            <element signature="method#afterTextChanged#0;class#16315:16735" expanded="false" />
+            <element signature="method#createSottoscortaStep#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="class#17830:18250" expanded="false" />
+            <element signature="method#beforeTextChanged#0;class#17830:18250" expanded="false" />
+            <element signature="method#onTextChanged#0;class#17830:18250" expanded="false" />
+            <element signature="method#afterTextChanged#0;class#17830:18250" expanded="false" />
+            <element signature="method#createNotesStep#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="method#onStepOpening#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="e#20405#20426#0" expanded="false" />
+            <element signature="method#isValidQtyWeigh#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="method#hasNoNumbers#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="method#isEmpty#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="class#SaveTask#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="method#SaveTask#0;class#SaveTask#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="method#onPreExecute#0;class#SaveTask#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="e#23223#23256#0" expanded="false" />
+            <element signature="method#doInBackground#0;class#SaveTask#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="e#23792#23863#0" expanded="false" />
+            <element signature="method#onPostExecute#0;class#SaveTask#0;class#DrugFormFragment#0" expanded="false" />
+            <element signature="e#25757#25852#0" expanded="false" />
+            <element signature="method#onPause#0;class#DrugFormFragment#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.41463414">
+          <caret line="68" column="85" selection-start-line="68" selection-start-column="3" selection-end-line="68" selection-end-column="85" />
+          <folding>
+            <element signature="docComment;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#ScheduleFormFragment#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#onCreateView#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#onButtonPressed#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#onAttach#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#onDetach#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="class#OnFragmentInteractionListener#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="e#12370#12453#0" expanded="false" />
+            <element signature="e#13105#13168#0" expanded="false" />
+            <element signature="e#14577#14658#0" expanded="false" />
+            <element signature="e#14782#14838#0" expanded="false" />
+            <element signature="class#18377:18820" expanded="false" />
+            <element signature="method#beforeTextChanged#0;class#18377:18820" expanded="false" />
+            <element signature="method#onTextChanged#0;class#18377:18820" expanded="false" />
+            <element signature="method#afterTextChanged#0;class#18377:18820" expanded="false" />
+            <element signature="method#createNotesStep#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#createAlarmTimeStep#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#createAlarmDaysStep#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#setTimePicker#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#checkTitleStep#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#setTime#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#deactivateDay#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#checkDays#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#getDayLayout#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#checkIfExists#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#MyAsyncTask#0;class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#doInBackground#0;class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#onPostExecute#0;class#MyAsyncTask#0;class#ScheduleFormFragment#0" expanded="false" />
+            <element signature="method#onPreExecute#0;class#SaveTask#0;class#ScheduleFormFragment#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/adapter/PendingScheduleAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5540541">
+          <caret line="191" column="151" selection-start-line="191" selection-start-column="151" selection-end-line="191" selection-end-column="151" />
+          <folding>
+            <element signature="method#PendingScheduleAdapter#0;class#PendingScheduleAdapter#0" expanded="false" />
+            <element signature="method#onCreateViewHolder#0;class#PendingScheduleAdapter#0" expanded="false" />
+            <element signature="class#ViewHolder#0;class#PendingScheduleAdapter#0" expanded="false" />
+            <element signature="method#ViewHolder#0;class#ViewHolder#0;class#PendingScheduleAdapter#0" expanded="false" />
+            <element signature="method#setClickListener#0;class#ViewHolder#0;class#PendingScheduleAdapter#0" expanded="false" />
+            <element signature="method#onLongClick#0;class#ViewHolder#0;class#PendingScheduleAdapter#0" expanded="false" />
+            <element signature="method#onPreExecute#0;class#SaveTask#0;class#PendingScheduleAdapter#0" expanded="false" />
+            <element signature="e#6244#6277#0" expanded="false" />
+            <element signature="e#8330#8425#0" expanded="false" />
           </folding>
         </state>
       </provider>

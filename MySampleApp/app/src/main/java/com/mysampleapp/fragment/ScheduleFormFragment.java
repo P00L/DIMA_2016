@@ -33,6 +33,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -65,6 +66,8 @@ import ernestoyaquello.com.verticalstepperform.interfaces.VerticalStepperForm;
  */
 public class ScheduleFormFragment extends Fragment implements VerticalStepperForm {
 
+    private final static String LOG_TAG = ScheduleFormFragment.class.getSimpleName();
+
     private static final String ARG_SCHEDULEDO = "param1";
     private static final String ARG_EDITMODE = "param2";
     private static final String ARG_SCHEDULELIST = "param3";
@@ -90,14 +93,18 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
     // Information about the steps/fields of the form
     private static final int DRUG_STEP_NUM = 0;
-    private static final int NOTES_STEP_NUM = 1;
-    private static final int TIME_STEP_NUM = 2;
-    private static final int DAYS_STEP_NUM = 3;
-    private static final int CONFIRM_STEP_NUM = 4;
+    private static final int QUANTITY_STEP_NUM = 1;
+    private static final int NOTES_STEP_NUM = 2;
+    private static final int TIME_STEP_NUM = 3;
+    private static final int DAYS_STEP_NUM = 4;
+    private static final int CONFIRM_STEP_NUM = 5;
 
     // drug step
     private AutoCompleteTextView autoDrugTextView;
     private static final int MIN_CHARACTERS_TITLE = 3;
+
+    // notes step
+    private Spinner qunatitySpinner;
 
     // notes step
     private EditText notesEditText;
@@ -202,6 +209,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
             }
             activity.getSupportActionBar().setTitle(R.string.edit_schedule_drug);
             verticalStepperForm.setStepAsCompleted(DRUG_STEP_NUM);
+            verticalStepperForm.setStepAsCompleted(QUANTITY_STEP_NUM);
             verticalStepperForm.setStepAsCompleted(NOTES_STEP_NUM);
             verticalStepperForm.setStepAsCompleted(TIME_STEP_NUM);
             verticalStepperForm.setStepAsCompleted(DAYS_STEP_NUM);
@@ -239,7 +247,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -265,7 +272,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
 
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
@@ -289,7 +295,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         // Vertical Stepper form vars
         int colorPrimary = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
         int colorPrimaryDark = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
-        String[] stepsTitles = {"Drug", "Notes", "Hour", "Days",};
+        String[] stepsTitles = {"Drug", "Quantity", "Notes", "Hour", "Days",};
         //String[] stepsSubtitles = getResources().getStringArray(R.array.steps_subtitles);
 
         // Here we find and initialize the form
@@ -317,6 +323,9 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
             case DRUG_STEP_NUM:
                 view = addDrugStep();
                 break;
+            case QUANTITY_STEP_NUM:
+                view = createQuantityStep();
+                break;
             case NOTES_STEP_NUM:
                 view = createNotesStep();
                 break;
@@ -335,6 +344,9 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         switch (stepNumber) {
             case DRUG_STEP_NUM:
                 checkIfExists(autoDrugTextView.getText().toString());
+                break;
+            case QUANTITY_STEP_NUM:
+                verticalStepperForm.setStepAsCompleted(stepNumber);
                 break;
             case NOTES_STEP_NUM:
                 verticalStepperForm.setStepAsCompleted(stepNumber);
@@ -360,6 +372,22 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         scheduleDrugDO_tmp.setNotes(notesEditText.getText().toString());
         scheduleDrugDO_tmp.setHour(timeTextView.getText().toString());
 
+        switch (qunatitySpinner.getSelectedItemPosition()) {
+            case 0:
+                scheduleDrugDO_tmp.setQuantity(1.0);
+                break;
+            case 1:
+                scheduleDrugDO_tmp.setQuantity(0.5);
+                break;
+            case 2:
+                scheduleDrugDO_tmp.setQuantity(0.25);
+                break;
+            case 3:
+                scheduleDrugDO_tmp.setQuantity(2.0);
+                break;
+
+        }
+
         boolean addFirst = true;
         for (int i = 0; i < weekDaysString.length; i++) {
             if (weekDaysBool[i]) {
@@ -384,7 +412,8 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         addDrugView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         // Get a reference to the AutoCompleteTextView in the layout
         autoDrugTextView = (AutoCompleteTextView) addDrugView.findViewById(R.id.autocomplete_drug);
-
+        //set threshold of number of letter to show up to display
+        autoDrugTextView.setThreshold(1);
         FloatingActionButton fab2 = (FloatingActionButton) addDrugView.findViewById(R.id.fab2);
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -439,6 +468,40 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         });
 
         return addDrugView;
+    }
+
+    private View createQuantityStep() {
+        qunatitySpinner = new Spinner(getActivity());
+        qunatitySpinner.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        ArrayList<String> quantity_hint = new ArrayList<>();
+        quantity_hint.add("1");
+        quantity_hint.add("1/2");
+        quantity_hint.add("1/4");
+        quantity_hint.add("2");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, quantity_hint);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        qunatitySpinner.setAdapter(adapter);
+        if (scheduleDrugDO_tmp.getQuantity() != null) {
+            Log.w(LOG_TAG, "quantity " + scheduleDrugDO.getQuantity().toString());
+            switch (scheduleDrugDO.getQuantity().toString()) {
+                case "1":
+                    qunatitySpinner.setSelection(0);
+                    break;
+                case "0.5":
+                    qunatitySpinner.setSelection(1);
+                    break;
+                case "0.25":
+                    qunatitySpinner.setSelection(2);
+                    break;
+                case "2":
+                    qunatitySpinner.setSelection(3);
+                    break;
+            }
+        }
+
+        return qunatitySpinner;
     }
 
     private View createNotesStep() {
@@ -711,7 +774,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         protected Void doInBackground(Void... params) {
             //if it isn't edit mode we have to generate a new alarm id otherwise we keep using the old one
             if (!editMode) {
-                Log.w("ScheduleFormFragment","generate new alarm id");
+                Log.w("ScheduleFormFragment", "generate new alarm id");
                 //setting the alarmID field retriving the value from shared pref
                 SharedPreferences sharedPref = getContext().getSharedPreferences(
                         getContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
@@ -719,18 +782,18 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                 int old_alarm_id = sharedPref.getInt(getContext().getString(R.string.alarm_id), 0);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 int alarm_id = old_alarm_id + 1;
-                Log.w("ScheduleFormFragment","alarm id "+alarm_id);
+                Log.w("ScheduleFormFragment", "alarm id " + alarm_id);
                 editor.putInt(getString(R.string.alarm_id), alarm_id);
                 editor.apply();
                 scheduleDrugDO_tmp.setAlarmId(Double.parseDouble(alarm_id + ""));
             }
-            Log.w("ScheduleFormFragment","alarm id "+ scheduleDrugDO_tmp.getAlarmId().intValue());
+            Log.w("ScheduleFormFragment", "alarm id " + scheduleDrugDO_tmp.getAlarmId().intValue());
             scheduleDrugDO_tmp.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
             //save into db
             try {
                 if (editMode) {
-                        mapper.delete(scheduleDrugDO_old);
-                    }
+                    mapper.delete(scheduleDrugDO_old);
+                }
                 mapper.save(scheduleDrugDO_tmp);
                 success = true;
             } catch (final AmazonClientException ex) {
@@ -800,6 +863,24 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         if (notesEditText != null) {
             if (!notesEditText.getText().toString().isEmpty())
                 scheduleDrugDO_tmp.setNotes(notesEditText.getText().toString());
+        }
+        // Saving quantity field
+        if (qunatitySpinner != null) {
+            switch (qunatitySpinner.getSelectedItemPosition()) {
+                case 0:
+                    scheduleDrugDO_tmp.setQuantity(1.0);
+                    break;
+                case 1:
+                    scheduleDrugDO_tmp.setQuantity(0.5);
+                    break;
+                case 2:
+                    scheduleDrugDO_tmp.setQuantity(0.25);
+                    break;
+                case 3:
+                    scheduleDrugDO_tmp.setQuantity(2.0);
+                    break;
+
+            }
         }
         // Saving hour field
         if (timeTextView != null) {

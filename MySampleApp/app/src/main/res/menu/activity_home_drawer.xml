@@ -21,5 +21,9 @@
             android:id="@+id/nav_schedule"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Scheduler" />
+        <item
+            android:id="@+id/nav_pending_schedule"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/pending_schedule" />
     </group>
 </menu>

@@ -1,13 +1,23 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.mysampleapp.fragment.PendingScheduleFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <TextView
+        android:id="@+id/no_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="HELLO PENDING SCHEDULE" />
+        android:visibility="gone"
+        android:text="NO DATA"
+        android:gravity="center"
+        android:textSize="20sp"/>
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>
+
+
