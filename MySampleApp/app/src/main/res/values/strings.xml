@@ -198,5 +198,6 @@
     <string name="schedule">schedule</string>
     <string name="pending_schedule">pending schedule</string>
     <string name="quantity">quantity</string>
+    <string name="sottoscorta_alarm">sottoscorta_alarm</string>
 
 </resources>

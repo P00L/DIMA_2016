@@ -233,6 +233,7 @@ public class AlarmService extends IntentService {
         Log.w("AlarmService", "started update alarm");
         cancelAlarm(scheduleDrugDO_old);
         setAlarm(scheduleDrugDO);
+        //TODO DECIDERE SE ELIMNIARE E BASTA LA PENDING NOTIFICATION O SE RIMETTERLA CON IL NUOVO NOME
     }
 
     private void cancelAlarm(ScheduleDrugDO scheduleDrugDO) {

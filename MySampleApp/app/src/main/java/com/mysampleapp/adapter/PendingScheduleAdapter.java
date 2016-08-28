@@ -24,6 +24,7 @@ import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.mysampleapp.AlarmService;
 import com.mysampleapp.R;
+import com.mysampleapp.SottoscortaService;
 import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableDrug;
@@ -213,6 +214,10 @@ public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingSchedule
                 mList.remove(scheduleDrugDO);
                 PendingScheduleAdapter.this.notifyDataSetChanged();
                 clearSharedPref(scheduleDrugDO);
+                //start service to check sottoscorta
+                Intent i = new Intent(mContext, SottoscortaService.class);
+                i.putExtra(SottoscortaService.DRUG_EXTRA, drugItem);
+                mContext.startService(i);
 
             } else {
                 mProgressDialog.dismiss();

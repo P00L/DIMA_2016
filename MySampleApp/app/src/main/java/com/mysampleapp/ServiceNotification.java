@@ -76,12 +76,13 @@ public class ServiceNotification extends IntentService {
 
         Intent resultIntent = new Intent(context, HomeActivity.class);
         resultIntent.putExtra(SplashActivity.ACTIVITY_HOME_FRAGMENT_EXTRA, "fragment_pending");
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(HomeActivity.class);
-
-        // Adds the Intent that starts the Activity to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        -2,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
         mBuilder.setContentIntent(resultPendingIntent);
         mBuilder.setDefaults(NotificationCompat.DEFAULT_VIBRATE);
 // added action TODO now it is setted to return to the same place as clicking notification

@@ -30,6 +30,7 @@ import com.amazonaws.mobile.user.IdentityManager;
 import com.amazonaws.mobile.user.IdentityProvider;
 import com.mysampleapp.R;
 import com.mysampleapp.demo.DemoConfiguration;
+import com.mysampleapp.demo.nosql.DrugDO;
 import com.mysampleapp.demo.nosql.NoSQLSelectTableDemoFragment;
 import com.mysampleapp.fragment.DocFormFragment;
 import com.mysampleapp.fragment.DocListFragment;
@@ -57,6 +58,7 @@ public class HomeActivity extends AppCompatActivity
         PendingScheduleFragment.OnFragmentInteractionListener,
         View.OnClickListener {
 
+    public static final String DRUG_EXTRA = "drug";
     private Button signOutButton;
     private Button signInButton;
     private IdentityManager identityManager;
@@ -140,6 +142,24 @@ public class HomeActivity extends AppCompatActivity
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                             .commit();
                     //navigationView.setCheckedItem(R.id.nav_home);
+                    break;
+                case "fragment_drug":
+                    //create fake backstack if arriving from sottoscorta notification
+                    DrugDO drugDO = intent.getParcelableExtra(HomeActivity.DRUG_EXTRA);
+                    fragment = DrugListFragment.newInstance();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content_frame, fragment)
+                            .addToBackStack(null)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit();
+                    fragment = DrugFragment.newInstance(drugDO);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content_frame, fragment)
+                            .addToBackStack(null)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit();
                     break;
             }
         } else {
@@ -348,7 +368,7 @@ public class HomeActivity extends AppCompatActivity
             Fragment myFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
             //catch click of bottom back button and handle what to to according where we are
             if (myFragment != null && myFragment.isVisible()) {
-                Log.w("Back pressed", "current fragment"+myFragment.getClass().toString());
+                Log.w("Back pressed", "current fragment" + myFragment.getClass().toString());
                 switch (myFragment.getClass().toString()) {
                     case "class com.mysampleapp.fragment.HomeFragment":
                         //if we are in the home a back press le it finish
@@ -406,12 +426,12 @@ public class HomeActivity extends AppCompatActivity
                         backConfirmation.show(getSupportFragmentManager(), null);
                         break;
                     default:
-                        Log.w("Back pressed", "number of fragment"+getSupportFragmentManager().getBackStackEntryCount() + "");
+                        Log.w("Back pressed", "number of fragment" + getSupportFragmentManager().getBackStackEntryCount() + "");
                         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                            Log.w("Back pressed","POP");
+                            Log.w("Back pressed", "POP");
                             getSupportFragmentManager().popBackStack();
                         } else {
-                            Log.w("Back pressed","only one fragmente in back stack turn to home ");
+                            Log.w("Back pressed", "only one fragmente in back stack turn to home ");
                             fragment = HomeFragment.newInstance();
                             getSupportFragmentManager()
                                     .beginTransaction()
