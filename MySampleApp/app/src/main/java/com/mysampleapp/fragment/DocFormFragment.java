@@ -22,6 +22,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -140,6 +142,9 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+
+        fab.animate().translationY(fab.getHeight() + 32).setInterpolator(new AccelerateInterpolator(2)).start();
+
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
 
         String[] mySteps = {"Name", "Surname", "E-mail", "Active", "Phone Number", "Address"};
@@ -155,8 +160,6 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                 .primaryDarkColor(colorPrimaryDark)
                 .displayBottomNavigation(true) // It is true by default, so in this case this line is not necessary
                 .init();
-
-        fab.hide();
 
         if (editMode) {
             if (!assigned_tmp) {

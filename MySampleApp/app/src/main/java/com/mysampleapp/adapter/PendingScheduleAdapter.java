@@ -84,7 +84,7 @@ public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingSchedule
         holder.drugTextView.setText(scheduleDrugDO.getDrug());
         //set quantity to take
         switch (scheduleDrugDO.getQuantity().toString()){
-            case "1":
+            case "1.0":
                 holder.quantityTextView.setText("take " + "1");
                 break;
             case "0.5":
@@ -93,7 +93,7 @@ public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingSchedule
             case "0.25":
                 holder.quantityTextView.setText("take " + "1/4");
                 break;
-            case "2":
+            case "2.0":
                 holder.quantityTextView.setText("take " + "2");
                 break;
         }

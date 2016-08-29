@@ -16,11 +16,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.amazonaws.AmazonClientException;
 import com.mysampleapp.DetailsTransition;
 import com.mysampleapp.R;
@@ -47,6 +54,7 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
     private ProgressDialog mProgressDialog;
     private DemoNoSQLOperation operation;
     private TextView noDataTextView;
+    private FloatingActionButton fab;
 
 
     public DocListFragment() {
@@ -84,6 +92,25 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(false);
+
+        fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+        fab.setImageResource(R.drawable.ic_action_plus);
+
+        fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+
+        //hide fab on scroll down show on scroll up
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    //fab.hide();
+                    fab.animate().translationY(fab.getHeight() + 32).setInterpolator(new AccelerateInterpolator(2)).start();
+                } else if (dy < 0)
+                    //fab.show();
+                    fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+            }
+        });
+
         noDataTextView = (TextView) view.findViewById(R.id.no_data);
         if (items == null) {
             new MyAsyncTask(this).execute();
@@ -97,9 +124,6 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
                 noDataTextView.setVisibility(View.VISIBLE);
             }
         }
-        final FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
-        if (!fab.isShown())
-            fab.show();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,6 +192,7 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
     private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
         Boolean success = false;
         DocListFragment listClass;
+
         public MyAsyncTask(DocListFragment listFragment) {
             listClass = listFragment;
         }
@@ -202,7 +227,7 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
             if (success && items.size() > 0) {
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
-                mAdapter = new DocAdapter(getContext(), items,listClass);
+                mAdapter = new DocAdapter(getContext(), items, listClass);
                 mRecyclerView.setAdapter(mAdapter);
                 mProgressDialog.dismiss();
             } else {
@@ -221,6 +246,14 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
     //handle on click to perform animation
     @Override
     public void onClick(ImageView imageView, int position, boolean isLongClick) {
+
+        fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+        fab.setImageResource(R.drawable.ic_action_modify);
+        RotateAnimation rotate = new RotateAnimation(360, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(500);
+        rotate.setInterpolator(new LinearInterpolator());
+        fab.startAnimation(rotate);
+
 
         //see github project to more detail
         Fragment docFragment = DocFragment.newInstance(items.get(position));

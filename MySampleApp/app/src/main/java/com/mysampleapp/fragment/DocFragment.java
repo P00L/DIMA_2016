@@ -11,7 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.TextView;
+
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DoctorDO;
@@ -24,6 +29,7 @@ public class DocFragment extends Fragment {
     private static final String ARG_DOCDO = "param1";
     private DoctorDO doctorDO;
     private AppCompatActivity activity;
+    private FloatingActionButton fab;
 
     public DocFragment() {
         // Required empty public constructor
@@ -58,14 +64,15 @@ public class DocFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //Log.w("docdo", doctorDO.getName());
         activity = (AppCompatActivity) getActivity();
-        FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
-        if (!fab.isShown())
-            fab.show();
+
+        fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+        fab.setImageResource(R.drawable.ic_action_modify);
+        fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //il fab manda al form di edit e passa doctorDO come parametro da salvare nel Bundle
-                DocFormFragment fragment = DocFormFragment.newInstance(doctorDO,true,new ArrayList<DoctorDO>());
+                DocFormFragment fragment = DocFormFragment.newInstance(doctorDO, true, new ArrayList<DoctorDO>());
                 activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
@@ -82,11 +89,16 @@ public class DocFragment extends Fragment {
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        ((HomeActivity)activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
-        ((HomeActivity)activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
+        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
+        ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
+                fab.setImageResource(R.drawable.ic_action_plus);
+                RotateAnimation rotate = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                rotate.setDuration(500);
+                rotate.setInterpolator(new LinearInterpolator());
+                fab.startAnimation(rotate);
                 activity.getSupportFragmentManager().popBackStack();
             }
         });
