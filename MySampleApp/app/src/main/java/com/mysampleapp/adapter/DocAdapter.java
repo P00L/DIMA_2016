@@ -2,11 +2,13 @@ package com.mysampleapp.adapter;
 
 import android.content.Context;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,10 +22,12 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
     private Context mContext;
     private ArrayList<DoctorDO> mList;
+    private final ItemClickListenerAnimation listener;
 
-    public DocAdapter(Context contexts, ArrayList<DoctorDO> list) {
+    public DocAdapter(Context contexts, ArrayList<DoctorDO> list, ItemClickListenerAnimation listener) {
         this.mContext = contexts;
         this.mList = list;
+        this.listener = listener;
     }
 
     @Override
@@ -34,26 +38,22 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        //TODO togliere toast
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        //setting up all the value of the image according to the position of the row
         holder.titleTextView.setText(mList.get(position).getName());
+        holder.imageView.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
+        //handle click listener of all the row
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
-                if (isLongClick) {
-                    Toast.makeText(mContext, "#" + position + " - " + mList.get(position) + " (Long click)", Toast.LENGTH_SHORT).show();
-                } else {
-                    DocFragment fragment = DocFragment.newInstance(mList.get(position));
-                    AppCompatActivity activity = (AppCompatActivity) mContext;
-                    activity.getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.content_frame, fragment)
-                            .addToBackStack(null)
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .commit();
-                }
+                //redirect it to the fragment list passing the image view element shared to be animated
+                listener.onClick(holder.imageView, position, isLongClick);
             }
         });
+        //setting up the name of the shared element
+        //done così in the github tutorial i leave it like this
+        ViewCompat.setTransitionName(holder.imageView, String.valueOf(position) + "_image");
+
     }
 
     @Override
@@ -61,14 +61,18 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
         return mList.size();
     }
 
+    //this listener is to catch click and long click on all the row of the recycler view
     public static class ViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener, View.OnLongClickListener{
+            implements View.OnClickListener, View.OnLongClickListener {
         private TextView titleTextView;
         private ItemClickListener clickListener;
+        private ImageView imageView;
 
+        //getting the reference of all the view element of one row
         public ViewHolder(View itemView) {
             super(itemView);
-            titleTextView = (TextView)itemView.findViewById(R.id.text_name);
+            titleTextView = (TextView) itemView.findViewById(R.id.text_name);
+            imageView = (ImageView) itemView.findViewById(R.id.icon_ID);
             itemView.setTag(itemView);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);

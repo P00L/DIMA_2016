@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -14,16 +15,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Fade;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amazonaws.AmazonClientException;
+import com.mysampleapp.DetailsTransition;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.adapter.DocAdapter;
+import com.mysampleapp.adapter.ItemClickListener;
+import com.mysampleapp.adapter.ItemClickListenerAnimation;
 import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableDoctor;
@@ -32,7 +38,7 @@ import com.mysampleapp.demo.nosql.DoctorDO;
 
 import java.util.ArrayList;
 
-public class DocListFragment extends Fragment {
+public class DocListFragment extends Fragment implements ItemClickListenerAnimation {
 
     private static final String ARG_DOCLIST = "param1";
     private OnFragmentInteractionListener mListener;
@@ -82,13 +88,13 @@ public class DocListFragment extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(false);
         noDataTextView = (TextView) view.findViewById(R.id.no_data);
-        if (items == null){
-            new MyAsyncTask().execute();
+        if (items == null) {
+            new MyAsyncTask(this).execute();
         } else {
             if (items.size() > 0) {
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
-                mAdapter = new DocAdapter(getContext(), items);
+                mAdapter = new DocAdapter(getContext(), items, this);
                 mRecyclerView.setAdapter(mAdapter);
             } else {
                 noDataTextView.setVisibility(View.VISIBLE);
@@ -164,9 +170,9 @@ public class DocListFragment extends Fragment {
 
     private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
         Boolean success = false;
-
-        public MyAsyncTask() {
-
+        DocListFragment listClass;
+        public MyAsyncTask(DocListFragment listFragment) {
+            listClass = listFragment;
         }
 
         @Override
@@ -199,7 +205,7 @@ public class DocListFragment extends Fragment {
             if (success && items.size() > 0) {
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
-                mAdapter = new DocAdapter(getContext(), items);
+                mAdapter = new DocAdapter(getContext(), items,listClass);
                 mRecyclerView.setAdapter(mAdapter);
                 mProgressDialog.dismiss();
             } else {
@@ -213,5 +219,31 @@ public class DocListFragment extends Fragment {
     public void onPause() {
         super.onPause();
         getArguments().putParcelableArrayList(ARG_DOCLIST, items);
+    }
+
+    //handle on click to perform animation
+    @Override
+    public void onClick(ImageView imageView, int position, boolean isLongClick) {
+
+        //see github project to more detail
+        Fragment docFragment = DocFragment.newInstance(items.get(position));
+
+        // Note that we need the API version check here because the actual transition classes (e.g. Fade)
+        // are not in the support library and are only available in API 21+. The methods we are calling on the Fragment
+        // ARE available in the support library (though they don't do anything on API < 21)
+        //qui pendo potremo giocare con le animazioni come vogliamo
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            docFragment.setSharedElementEnterTransition(new DetailsTransition());
+            docFragment.setEnterTransition(new Fade());
+            setExitTransition(new Fade());
+            docFragment.setSharedElementReturnTransition(new DetailsTransition());
+        }
+
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .addSharedElement(imageView, "kittenImage")
+                .replace(R.id.content_frame, docFragment)
+                .addToBackStack(null)
+                .commit();
     }
 }
