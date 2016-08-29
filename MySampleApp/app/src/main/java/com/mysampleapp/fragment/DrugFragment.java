@@ -100,8 +100,24 @@ public class DrugFragment extends Fragment {
 
             }
         });
-        TextView textView = (TextView) view.findViewById(R.id.drug_name);
-        textView.setText(drugDO.getName());
+        TextView textViewName = (TextView) view.findViewById(R.id.drug_name);
+        textViewName.setText("Name: "+drugDO.getName());
+
+        TextView textViewType = (TextView) view.findViewById(R.id.drug_type);
+        textViewType.setText("Type: "+drugDO.getType());
+
+        TextView textViewWeight = (TextView) view.findViewById(R.id.drug_weight);
+        textViewWeight.setText("Weight: "+String.valueOf(drugDO.getWeight().intValue()));
+
+        TextView textViewNotes = (TextView) view.findViewById(R.id.drug_notes);
+        textViewNotes.setText("Notes: "+drugDO.getNotes());
+
+        TextView textViewQty = (TextView) view.findViewById(R.id.drug_qty);
+        textViewQty.setText("Quantity: "+String.valueOf(drugDO.getQuantity().intValue()));
+
+        TextView textViewMinQty = (TextView) view.findViewById(R.id.drug_minqty);
+        textViewMinQty.setText("Sottoscorta: "+String.valueOf(drugDO.getMinqty().intValue()));
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

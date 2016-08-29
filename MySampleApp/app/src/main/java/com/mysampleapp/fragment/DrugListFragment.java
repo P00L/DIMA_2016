@@ -37,6 +37,7 @@ import com.mysampleapp.demo.nosql.DrugDO;
 import java.util.ArrayList;
 
 
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
