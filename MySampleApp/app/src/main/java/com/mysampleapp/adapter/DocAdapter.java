@@ -1,20 +1,16 @@
 package com.mysampleapp.adapter;
 
 import android.content.Context;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mysampleapp.R;
 import com.mysampleapp.demo.nosql.DoctorDO;
-import com.mysampleapp.fragment.DocFragment;
 
 import java.util.ArrayList;
 
@@ -41,7 +37,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
     public void onBindViewHolder(final ViewHolder holder, int position) {
         //setting up all the value of the image according to the position of the row
         holder.titleTextView.setText(mList.get(position).getName());
-        holder.imageView.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
+        holder.imageView.setImageResource(R.drawable.ic_icon_doctor);
         //handle click listener of all the row
         holder.setClickListener(new ItemClickListener() {
             @Override

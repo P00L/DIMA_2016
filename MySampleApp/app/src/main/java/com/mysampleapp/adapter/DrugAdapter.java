@@ -1,18 +1,16 @@
 package com.mysampleapp.adapter;
 
 import android.content.Context;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mysampleapp.R;
 import com.mysampleapp.demo.nosql.DrugDO;
-import com.mysampleapp.fragment.DrugFragment;
 
 import java.util.ArrayList;
 
@@ -20,10 +18,12 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
 
     private Context mContext;
     private ArrayList<DrugDO> mList;
+    private final ItemClickListenerAnimation listener;
 
-    public DrugAdapter(Context contexts, ArrayList<DrugDO> list) {
+    public DrugAdapter(Context contexts, ArrayList<DrugDO> list, ItemClickListenerAnimation listener) {
         this.mContext = contexts;
         this.mList = list;
+        this.listener = listener;
     }
 
     @Override
@@ -34,28 +34,17 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        //TODO togliere toast
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.titleTextView.setText(mList.get(position).getName());
+        holder.imageView.setImageResource(R.drawable.ic_drug_pill);
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
-                if (isLongClick) {
-                    Toast.makeText(mContext, "#" + position + " - " + mList.get(position) + " (Long click)", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(mContext, "#" + position + " - " + mList.get(position), Toast.LENGTH_SHORT).show();
-                    DrugFragment fragment = DrugFragment.newInstance(mList.get(position));
-                    fragment.setResult(mList.get(position));
-                    AppCompatActivity activity = (AppCompatActivity) mContext;
-                    activity.getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.content_frame, fragment)
-                            .addToBackStack(null)
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .commit();
-                }
+                listener.onClick(holder.imageView, position, isLongClick);
             }
         });
+
+        ViewCompat.setTransitionName(holder.imageView, String.valueOf(position) + "_image");
     }
 
     @Override
@@ -66,11 +55,13 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener{
         private TextView titleTextView;
+        private ImageView imageView;
         private ItemClickListener clickListener;
 
         public ViewHolder(View itemView) {
             super(itemView);
             titleTextView = (TextView)itemView.findViewById(R.id.text_name);
+            imageView = (ImageView) itemView.findViewById(R.id.icon_ID);
             itemView.setTag(itemView);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);

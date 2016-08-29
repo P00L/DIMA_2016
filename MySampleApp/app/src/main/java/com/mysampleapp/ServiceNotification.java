@@ -7,13 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.activity.SplashActivity;
 import com.mysampleapp.demo.nosql.ScheduleDrugDO;
-import com.mysampleapp.fragment.ScheduleFormFragment;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -59,7 +57,7 @@ public class ServiceNotification extends IntentService {
     public void createNotification(Context context, Intent intent, Set<String> set_result) {
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_launcher1)
                 .setContentTitle("Drug reminder")
                 .setContentText("...");
         NotificationCompat.InboxStyle inboxStyle =
@@ -86,7 +84,7 @@ public class ServiceNotification extends IntentService {
         mBuilder.setContentIntent(resultPendingIntent);
         mBuilder.setDefaults(NotificationCompat.DEFAULT_VIBRATE);
 // added action TODO now it is setted to return to the same place as clicking notification
-        mBuilder.addAction(R.mipmap.ic_launcher, "Call", resultPendingIntent);
+        mBuilder.addAction(R.mipmap.ic_launcher1, "Call", resultPendingIntent);
 
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
         mBuilder.setAutoCancel(true);

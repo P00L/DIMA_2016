@@ -1,11 +1,23 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.mysampleapp.fragment.DrugFragment">
+
+    <ImageView
+        android:id="@+id/icon_ID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="111dp"
+        android:layout_gravity="center"
+        android:transitionName="kittenImage"
+        tools:ignore="ContentDescription,UnusedAttribute"
+        android:src="@drawable/ic_drug_pill"/>
 
     <TextView
         android:id="@+id/drug_name"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ASD"/>
+</LinearLayout>

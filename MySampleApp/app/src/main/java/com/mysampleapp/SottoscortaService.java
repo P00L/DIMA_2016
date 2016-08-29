@@ -7,13 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.activity.SplashActivity;
 import com.mysampleapp.demo.nosql.DrugDO;
-import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -90,7 +88,7 @@ public class SottoscortaService extends IntentService {
     public void createNotification(Context context, DrugDO drugDO, int notificatoID) {
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_launcher1)
                 .setContentTitle("Sottoscorta")
                 .setContentText(drugDO.getName());
 

@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:transitionName="kittenImage"
         tools:ignore="ContentDescription,UnusedAttribute"
-        android:src="@drawable/com_facebook_profile_picture_blank_square"/>
+        android:src="@drawable/ic_icon_doctor"/>
 
     <TextView
         android:id="@+id/doc_name"

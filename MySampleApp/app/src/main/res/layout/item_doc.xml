@@ -10,7 +10,7 @@
         android:layout_height="108dp"
         android:maxHeight="100dp"
         android:maxWidth="100dp"
-        android:src="@drawable/com_facebook_profile_picture_blank_square"/>
+        android:src="@drawable/ic_icon_doctor"/>
 
     <TextView
         android:id="@+id/text_name"
