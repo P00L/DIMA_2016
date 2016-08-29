@@ -66,8 +66,11 @@ public class DocFragment extends Fragment {
         activity = (AppCompatActivity) getActivity();
 
         fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+        if (!fab.isShown()) {
+            fab.show();
+        }
         fab.setImageResource(R.drawable.ic_action_modify);
-        fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+        //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

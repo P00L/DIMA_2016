@@ -39,8 +39,11 @@ import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableDoctor;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
 import com.mysampleapp.demo.nosql.DoctorDO;
+import com.mysampleapp.demo.nosql.DrugDO;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class DocListFragment extends Fragment implements ItemClickListenerAnimation {
 
@@ -94,20 +97,25 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
         mRecyclerView.setHasFixedSize(false);
 
         fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+
+        if(!fab.isShown()){
+            fab.show();
+        }
+
         fab.setImageResource(R.drawable.ic_action_plus);
 
-        fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+        //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
 
         //hide fab on scroll down show on scroll up
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0) {
-                    //fab.hide();
-                    fab.animate().translationY(fab.getHeight() + 32).setInterpolator(new AccelerateInterpolator(2)).start();
+                    fab.hide();
+                    //fab.animate().translationY(fab.getHeight() + 32).setInterpolator(new AccelerateInterpolator(2)).start();
                 } else if (dy < 0)
-                    //fab.show();
-                    fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                    fab.show();
+                    //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
             }
         });
 
@@ -118,6 +126,12 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
             if (items.size() > 0) {
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
+                Collections.sort(items, (new Comparator<DoctorDO>() {
+                    @Override
+                    public int compare(DoctorDO s1, DoctorDO s2) {
+                        return s1.getName().compareTo(s2.getName());   //or whatever your sorting algorithm
+                    }
+                }));
                 mAdapter = new DocAdapter(getContext(), items, this);
                 mRecyclerView.setAdapter(mAdapter);
             } else {
@@ -227,6 +241,12 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
             if (success && items.size() > 0) {
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
+                Collections.sort(items, (new Comparator<DoctorDO>() {
+                    @Override
+                    public int compare(DoctorDO s1, DoctorDO s2) {
+                        return s1.getName().compareTo(s2.getName());   //or whatever your sorting algorithm
+                    }
+                }));
                 mAdapter = new DocAdapter(getContext(), items, listClass);
                 mRecyclerView.setAdapter(mAdapter);
                 mProgressDialog.dismiss();
@@ -247,7 +267,7 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
     @Override
     public void onClick(ImageView imageView, int position, boolean isLongClick) {
 
-        fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+        //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
         fab.setImageResource(R.drawable.ic_action_modify);
         RotateAnimation rotate = new RotateAnimation(360, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotate.setDuration(500);

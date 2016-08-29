@@ -143,7 +143,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
 
-        fab.animate().translationY(fab.getHeight() + 32).setInterpolator(new AccelerateInterpolator(2)).start();
+        fab.hide();
 
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
 

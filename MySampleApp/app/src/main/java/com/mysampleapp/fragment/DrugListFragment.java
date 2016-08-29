@@ -19,6 +19,9 @@ import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,9 +36,11 @@ import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableDrug;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
 import com.mysampleapp.demo.nosql.DrugDO;
+import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 
 import java.util.ArrayList;
-
+import java.util.Collections;
+import java.util.Comparator;
 
 
 /**
@@ -58,6 +63,7 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
     private ProgressDialog mProgressDialog;
     private DemoNoSQLOperation operation;
     private TextView noDataTextView;
+    private FloatingActionButton fab;
 
 
     public DrugListFragment() {
@@ -95,8 +101,32 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
                 .getNoSQLTableByTableName("Drug");
         operation = (DemoNoSQLOperation) demoTable.getOperationByName(getContext(), "ASD");
 
+        fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(false);
+
+        if (!fab.isShown()) {
+            fab.show();
+        }
+
+        fab.setImageResource(R.drawable.ic_action_plus);
+
+        //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+
+        //hide fab on scroll down show on scroll up
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    fab.hide();
+                    //fab.animate().translationY(fab.getHeight() + 32).setInterpolator(new AccelerateInterpolator(2)).start();
+                } else if (dy < 0)
+                    fab.show();
+                //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+            }
+        });
+
         noDataTextView = (TextView) view.findViewById(R.id.no_data);
         if (items == null) {
             new MyAsyncTask(this).execute();
@@ -104,6 +134,12 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
             if (items.size() > 0) {
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
+                Collections.sort(items, (new Comparator<DrugDO>() {
+                    @Override
+                    public int compare(DrugDO s1, DrugDO s2) {
+                        return s1.getName().compareTo(s2.getName());   //or whatever your sorting algorithm
+                    }
+                }));
                 mAdapter = new DrugAdapter(getContext(), items, this);
                 mRecyclerView.setAdapter(mAdapter);
             } else {
@@ -111,9 +147,6 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
             }
         }
 
-        final FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
-        if (!fab.isShown())
-            fab.show();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -186,6 +219,7 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
     private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
         Boolean success = false;
         DrugListFragment listClass;
+
         public MyAsyncTask(DrugListFragment listFragment) {
             listClass = listFragment;
         }
@@ -220,6 +254,12 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
             if (success && items.size() > 0) {
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
+                Collections.sort(items, (new Comparator<DrugDO>() {
+                    @Override
+                    public int compare(DrugDO s1, DrugDO s2) {
+                        return s1.getName().compareTo(s2.getName());   //or whatever your sorting algorithm
+                    }
+                }));
                 mAdapter = new DrugAdapter(getContext(), items, listClass);
                 mRecyclerView.setAdapter(mAdapter);
                 mProgressDialog.dismiss();
@@ -239,6 +279,12 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
     //handle on click to perform animation
     @Override
     public void onClick(ImageView imageView, int position, boolean isLongClick) {
+
+        fab.setImageResource(R.drawable.ic_action_modify);
+        RotateAnimation rotate = new RotateAnimation(360, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(500);
+        rotate.setInterpolator(new LinearInterpolator());
+        fab.startAnimation(rotate);
 
         //see github project to more detail
         Fragment drugFragment = DrugFragment.newInstance(items.get(position));

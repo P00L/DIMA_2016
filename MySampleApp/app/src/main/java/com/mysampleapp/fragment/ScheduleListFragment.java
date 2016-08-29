@@ -19,6 +19,9 @@ import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,6 +54,7 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
     private ProgressDialog mProgressDialog;
     private DemoNoSQLOperation operation;
     private TextView noDataTextView;
+    private FloatingActionButton fab;
 
     public ScheduleListFragment() {
         // Required empty public constructor
@@ -91,9 +95,33 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
                 .getNoSQLTableByTableName("ScheduleDrug");
         operation = (DemoNoSQLOperation) demoTable.getOperationByName(getContext(), "all");
         noDataTextView = (TextView) view.findViewById(R.id.no_data);
-        FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
-        if (!fab.isShown())
+
+        fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(false);
+
+        if(!fab.isShown()){
             fab.show();
+        }
+
+        fab.setImageResource(R.drawable.ic_action_plus);
+
+        //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+
+        //hide fab on scroll down show on scroll up
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    fab.hide();
+                    //fab.animate().translationY(fab.getHeight() + 32).setInterpolator(new AccelerateInterpolator(2)).start();
+                } else if (dy < 0)
+                    fab.show();
+                //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+            }
+        });
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,9 +139,6 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
 
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_schedule);
-
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
-        mRecyclerView.setHasFixedSize(false);
 
         if (items == null) {
             new MyAsyncTask(this).execute();
@@ -254,6 +279,12 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
     //handle on click to perform animation
     @Override
     public void onClick(ImageView imageView, int position, boolean isLongClick) {
+
+        fab.setImageResource(R.drawable.ic_action_modify);
+        RotateAnimation rotate = new RotateAnimation(360, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(500);
+        rotate.setInterpolator(new LinearInterpolator());
+        fab.startAnimation(rotate);
 
         //see github project to more detail
         Fragment scheduleFragment = ScheduleFragment.newInstance(items.get(position));

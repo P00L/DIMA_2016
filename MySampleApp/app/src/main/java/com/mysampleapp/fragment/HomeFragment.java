@@ -58,8 +58,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         activity = (AppCompatActivity) getActivity();
         final FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
-        if (!fab.isShown())
-            fab.show();
+        fab.hide();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

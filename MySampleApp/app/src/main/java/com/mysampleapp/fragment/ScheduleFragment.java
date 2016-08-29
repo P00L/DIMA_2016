@@ -13,6 +13,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.TextView;
 
 import com.mysampleapp.R;
@@ -35,6 +38,7 @@ public class ScheduleFragment extends Fragment {
     private AppCompatActivity activity;
     private OnFragmentInteractionListener mListener;
     private ScheduleDrugDO scheduleDrugDO;
+    private FloatingActionButton fab;
 
     public ScheduleFragment() {
         // Required empty public constructor
@@ -69,9 +73,11 @@ public class ScheduleFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //Log.w("docdo", doctorDO.getName());
         activity = (AppCompatActivity) getActivity();
-        FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
-        if (!fab.isShown())
+        fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+        fab.setImageResource(R.drawable.ic_action_modify);
+        if (!fab.isShown()) {
             fab.show();
+        }
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,6 +104,11 @@ public class ScheduleFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
+                fab.setImageResource(R.drawable.ic_action_plus);
+                RotateAnimation rotate = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                rotate.setDuration(500);
+                rotate.setInterpolator(new LinearInterpolator());
+                fab.startAnimation(rotate);
                 activity.getSupportFragmentManager().popBackStack();
 
             }

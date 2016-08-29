@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.TextView;
 
 import com.mysampleapp.R;
@@ -35,6 +38,7 @@ public class DrugFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private DrugDO drugDO;
     private AppCompatActivity activity;
+    private FloatingActionButton fab;
 
 
     // TODO: Rename and change types and number of parameters
@@ -68,9 +72,11 @@ public class DrugFragment extends Fragment {
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         activity = (AppCompatActivity) getActivity();
-        FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
-        if (!fab.isShown())
+        fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+        fab.setImageResource(R.drawable.ic_action_modify);
+        if (!fab.isShown()) {
             fab.show();
+        }
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,6 +102,11 @@ public class DrugFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
+                fab.setImageResource(R.drawable.ic_action_plus);
+                RotateAnimation rotate = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                rotate.setDuration(500);
+                rotate.setInterpolator(new LinearInterpolator());
+                fab.startAnimation(rotate);
                 activity.getSupportFragmentManager().popBackStack();
 
             }

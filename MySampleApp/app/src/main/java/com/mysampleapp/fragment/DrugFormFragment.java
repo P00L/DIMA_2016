@@ -148,8 +148,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                 .displayBottomNavigation(true) // It is true by default, so in this case this line is not necessary
                 .init();
 
-        if (fab.isShown())
-            fab.hide();
+        fab.hide();
 
         //se in edit mode e assign_tmp == true, inizializzo drugDO_old a quello attuale;
         //se giro il display in onpause setto assign_tmp a false in modo da non riassegnare i campi
@@ -181,7 +180,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
+        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_x);
         ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
