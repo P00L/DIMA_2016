@@ -11,12 +11,17 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.transition.Fade;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -36,7 +41,6 @@ import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableDrug;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
 import com.mysampleapp.demo.nosql.DrugDO;
-import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,9 +60,11 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
     private static final String ARG_DRUGLIST = "param1";
     private OnFragmentInteractionListener mListener;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    //private RecyclerView.Adapter mAdapter;
+    private DrugAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<DrugDO> items;
+    private String[] drugnames;
     private AppCompatActivity activity;
     private ProgressDialog mProgressDialog;
     private DemoNoSQLOperation operation;
@@ -83,6 +89,7 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
             items = getArguments().getParcelableArrayList(ARG_DRUGLIST);
         }
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -162,6 +169,7 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
         });
 
         activity.getSupportActionBar().setTitle(R.string.drugs);
+
         // set nav menu item checked
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_drug);
@@ -306,5 +314,37 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
                 .replace(R.id.content_frame, drugFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.search_menu, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = new SearchView(activity.getSupportActionBar().getThemedContext());
+        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+        MenuItemCompat.setActionView(item, searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //mAdapter.filter(query);
+                return false;
+                }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //mAdapter.filter(newText);
+                mAdapter.getFilter().filter(newText);
+                return true;
+                }
+        });
+
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                }
+        });
     }
 }
