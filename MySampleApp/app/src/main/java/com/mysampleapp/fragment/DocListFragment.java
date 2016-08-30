@@ -1,6 +1,5 @@
 package com.mysampleapp.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -8,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -20,12 +20,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.amazonaws.AmazonClientException;
@@ -39,7 +38,6 @@ import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableDoctor;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
 import com.mysampleapp.demo.nosql.DoctorDO;
-import com.mysampleapp.demo.nosql.DrugDO;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,15 +46,19 @@ import java.util.Comparator;
 public class DocListFragment extends Fragment implements ItemClickListenerAnimation {
 
     private static final String ARG_DOCLIST = "param1";
+    private static final String ARG_NO_DATA_TEXT = "param2";
+    private final static String LOG_TAG = DocListFragment.class.getSimpleName();
+
     private OnFragmentInteractionListener mListener;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<DoctorDO> items;
     private AppCompatActivity activity;
-    private ProgressDialog mProgressDialog;
+    private ProgressBar mProgress;
     private DemoNoSQLOperation operation;
     private TextView noDataTextView;
+    private String noDataString;
     private FloatingActionButton fab;
 
 
@@ -75,6 +77,7 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
     public void onCreate(Bundle savedInstanceState) {
         if (getArguments() != null) {
             items = getArguments().getParcelableArrayList(ARG_DOCLIST);
+            noDataString = getArguments().getString(ARG_NO_DATA_TEXT);
         }
         super.onCreate(savedInstanceState);
     }
@@ -96,9 +99,11 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(false);
 
+        mProgress = (ProgressBar) view.findViewById(R.id.progress_bar);
+
         fab = (FloatingActionButton) activity.findViewById(R.id.fab);
 
-        if(!fab.isShown()){
+        if (!fab.isShown()) {
             fab.show();
         }
 
@@ -115,15 +120,21 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
                     //fab.animate().translationY(fab.getHeight() + 32).setInterpolator(new AccelerateInterpolator(2)).start();
                 } else if (dy < 0)
                     fab.show();
-                    //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
             }
         });
 
         noDataTextView = (TextView) view.findViewById(R.id.no_data);
+
+        noDataTextView.setText(noDataString);
+
+        //restore
         if (items == null) {
+            Log.w(LOG_TAG, "load");
             new MyAsyncTask(this).execute();
         } else {
             if (items.size() > 0) {
+                Log.w(LOG_TAG, "restore items");
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 Collections.sort(items, (new Comparator<DoctorDO>() {
@@ -134,25 +145,34 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
                 }));
                 mAdapter = new DocAdapter(getContext(), items, this);
                 mRecyclerView.setAdapter(mAdapter);
+                enableFab();
             } else {
-                noDataTextView.setVisibility(View.VISIBLE);
+                Log.w(LOG_TAG, "restore no data string");
+                enableFab();
+                enableEmptyState("Click \"+\" \n to insert a doctor");
             }
         }
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment fragment = DocFormFragment.newInstance(new DoctorDO(), false, items);
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content_frame, fragment)
-                        .addToBackStack(null)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-            }
-        });
+
+        fab.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Fragment fragment = DocFormFragment.newInstance(new DoctorDO(), false, items);
+                        activity.getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.content_frame, fragment)
+                                .addToBackStack(null)
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .commit();
+                    }
+                }
+        );
 
         // set action bar title
-        activity.getSupportActionBar().setTitle(R.string.doctors);
+        activity.getSupportActionBar().
+
+                setTitle(R.string.doctors);
+
         // set nav menu item checked
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_doc);
@@ -160,19 +180,22 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_hamburger);
-        ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // handle toolbar home button click
-                DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
-                if (drawer.isDrawerOpen(GravityCompat.START)) {
-                    drawer.closeDrawer(GravityCompat.START);
-                } else {
-                    drawer.openDrawer(GravityCompat.START);
+        ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // handle toolbar home button click
+                        DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
+                        if (drawer.isDrawerOpen(GravityCompat.START)) {
+                            drawer.closeDrawer(GravityCompat.START);
+                        } else {
+                            drawer.openDrawer(GravityCompat.START);
+                        }
+
+                    }
                 }
 
-            }
-        });
+        );
     }
 
     public void onButtonPressed(Uri uri) {
@@ -205,6 +228,7 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
 
     private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
         Boolean success = false;
+        Boolean successQuery = false;
         DocListFragment listClass;
 
         public MyAsyncTask(DocListFragment listFragment) {
@@ -214,22 +238,17 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Create a progressdialog
-            mProgressDialog = new ProgressDialog(getActivity());
-            // Set progressdialog title
-            mProgressDialog.setTitle("We are working for you");
-            // Set progressdialog message
-            mProgressDialog.setMessage("Loading...");
-            mProgressDialog.setIndeterminate(false);
-            // Show progressdialog
-            mProgressDialog.show();
+            disableEmptyState();
+            disableFab();
+            mProgress.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                success = operation.executeOperation();
+                successQuery = operation.executeOperation();
                 items = ((DemoNoSQLTableDoctor.DemoQueryWithPartitionKeyOnly) operation).getResultArray();
+                success = true;
             } catch (final AmazonClientException ex) {
                 success = false;
             }
@@ -238,29 +257,57 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
 
         @Override
         protected void onPostExecute(Void args) {
-            if (success && items.size() > 0) {
-                mLayoutManager = new LinearLayoutManager(getActivity());
-                mRecyclerView.setLayoutManager(mLayoutManager);
-                Collections.sort(items, (new Comparator<DoctorDO>() {
-                    @Override
-                    public int compare(DoctorDO s1, DoctorDO s2) {
-                        return s1.getName().compareTo(s2.getName());   //or whatever your sorting algorithm
-                    }
-                }));
-                mAdapter = new DocAdapter(getContext(), items, listClass);
-                mRecyclerView.setAdapter(mAdapter);
-                mProgressDialog.dismiss();
+            mProgress.setVisibility(View.GONE);
+            if (success) {
+                Log.w(LOG_TAG, "SUCCESS " + items.size() + "");
+                if (successQuery) {
+                    Log.w(LOG_TAG, "SUCCESS " + "SUCCESS");
+                    enableFab();
+                    mLayoutManager = new LinearLayoutManager(getActivity());
+                    mRecyclerView.setLayoutManager(mLayoutManager);
+                    Collections.sort(items, (new Comparator<DoctorDO>() {
+                        @Override
+                        public int compare(DoctorDO s1, DoctorDO s2) {
+                            return s1.getName().compareTo(s2.getName());   //or whatever your sorting algorithm
+                        }
+                    }));
+                    mAdapter = new DocAdapter(getContext(), items, listClass);
+                    mRecyclerView.setAdapter(mAdapter);
+                } else {
+                    Log.w(LOG_TAG, "SUCCESS " + "FAIL");
+                    enableFab();
+                    enableEmptyState("Click \"+\" \n to insert a doctor");
+                }
+
             } else {
-                mProgressDialog.dismiss();
-                noDataTextView.setVisibility(View.VISIBLE);
+                if (successQuery) {
+                    Log.w(LOG_TAG, "FAIL " + "SUCCESS");
+                    enableFab();
+                    enableEmptyState("Click \"+\" \n to insert a doctor");
+                } else {
+                    Log.w(LOG_TAG, "FAIL " + "FAIL");
+                    Snackbar snackbar = Snackbar
+                            .make(fab, "No internet connection!", Snackbar.LENGTH_LONG)
+                            .setAction("RETRY", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    new MyAsyncTask(listClass).execute();
+                                }
+                            });
+                    snackbar.show();
+                    disableFab();
+                    enableEmptyState("No data available \n check your connection");
+                }
             }
         }
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         getArguments().putParcelableArrayList(ARG_DOCLIST, items);
+        getArguments().putString(ARG_NO_DATA_TEXT, noDataTextView.getText().toString());
     }
 
     //handle on click to perform animation
@@ -296,4 +343,27 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
                 .addToBackStack(null)
                 .commit();
     }
+
+    private void enableFab() {
+        Log.w(LOG_TAG,"enable fab");
+        fab.setEnabled(true);
+        fab.setAlpha(1f);
+
+    }
+
+    private void disableFab() {
+        Log.w(LOG_TAG,"disable fab");
+        fab.setEnabled(false);
+        fab.setAlpha(0.2f);
+    }
+
+    private void enableEmptyState(String text) {
+        noDataTextView.setText(text);
+        noDataTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void disableEmptyState() {
+        noDataTextView.setVisibility(View.GONE);
+    }
+
 }

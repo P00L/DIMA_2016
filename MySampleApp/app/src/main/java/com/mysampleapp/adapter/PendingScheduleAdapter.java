@@ -217,6 +217,7 @@ public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingSchedule
                 //start service to check sottoscorta
                 Intent i = new Intent(mContext, SottoscortaService.class);
                 i.putExtra(SottoscortaService.DRUG_EXTRA, drugItem);
+                i.putExtra(SottoscortaService.ACTION_EXTRA, "take");
                 mContext.startService(i);
 
             } else {

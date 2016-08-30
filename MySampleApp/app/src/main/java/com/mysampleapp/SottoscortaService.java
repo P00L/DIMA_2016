@@ -21,6 +21,7 @@ import java.util.Set;
 public class SottoscortaService extends IntentService {
 
     public static final String DRUG_EXTRA = "drug";
+    public static final String ACTION_EXTRA = "action";
 
     public SottoscortaService() {
         super("SottoscortaService");
@@ -28,11 +29,24 @@ public class SottoscortaService extends IntentService {
 
     protected void onHandleIntent(Intent intent) {
         Log.w("SottoscortaService", "service running");
-
+        String action = intent.getStringExtra(SottoscortaService.ACTION_EXTRA);
         DrugDO drugDO = intent.getParcelableExtra(SottoscortaService.DRUG_EXTRA);
+        switch (action) {
+            case "take":
+                Log.w("SottoscortaService", "take");
+                takeDrug(drugDO);
+                break;
+            case "refill":
+                Log.w("SottoscortaService", "refill");
+                refillDrug(drugDO);
+                break;
+        }
+
+    }
+
+    public void takeDrug(DrugDO drugDO) {
         Log.w("SottoscortaService", "quantity available " + drugDO.getQuantity().toString());
         Log.w("SottoscortaService", "sottoscorta " + drugDO.getMinqty().toString());
-
         //check if quantity below sottoscorta
         if (drugDO.getQuantity() <= drugDO.getMinqty()) {
             //get shared pref file
@@ -50,7 +64,7 @@ public class SottoscortaService extends IntentService {
             String pendingSottoscorta = "none";
             for (String ss : s) {
                 String tmp = ss.split("/")[0];
-                Log.w("SottoscortaService",tmp);
+                Log.w("SottoscortaService", tmp);
                 if (tmp.equals(drugDO.getName())) {
                     pendingSottoscorta = ss;
                 }
@@ -77,7 +91,36 @@ public class SottoscortaService extends IntentService {
             Log.w("SottoscortaService", "sottoscorta" + notificationID);
             createNotification(getApplicationContext(), drugDO, notificationID);
         }
+    }
 
+    private void refillDrug(DrugDO drugDO) {
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(
+                getApplicationContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
+
+        //getting data from shared pref and add the new sottoscorta pendig id notification to update always same notification
+        Set<String> s = new HashSet<String>(sharedPref.getStringSet(getApplicationContext().getString(R.string.sottoscorta_alarm),
+                new HashSet<String>()));
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        Log.w("SottoscortaService", "pending list " + s.toString());
+
+        //search if the drug was already sottoscortata
+        String pendingSottoscorta = "none";
+        for (String ss : s) {
+            String tmp = ss.split("/")[0];
+            Log.w("SottoscortaService", tmp);
+            if (tmp.equals(drugDO.getName())) {
+                pendingSottoscorta = ss;
+            }
+        }
+        if (!pendingSottoscorta.equals("none")) {
+            //use the same id to update the notification
+            s.remove(pendingSottoscorta);
+            editor.putStringSet(getApplicationContext().getString(R.string.sottoscorta_alarm), s);
+            //persist immediatly the data in the shared pref
+            editor.apply();
+            Log.w("SottoscortaService", "pending list " + s.toString());
+        }
     }
 
     //TODO COSA FACCIAMO CON I SOTTOSCORTA?????

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,10 +32,13 @@ import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.mysampleapp.AlarmService;
 import com.mysampleapp.R;
+import com.mysampleapp.SottoscortaService;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DrugDO;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormLayout;
 import ernestoyaquello.com.verticalstepperform.interfaces.VerticalStepperForm;
@@ -618,6 +622,13 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                 if (!editMode) {
                     drug_list.add(drugDO_tmp);
                 } else {
+                    //check if modified quantity may be the case of a refill and clean shared pref
+                    if (drugDO.getQuantity() < drugDO.getMinqty()) {
+                        Intent i = new Intent(getContext(), SottoscortaService.class);
+                        i.putExtra(AlarmService.ACTION_EXTRA, "refill");
+                        i.putExtra(AlarmService.DRUG_EXTRA, drugDO);
+                        getContext().startService(i);
+                    }
                     //if changed name update schedule
                     if (!drugDO_old.getName().equals(drugDO_tmp.getName())) {
                         Intent i = new Intent(getContext(), AlarmService.class);
