@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
@@ -46,7 +47,6 @@ import java.util.Comparator;
 public class DocListFragment extends Fragment implements ItemClickListenerAnimation {
 
     private static final String ARG_DOCLIST = "param1";
-    private static final String ARG_NO_DATA_TEXT = "param2";
     private final static String LOG_TAG = DocListFragment.class.getSimpleName();
 
     private OnFragmentInteractionListener mListener;
@@ -58,8 +58,8 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
     private ProgressBar mProgress;
     private DemoNoSQLOperation operation;
     private TextView noDataTextView;
-    private String noDataString;
     private FloatingActionButton fab;
+    private Animation rotate_open;
 
 
     public DocListFragment() {
@@ -77,7 +77,6 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
     public void onCreate(Bundle savedInstanceState) {
         if (getArguments() != null) {
             items = getArguments().getParcelableArrayList(ARG_DOCLIST);
-            noDataString = getArguments().getString(ARG_NO_DATA_TEXT);
         }
         super.onCreate(savedInstanceState);
     }
@@ -95,7 +94,7 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
         DemoNoSQLTableBase demoTable = DemoNoSQLTableFactory.instance(getContext())
                 .getNoSQLTableByTableName("Doctor");
         operation = (DemoNoSQLOperation) demoTable.getOperationByName(getContext(), "ASD");
-
+        rotate_open = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_open_360);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(false);
 
@@ -125,8 +124,6 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
         });
 
         noDataTextView = (TextView) view.findViewById(R.id.no_data);
-
-        noDataTextView.setText(noDataString);
 
         //restore
         if (items == null) {
@@ -169,9 +166,7 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
         );
 
         // set action bar title
-        activity.getSupportActionBar().
-
-                setTitle(R.string.doctors);
+        activity.getSupportActionBar().setTitle(R.string.doctors);
 
         // set nav menu item checked
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
@@ -307,19 +302,13 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
     public void onPause() {
         super.onPause();
         getArguments().putParcelableArrayList(ARG_DOCLIST, items);
-        getArguments().putString(ARG_NO_DATA_TEXT, noDataTextView.getText().toString());
     }
 
     //handle on click to perform animation
     @Override
     public void onClick(ImageView imageView, int position, boolean isLongClick) {
 
-        //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-        fab.setImageResource(R.drawable.ic_action_modify);
-        RotateAnimation rotate = new RotateAnimation(360, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        rotate.setDuration(500);
-        rotate.setInterpolator(new LinearInterpolator());
-        fab.startAnimation(rotate);
+        fab.startAnimation(rotate_open);
 
 
         //see github project to more detail

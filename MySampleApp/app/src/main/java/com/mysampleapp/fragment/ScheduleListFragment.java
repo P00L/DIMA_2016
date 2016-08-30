@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -16,13 +17,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.amazonaws.AmazonClientException;
@@ -44,6 +48,7 @@ import java.util.Comparator;
 
 public class ScheduleListFragment extends Fragment implements ItemClickListenerAnimation {
 
+    private final static String LOG_TAG = DrugListFragment.class.getSimpleName();
     private static final String ARG_SCHEDULELIST = "param1";
     private AppCompatActivity activity;
     private OnFragmentInteractionListener mListener;
@@ -55,6 +60,8 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
     private DemoNoSQLOperation operation;
     private TextView noDataTextView;
     private FloatingActionButton fab;
+    private Animation rotate_open;
+    private ProgressBar mProgress;
 
     public ScheduleListFragment() {
         // Required empty public constructor
@@ -95,13 +102,14 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
                 .getNoSQLTableByTableName("ScheduleDrug");
         operation = (DemoNoSQLOperation) demoTable.getOperationByName(getContext(), "all");
         noDataTextView = (TextView) view.findViewById(R.id.no_data);
-
+        rotate_open = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_open_360);
+        mProgress = (ProgressBar) view.findViewById(R.id.progress_bar);
         fab = (FloatingActionButton) activity.findViewById(R.id.fab);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(false);
 
-        if(!fab.isShown()){
+        if (!fab.isShown()) {
             fab.show();
         }
 
@@ -154,8 +162,11 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
                 }));
                 mAdapter = new ScheduleAdapter(getContext(), items, this);
                 mRecyclerView.setAdapter(mAdapter);
+                enableFab();
             } else {
-                noDataTextView.setVisibility(View.VISIBLE);
+                Log.w(LOG_TAG, "restore no data string");
+                enableFab();
+                enableEmptyState("Click \"+\" \n to insert a schedule");
             }
         }
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
@@ -219,6 +230,8 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
     private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
         Boolean success = false;
         ScheduleListFragment listClass;
+        Boolean successQuery = false;
+
         public MyAsyncTask(ScheduleListFragment listFragment) {
             listClass = listFragment;
         }
@@ -226,22 +239,17 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Create a progressdialog
-            mProgressDialog = new ProgressDialog(getActivity());
-            // Set progressdialog title
-            mProgressDialog.setTitle("We are working for you");
-            // Set progressdialog message
-            mProgressDialog.setMessage("Loading...");
-            mProgressDialog.setIndeterminate(false);
-            // Show progressdialog
-            mProgressDialog.show();
+            disableEmptyState();
+            disableFab();
+            mProgress.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                success = operation.executeOperation();
+                successQuery = operation.executeOperation();
                 items = ((DemoNoSQLTableScheduleDrug.DemoQueryWithPartitionKeyOnly) operation).getResultArray();
+                success = true;
             } catch (final AmazonClientException ex) {
                 success = false;
             }
@@ -250,22 +258,48 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
 
         @Override
         protected void onPostExecute(Void args) {
-            if (success && items.size() > 0) {
-                mLayoutManager = new LinearLayoutManager(getActivity());
-                mRecyclerView.setLayoutManager(mLayoutManager);
-                //TODO controlloare se server sortatre
-                Collections.sort(items, (new Comparator<ScheduleDrugDO>() {
-                    @Override
-                    public int compare(ScheduleDrugDO s1, ScheduleDrugDO s2) {
-                        return s1.getDrug().compareTo(s2.getDrug());   //or whatever your sorting algorithm
-                    }
-                }));
-                mAdapter = new ScheduleAdapter(getContext(), items, listClass);
-                mRecyclerView.setAdapter(mAdapter);
-                mProgressDialog.dismiss();
+            mProgress.setVisibility(View.GONE);
+            if (success) {
+                Log.w(LOG_TAG, "SUCCESS " + items.size() + "");
+                if (successQuery) {
+                    Log.w(LOG_TAG, "SUCCESS " + "SUCCESS");
+                    enableFab();
+                    mLayoutManager = new LinearLayoutManager(getActivity());
+                    mRecyclerView.setLayoutManager(mLayoutManager);
+                    //TODO controlloare se server sortatre
+                    Collections.sort(items, (new Comparator<ScheduleDrugDO>() {
+                        @Override
+                        public int compare(ScheduleDrugDO s1, ScheduleDrugDO s2) {
+                            return s1.getDrug().compareTo(s2.getDrug());   //or whatever your sorting algorithm
+                        }
+                    }));
+                    mAdapter = new ScheduleAdapter(getContext(), items, listClass);
+                    mRecyclerView.setAdapter(mAdapter);
+                } else {
+                    Log.w(LOG_TAG, "SUCCESS " + "FAIL");
+                    enableFab();
+                    enableEmptyState("Click \"+\" \n to insert a schedule");
+                }
+
             } else {
-                mProgressDialog.dismiss();
-                noDataTextView.setVisibility(View.VISIBLE);
+                if (successQuery) {
+                    Log.w(LOG_TAG, "FAIL " + "SUCCESS");
+                    enableFab();
+                    enableEmptyState("Click \"+\" \n to insert a schedule");
+                } else {
+                    Log.w(LOG_TAG, "FAIL " + "FAIL");
+                    Snackbar snackbar = Snackbar
+                            .make(fab, "No internet connection!", Snackbar.LENGTH_LONG)
+                            .setAction("RETRY", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    new MyAsyncTask(listClass).execute();
+                                }
+                            });
+                    snackbar.show();
+                    disableFab();
+                    enableEmptyState("No data available \n check your connection");
+                }
             }
         }
     }
@@ -280,11 +314,7 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
     @Override
     public void onClick(ImageView imageView, int position, boolean isLongClick) {
 
-        fab.setImageResource(R.drawable.ic_action_modify);
-        RotateAnimation rotate = new RotateAnimation(360, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        rotate.setDuration(500);
-        rotate.setInterpolator(new LinearInterpolator());
-        fab.startAnimation(rotate);
+        fab.startAnimation(rotate_open);
 
         //see github project to more detail
         Fragment scheduleFragment = ScheduleFragment.newInstance(items.get(position));
@@ -306,6 +336,28 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
                 .replace(R.id.content_frame, scheduleFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    private void enableFab() {
+        Log.w(LOG_TAG, "enable fab");
+        fab.setEnabled(true);
+        fab.setAlpha(1f);
+
+    }
+
+    private void disableFab() {
+        Log.w(LOG_TAG, "disable fab");
+        fab.setEnabled(false);
+        fab.setAlpha(0.2f);
+    }
+
+    private void enableEmptyState(String text) {
+        noDataTextView.setText(text);
+        noDataTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void disableEmptyState() {
+        noDataTextView.setVisibility(View.GONE);
     }
 }
 
