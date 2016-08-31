@@ -94,24 +94,6 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> im
         return results;
     }
 
-
-    /*
-    public void filter(String text) {
-
-            ArrayList<DrugDO> result = new ArrayList<>();
-            text = text.toLowerCase();
-            for(DrugDO item: mListCopy){
-                if(item.getName().toLowerCase().contains(text)){
-                    result.add(item);
-                }
-            }
-            mList.clear();
-            mList.addAll(result);
-
-        notifyDataSetChanged();
-    }
-*/
-
     public static class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener{
         private TextView titleTextView;

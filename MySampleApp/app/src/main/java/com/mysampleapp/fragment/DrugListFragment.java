@@ -28,8 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -365,8 +363,12 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
             @Override
             public boolean onQueryTextChange(String newText) {
                 //mAdapter.filter(newText);
-                mAdapter.getFilter().filter(newText);
-                return true;
+                if(mAdapter != null) {
+                    mAdapter.getFilter().filter(newText);
+                    return true;
+                }
+                else
+                    return false;
             }
         });
 
