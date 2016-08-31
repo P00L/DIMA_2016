@@ -5,6 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +24,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,6 +87,9 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
     private Animation rotate_open;
     private Animation rotate_close;
     private ProgressBar mProgress;
+    private Paint p = new Paint();
+    private int edit_position;
+    private AlertDialog.Builder alertDialog;
 
     public PendingScheduleFragment() {
         // Required empty public constructor
@@ -161,6 +171,8 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                     @Override
                     public void onClick(View view) {
                         if (!fab1.isShown()) {
+                            //getView().setAlpha(0.2f);
+                            //mRecyclerView.setClickable(false);
                             //open menu
                             fab1.show();
                             fab2.show();
@@ -168,6 +180,8 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
 
                         } else {
                             //close menu
+                            //getView().setAlpha(1f);
+                            //mRecyclerView.setClickable(true);
                             fab1.hide();
                             fab2.hide();
                             fab.startAnimation(rotate_close);
@@ -193,6 +207,8 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
             Log.w(LOG_TAG, "load");
             new MyAsyncTask(this).execute();
         } else {
+            //fake instantiation of items to avoid reload on rotation if came from a rotation
+            items = new ArrayList<>();
             if (pendingItems.size() > 0) {
                 Log.w(LOG_TAG, "restore items");
                 mLayoutManager = new LinearLayoutManager(getActivity());
@@ -203,7 +219,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                         return s1.getDrug().compareTo(s2.getDrug());   //or whatever your sorting algorithm
                     }
                 }));
-                mAdapter = new PendingScheduleAdapter(getContext(),pendingItems, this);
+                mAdapter = new PendingScheduleAdapter(getContext(), pendingItems, this);
                 mRecyclerView.setAdapter(mAdapter);
                 enableFab();
             } else {
@@ -228,7 +244,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
 
             }
         });
-
+        initSwipe();
     }
 
     public void onButtonPressed(Uri uri) {
@@ -265,9 +281,11 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                 Log.w(LOG_TAG, "skip");
                 clearSharedPref(pendingItems.get(position));
                 pendingItems.remove(position);
-                if(pendingItems.size() == 0){
+                if (pendingItems.size() == 0) {
                     enableEmptyState("No pendig schedule");
                     disableFab();
+                    fab1.hide();
+                    fab2.hide();
                 }
                 fab.show();
                 mAdapter.notifyDataSetChanged();
@@ -280,7 +298,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -297,7 +315,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
             fab2.hide();
             fab.startAnimation(rotate_close);
         }
-        if(items == null)
+        if (items == null)
             getArguments().putParcelableArrayList(ARG_SCHEDULELIST, null);
         else
             getArguments().putParcelableArrayList(ARG_SCHEDULELIST, pendingItems);
@@ -356,7 +374,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                 if (pendingItems.size() > 0) {
                     Log.w(LOG_TAG, "SUCCESS " + "SUCCESS");
                     enableFab();
-                    mAdapter = new PendingScheduleAdapter(getContext(),pendingItems,listClass);
+                    mAdapter = new PendingScheduleAdapter(getContext(), pendingItems, listClass);
                     mRecyclerView.setAdapter(mAdapter);
                 } else {
                     disableFab();
@@ -432,9 +450,11 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
             if (success) {
                 mProgressDialog.dismiss();
                 pendingItems.remove(scheduleDrugDO);
-                if(pendingItems.size() == 0){
+                if (pendingItems.size() == 0) {
                     enableEmptyState("No pendig schedule");
                     disableFab();
+                    fab1.hide();
+                    fab2.hide();
                 }
                 fab.show();
                 mAdapter.notifyDataSetChanged();
@@ -459,6 +479,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                 });
                 AlertDialog dialog = builder.create();
                 dialog.show();
+                mAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -483,14 +504,14 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
     }
 
     private void enableFab() {
-        Log.w(LOG_TAG,"enable fab");
+        Log.w(LOG_TAG, "enable fab");
         fab.setEnabled(true);
         fab.setAlpha(1f);
 
     }
 
     private void disableFab() {
-        Log.w(LOG_TAG,"disable fab");
+        Log.w(LOG_TAG, "disable fab");
         fab.setEnabled(false);
         fab.setAlpha(0.2f);
     }
@@ -502,5 +523,63 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
 
     private void disableEmptyState() {
         noDataTextView.setVisibility(View.GONE);
+    }
+
+    private void initSwipe() {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                if (direction == ItemTouchHelper.LEFT) {
+                    Log.w(LOG_TAG, "take");
+                    new SaveTask(pendingItems.get(position)).execute();
+                }else{
+                    Log.w(LOG_TAG, "take");
+                    new SaveTask(pendingItems.get(position)).execute();
+                }
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                Bitmap icon;
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+
+                    View itemView = viewHolder.itemView;
+                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
+                    float width = height / 3;
+
+                    if (dX > 0) {
+                        p.setColor(Color.parseColor("#D32F2F"));
+                        RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX, (float) itemView.getBottom());
+                        c.drawRect(background, p);
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_expand);
+                        RectF icon_dest = new RectF((float) itemView.getLeft() + width, (float) itemView.getTop() + width, (float) itemView.getLeft() + 2 * width, (float) itemView.getBottom() - width);
+                        c.drawBitmap(icon, null, icon_dest, p);
+                    } else {
+                        p.setColor(Color.parseColor("#D32F2F"));
+                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(), (float) itemView.getRight(), (float) itemView.getBottom());
+                        c.drawRect(background, p);
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_expand);
+                        RectF icon_dest = new RectF((float) itemView.getRight() - 2 * width, (float) itemView.getTop() + width, (float) itemView.getRight() - width, (float) itemView.getBottom() - width);
+                        c.drawBitmap(icon, null, icon_dest, p);
+                    }
+                }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+    }
+
+    private void removeView() {
+        if (getView().getParent() != null) {
+            ((ViewGroup) getView().getParent()).removeView(getView());
+        }
     }
 }

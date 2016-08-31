@@ -558,7 +558,7 @@ public class DemoNoSQLTableDrug extends DemoNoSQLTableBase {
         List<DemoNoSQLOperationListItem> noSQLOperationsList = new ArrayList<DemoNoSQLOperationListItem>();
         noSQLOperationsList.add(new DemoNoSQLOperationListHeader(
             context.getString(R.string.nosql_operation_header_get)));
-        noSQLOperationsList.add(new DemoGetWithPartitionKeyAndSortKey(context,"asd"));
+        noSQLOperationsList.add(new DemoGetWithPartitionKeyAndSortKey(context,"nav_header_image"));
 
         noSQLOperationsList.add(new DemoNoSQLOperationListHeader(
             context.getString(R.string.nosql_operation_header_primary_queries)));

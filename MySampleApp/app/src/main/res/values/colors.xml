@@ -14,4 +14,10 @@
     <color name="dark_content_text">#333333</color>
     <color name="sign_in_separator_color">#DDDDDD</color>
     <color name="instructions_list_border_color">#FFDDDDDD</color>
+
+
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1976D2</color>
+    <color name="colorAccent">#FF9800</color>
+    <color name="windowBackground">#FFFFFF</color>
 </resources>

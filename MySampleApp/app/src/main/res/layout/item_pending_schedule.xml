@@ -40,6 +40,7 @@
 
 
             <Button
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:id="@+id/skip"
                 android:drawableLeft="@drawable/com_facebook_tooltip_blue_xout"
                 android:layout_width="wrap_content"
@@ -50,6 +51,7 @@
 
             <Button
                 android:id="@+id/take"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:drawableLeft="@drawable/com_facebook_button_like_icon_selected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,7 +66,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/quantity"
                 android:layout_marginTop="20dp"
-                android:background="#ff9703" />
+                android:background="@color/colorAccent" />
+
 
     </RelativeLayout>
 
