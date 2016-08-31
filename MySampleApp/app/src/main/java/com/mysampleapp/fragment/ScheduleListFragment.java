@@ -116,7 +116,7 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
             fab.show();
         }
 
-        fab.setImageResource(R.drawable.ic_action_plus);
+        fab.setImageResource(R.drawable.ic_plus_blue);
 
         //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
 
