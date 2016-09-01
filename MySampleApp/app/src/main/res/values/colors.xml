@@ -14,6 +14,7 @@
     <color name="dark_content_text">#333333</color>
     <color name="sign_in_separator_color">#DDDDDD</color>
     <color name="instructions_list_border_color">#FFDDDDDD</color>
+    <color name="input_error_color">#af1212</color>
 
 
     <color name="colorPrimary">#2196F3</color>

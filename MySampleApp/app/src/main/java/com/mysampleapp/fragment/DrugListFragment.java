@@ -2,6 +2,13 @@ package com.mysampleapp.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -18,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.transition.Fade;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +41,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.amazonaws.AmazonClientException;
+import com.amazonaws.mobile.AWSMobileClient;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.mysampleapp.AlarmService;
 import com.mysampleapp.DetailsTransition;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
@@ -75,6 +86,7 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
     private FloatingActionButton fab;
     private Animation rotate_open;
     private ProgressBar mProgress;
+    private Paint p = new Paint();
 
 
     public DrugListFragment() {
@@ -117,6 +129,8 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
         rotate_open = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_open_360);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(false);
+
+        initSwipe();
 
         if (!fab.isShown()) {
             fab.show();
@@ -310,6 +324,58 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
         }
     }
 
+    private class DeleteTask extends AsyncTask<Void, Void, Void> {
+        private Boolean success;
+        private DrugDO drugDO;
+        private DynamoDBMapper mapper;
+
+        public DeleteTask(DrugDO drugDO) {
+            success = false;
+            this.drugDO = drugDO;
+            this.mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                mapper.delete(drugDO);
+                success = true;
+            } catch (final AmazonClientException ex) {
+                Log.e("ASD", "Failed deleting item : " + ex.getMessage(), ex);
+                success = false;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void args) {
+            if (success) {
+                Snackbar.make(fab, drugDO.getName()+" Deleted!", Snackbar.LENGTH_LONG).show();
+                //start service to delete schedules and alarms associated with deleted drug
+                Intent i = new Intent(getContext(), AlarmService.class);
+                i.putExtra(AlarmService.DRUG_EXTRA, drugDO);
+                i.putExtra(AlarmService.ACTION_EXTRA, "cancel_drug");
+                getContext().startService(i);
+                }
+            else {
+                items.add(drugDO);
+                Collections.sort(items, (new Comparator<DrugDO>() {
+                    @Override
+                    public int compare(DrugDO s1, DrugDO s2) {
+                        return s1.getName().compareTo(s2.getName());   //or whatever your sorting algorithm
+                    }
+                }));
+                mAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+
     @Override
     public void onPause() {
         super.onPause();
@@ -378,6 +444,101 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
 
             }
         });
+    }
+
+    private void initSwipe() {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            Boolean delete = true;
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                final int position = viewHolder.getAdapterPosition();
+                final DrugDO drugDO = items.get(position);
+
+                if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.RIGHT) {
+                    items.remove(drugDO);
+                    if (items.size() == 0) {
+                        enableEmptyState("Click \"+\" \n" + " to insert a drug");
+                        enableFab();
+                    }
+                    mAdapter.notifyDataSetChanged();
+                    Snackbar snackbar = Snackbar
+                            .make(fab, "Deleting on DISMISS", Snackbar.LENGTH_LONG)
+                            .setAction("UNDO", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    items.add(drugDO);
+                                    delete = false;
+                                    Collections.sort(items, (new Comparator<DrugDO>() {
+                                        @Override
+                                        public int compare(DrugDO s1, DrugDO s2) {
+                                            return s1.getName().compareTo(s2.getName());   //or whatever your sorting algorithm
+                                        }
+                                    }));
+                                    mAdapter.notifyDataSetChanged();
+
+                                }
+                            });
+                    snackbar.setActionTextColor(getResources().getColor(R.color.input_error_color));
+                    snackbar.setCallback(new Snackbar.Callback() {
+                        @Override
+                        public void onDismissed(Snackbar snackbar, int event) {
+                            super.onDismissed(snackbar, event);
+                            Log.w("ASD", "ASD");
+                            if(delete)
+                                new DeleteTask(drugDO).execute();
+                            else
+                                Snackbar.make(fab, drugDO.getName()+" Restored!", Snackbar.LENGTH_LONG).show();
+                        }
+                    });
+                    snackbar.show();
+                }
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                Bitmap icon;
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+
+                    View itemView = viewHolder.itemView;
+                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
+                    float width = height / 3;
+
+                    if (dX > 0) {
+                        p.setColor(Color.parseColor("#D32F2F"));
+                        RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX, (float) itemView.getBottom());
+                        c.drawRect(background, p);
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_delete);
+                        RectF icon_dest = new RectF((float) itemView.getLeft() + width, (float) itemView.getTop() + width, (float) itemView.getLeft() + 2 * width, (float) itemView.getBottom() - width);
+                        c.clipRect(background);
+                        c.drawBitmap(icon, null, icon_dest, p);
+                    } else {
+                        p.setColor(Color.parseColor("#D32F2F"));
+                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(), (float) itemView.getRight(), (float) itemView.getBottom());
+                        c.drawRect(background, p);
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_delete);
+                        RectF icon_dest = new RectF((float) itemView.getRight() - 2 * width, (float) itemView.getTop() + width, (float) itemView.getRight() - width, (float) itemView.getBottom() - width);
+                        c.clipRect(background);
+                        c.drawBitmap(icon, null, icon_dest, p);
+                    }
+                }
+                c.restore();
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+    }
+
+    private void removeView() {
+        if (getView().getParent() != null) {
+            ((ViewGroup) getView().getParent()).removeView(getView());
+        }
     }
 
     private void enableFab() {

@@ -16,12 +16,10 @@ import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
-import com.mysampleapp.demo.nosql.DemoNoSQLTableDrug;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableScheduleDrug;
 import com.mysampleapp.demo.nosql.DrugDO;
 import com.mysampleapp.demo.nosql.ScheduleDrugDO;
-import com.mysampleapp.fragment.ScheduleFormFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,10 +73,8 @@ public class AlarmService extends IntentService {
                 updateDrug(drugDO, drugDO_old);
                 break;
             case "cancel_drug":
-                //TODO IMPLEMENT
                 Log.w("AlarmService", "cancelDrug");
                 drugDO = intent.getParcelableExtra(AlarmService.DRUG_EXTRA);
-                drugDO_old = intent.getParcelableExtra(AlarmService.DRUG_OLD_EXTRA);
                 cancelDrug(drugDO);
                 break;
         }
@@ -318,5 +314,40 @@ public class AlarmService extends IntentService {
 
     private void cancelDrug(DrugDO drugDO) {
 
+        DemoNoSQLOperation operation;
+        ArrayList<ScheduleDrugDO> items = new ArrayList<>();
+        ArrayList<ScheduleDrugDO> deleteItemsList = new ArrayList<>();
+        DynamoDBMapper mapper;
+        mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+
+        //getting all the scheduleDrugDO
+        DemoNoSQLTableBase demoTable = DemoNoSQLTableFactory.instance(getApplicationContext())
+                .getNoSQLTableByTableName("ScheduleDrug");
+        operation = (DemoNoSQLOperation) demoTable.getOperationByName(getApplicationContext(), "all");
+
+        //TODO inventarsi qualcosa se va male la query
+        try {
+            operation.executeOperation();
+            items = ((DemoNoSQLTableScheduleDrug.DemoQueryWithPartitionKeyOnly) operation).getResultArray();
+        } catch (final AmazonClientException ex) {
+
+        }
+
+        for (ScheduleDrugDO d : items) {
+            if (d.getDrug().equals(drugDO.getName())) {
+                deleteItemsList.add(d);
+                Log.w("AlarmService","schedule drug "+d.getDrug());
+            }
+        }
+
+        for(ScheduleDrugDO d : deleteItemsList){
+            try {
+                mapper.delete(d);
+                Log.w("ASD", "ASD");
+            } catch (final AmazonClientException ex) {
+                Log.e("ScheduleFormFragment", "Failed saving item : " + ex.getMessage(), ex);
+            }
+            cancelAlarm(d);
+        }
     }
 }

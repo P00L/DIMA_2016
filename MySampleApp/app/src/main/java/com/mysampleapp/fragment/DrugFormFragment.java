@@ -4,7 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,8 +37,6 @@ import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DrugDO;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormLayout;
 import ernestoyaquello.com.verticalstepperform.interfaces.VerticalStepperForm;
@@ -553,12 +551,14 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
     private boolean isEmpty(String content) {
         boolean isempty = false;
         if (!content.isEmpty()) {
+            name_text.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.OVERLAY);
             verticalStepperForm.setActiveStepAsCompleted();
             return isempty;
         } else {
             isempty = true;
             String emptycontent;
             emptycontent = getResources().getString(R.string.error_empty_content);
+            name_text.getBackground().mutate().setColorFilter(getResources().getColor(R.color.input_error_color), PorterDuff.Mode.OVERLAY);
             verticalStepperForm.setActiveStepAsUncompleted(emptycontent);
         }
         return isempty;
