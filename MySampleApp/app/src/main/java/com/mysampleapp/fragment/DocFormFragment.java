@@ -3,6 +3,7 @@ package com.mysampleapp.fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,8 +23,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -295,7 +294,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkNameSurnameStep(s.toString());
+                checkNameSurnameStep(s.toString(), name_text);
             }
 
             @Override
@@ -305,7 +304,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         name_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (checkNameSurnameStep(v.getText().toString())) {
+                if (checkNameSurnameStep(v.getText().toString(), name_text)) {
                     verticalStepperForm.goToNextStep();
                 }
                 return false;
@@ -331,7 +330,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkNameSurnameStep(s.toString());
+                checkNameSurnameStep(s.toString(), surname_text);
             }
 
             @Override
@@ -341,7 +340,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         surname_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (checkNameSurnameStep(v.getText().toString())) {
+                if (checkNameSurnameStep(v.getText().toString(), surname_text)) {
                     verticalStepperForm.goToNextStep();
                 }
                 return false;
@@ -509,10 +508,10 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     public void onStepOpening(int stepNumber) {
         switch (stepNumber) {
             case NAME_STEP:
-                checkNameSurnameStep(name_text.getText().toString());
+                checkNameSurnameStep(name_text.getText().toString(), name_text);
                 break;
             case SURNAME_STEP:
-                checkNameSurnameStep(surname_text.getText().toString());
+                checkNameSurnameStep(surname_text.getText().toString(), surname_text);
                 break;
             case EMAIL_STEP:
                 isValidEmail(email_text.getText().toString());
@@ -551,13 +550,13 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     }
 
     // name/surname checker
-    private boolean checkNameSurnameStep(String word) {
+    private boolean checkNameSurnameStep(String word, EditText editText) {
         boolean wordIsCorrect = false;
 
         //check if correct!!
         if (word.length() >= MIN_NAME_LENGTH && word.matches("[a-zA-Z]+")) {
             wordIsCorrect = true;
-
+            editText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
             verticalStepperForm.setActiveStepAsCompleted();
             // Equivalent to: verticalStepperForm.setStepAsCompleted(TITLE_STEP_NUM);
 
@@ -568,6 +567,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
             else
                 wordErrorString = getResources().getString(R.string.error_has_numbers);
 
+            editText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.input_error_color), PorterDuff.Mode.SRC_ATOP);
             verticalStepperForm.setActiveStepAsUncompleted(wordErrorString);
             // Equivalent to: verticalStepperForm.setStepAsUncompleted(TITLE_STEP_NUM, titleError);
 
@@ -581,9 +581,11 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         Pattern pattern = Patterns.EMAIL_ADDRESS;
 
         if (pattern.matcher(email).matches()) {
+            email_text.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
             verticalStepperForm.setActiveStepAsCompleted();
         } else {
             String emailerror = getResources().getString(R.string.error_email);
+            email_text.getBackground().mutate().setColorFilter(getResources().getColor(R.color.input_error_color), PorterDuff.Mode.SRC_ATOP);
             verticalStepperForm.setActiveStepAsUncompleted(emailerror);
         }
         return pattern.matcher(email).matches();
@@ -594,9 +596,11 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         Pattern pattern = Patterns.PHONE;
 
         if (pattern.matcher(number).matches()) {
+            phoneNumber_text.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
             verticalStepperForm.setActiveStepAsCompleted();
         } else {
             String numbererror = getResources().getString(R.string.error_phone_number);
+            phoneNumber_text.getBackground().mutate().setColorFilter(getResources().getColor(R.color.input_error_color), PorterDuff.Mode.SRC_ATOP);
             verticalStepperForm.setActiveStepAsUncompleted(numbererror);
         }
         return pattern.matcher(number).matches();
@@ -605,12 +609,14 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
     private boolean isEmpty(String content) {
         boolean isempty = false;
         if (!content.isEmpty()) {
+            address_text.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
             verticalStepperForm.setActiveStepAsCompleted();
             return isempty;
         } else {
             isempty = true;
             String emptycontent;
             emptycontent = getResources().getString(R.string.error_empty_content);
+            address_text.getBackground().mutate().setColorFilter(getResources().getColor(R.color.input_error_color), PorterDuff.Mode.SRC_ATOP);
             verticalStepperForm.setActiveStepAsUncompleted(emptycontent);
         }
         return isempty;

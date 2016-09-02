@@ -1,6 +1,5 @@
 package com.mysampleapp.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -78,9 +77,7 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
     private DrugAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<DrugDO> items;
-    private String[] drugnames;
     private AppCompatActivity activity;
-    private ProgressDialog mProgressDialog;
     private DemoNoSQLOperation operation;
     private TextView noDataTextView;
     private FloatingActionButton fab;
@@ -173,7 +170,7 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
             } else {
                 Log.w(LOG_TAG, "restore no data string");
                 enableFab();
-                enableEmptyState("Click \"+\" \n to insert a drug");
+                enableEmptyState(getResources().getString(R.string.enable_empty_drug));
 
             }
         }
@@ -298,14 +295,14 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
                 } else {
                     Log.w(LOG_TAG, "SUCCESS " + "FAIL");
                     enableFab();
-                    enableEmptyState("Click \"+\" \n to insert a drug");
+                    enableEmptyState(getResources().getString(R.string.enable_empty_drug));
                 }
 
             } else {
                 if (successQuery) {
                     Log.w(LOG_TAG, "FAIL " + "SUCCESS");
                     enableFab();
-                    enableEmptyState("Click \"+\" \n to insert a drug");
+                    enableEmptyState(getResources().getString(R.string.enable_empty_drug));
                 } else {
                     Log.w(LOG_TAG, "FAIL " + "FAIL");
                     Snackbar snackbar = Snackbar
@@ -318,7 +315,7 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
                             });
                     snackbar.show();
                     disableFab();
-                    enableEmptyState("No data available \n check your connection");
+                    enableEmptyState(getResources().getString(R.string.no_internet_connection));
                 }
             }
         }
@@ -463,7 +460,7 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
                 if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.RIGHT) {
                     items.remove(drugDO);
                     if (items.size() == 0) {
-                        enableEmptyState("Click \"+\" \n" + " to insert a drug");
+                        enableEmptyState(getResources().getString(R.string.enable_empty_drug));
                         enableFab();
                     }
                     mAdapter.notifyDataSetChanged();
@@ -473,6 +470,7 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
                                 @Override
                                 public void onClick(View view) {
                                     items.add(drugDO);
+                                    disableEmptyState();
                                     delete = false;
                                     Collections.sort(items, (new Comparator<DrugDO>() {
                                         @Override

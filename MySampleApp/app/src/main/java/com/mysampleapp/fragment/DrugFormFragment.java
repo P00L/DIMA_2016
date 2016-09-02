@@ -334,7 +334,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
             public void afterTextChanged(Editable s) {
             }
         });
-        name_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        type_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (hasNoNumbers(v.getText().toString())) {
@@ -362,7 +362,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isValidQtyWeigh(s.toString());
+                isValidQtyWeigh(s.toString(), qty_text);
             }
 
             @Override
@@ -372,7 +372,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         qty_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (isValidQtyWeigh(v.getText().toString())) {
+                if (isValidQtyWeigh(v.getText().toString(), qty_text)) {
                     verticalStepperForm.goToNextStep();
                 }
                 return false;
@@ -397,7 +397,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isValidQtyWeigh(s.toString());
+                isValidQtyWeigh(s.toString(), weight_text);
             }
 
             @Override
@@ -407,7 +407,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         weight_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (isValidQtyWeigh(v.getText().toString())) {
+                if (isValidQtyWeigh(v.getText().toString(), weight_text)) {
                     verticalStepperForm.goToNextStep();
                 }
                 return false;
@@ -432,7 +432,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isValidQtyWeigh(s.toString());
+                isValidQtyWeigh(s.toString(), minqty_text);
             }
 
             @Override
@@ -442,7 +442,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         minqty_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (isValidQtyWeigh(v.getText().toString())) {
+                if (isValidQtyWeigh(v.getText().toString(), minqty_text)) {
                     verticalStepperForm.goToNextStep();
                 }
                 return false;
@@ -478,13 +478,13 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                 hasNoNumbers(type_text.getText().toString());
                 break;
             case QTY_STEP:
-                isValidQtyWeigh(qty_text.getText().toString());
+                isValidQtyWeigh(qty_text.getText().toString(), qty_text);
                 break;
             case WEIGHT_STEP:
-                isValidQtyWeigh(weight_text.getText().toString());
+                isValidQtyWeigh(weight_text.getText().toString(), weight_text);
                 break;
             case MINQTY_STEP:
-                isValidQtyWeigh(minqty_text.getText().toString());
+                isValidQtyWeigh(minqty_text.getText().toString(), minqty_text);
                 break;
             case NOTES_STEP:
                 verticalStepperForm.setActiveStepAsCompleted();
@@ -513,15 +513,17 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         new SaveTask(editMode).execute();
     }
 
-    public boolean isValidQtyWeigh(String number) {
+    public boolean isValidQtyWeigh(String number, EditText editText) {
         boolean onlynumbers = false;
 
         if (number.matches("[0-9]+")) {
             onlynumbers = true;
+            editText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
             verticalStepperForm.setActiveStepAsCompleted();
         } else {
             String numErrorString;
             numErrorString = getResources().getString(R.string.error_not_a_number);
+            editText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.input_error_color), PorterDuff.Mode.SRC_ATOP);
             verticalStepperForm.setActiveStepAsUncompleted(numErrorString);
         }
         return onlynumbers;
@@ -533,14 +535,14 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         //check if correct!!
         if (type.matches("[a-zA-Z]+")) {
             typeIsCorrect = true;
-
+            type_text.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
             verticalStepperForm.setActiveStepAsCompleted();
             // Equivalent to: verticalStepperForm.setStepAsCompleted(TITLE_STEP_NUM);
 
         } else {
             String typeErrorString;
             typeErrorString = getResources().getString(R.string.error_has_numbers);
-
+            type_text.getBackground().mutate().setColorFilter(getResources().getColor(R.color.input_error_color), PorterDuff.Mode.SRC_ATOP);
             verticalStepperForm.setActiveStepAsUncompleted(typeErrorString);
             // Equivalent to: verticalStepperForm.setStepAsUncompleted(TITLE_STEP_NUM, titleError);
 
@@ -551,14 +553,14 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
     private boolean isEmpty(String content) {
         boolean isempty = false;
         if (!content.isEmpty()) {
-            name_text.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.OVERLAY);
+            name_text.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
             verticalStepperForm.setActiveStepAsCompleted();
             return isempty;
         } else {
             isempty = true;
             String emptycontent;
             emptycontent = getResources().getString(R.string.error_empty_content);
-            name_text.getBackground().mutate().setColorFilter(getResources().getColor(R.color.input_error_color), PorterDuff.Mode.OVERLAY);
+            name_text.getBackground().mutate().setColorFilter(getResources().getColor(R.color.input_error_color), PorterDuff.Mode.SRC_ATOP);
             verticalStepperForm.setActiveStepAsUncompleted(emptycontent);
         }
         return isempty;
@@ -681,7 +683,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         }
         // Saving weight field
         if (weight_text != null) {
-            if (!qty_text.getText().toString().isEmpty())
+            if (!weight_text.getText().toString().isEmpty())
                 drugDO_tmp.setWeight(Double.parseDouble(weight_text.getText().toString()));
         }
 

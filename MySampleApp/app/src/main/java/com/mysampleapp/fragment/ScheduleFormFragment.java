@@ -601,26 +601,6 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                 }, hour, minutes, true);
     }
 
-    private boolean checkTitleStep(String title) {
-        boolean titleIsCorrect = false;
-
-        if (title.length() >= MIN_CHARACTERS_TITLE) {
-            titleIsCorrect = true;
-
-            verticalStepperForm.setActiveStepAsCompleted();
-            // Equivalent to: verticalStepperForm.setStepAsCompleted(TITLE_STEP_NUM);
-
-        } else {
-            String titleError = "ASD";
-
-            verticalStepperForm.setActiveStepAsUncompleted(titleError);
-            // Equivalent to: verticalStepperForm.setStepAsUncompleted(TITLE_STEP_NUM, titleError);
-
-        }
-
-        return titleIsCorrect;
-    }
-
     private void setTime(int hour, int minutes) {
         time = new Pair<>(hour, minutes);
         String hourString = ((time.first > 9) ?
@@ -696,16 +676,20 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                     if (s.equals(drugname))
                         exists = true;
             }
-            if (exists)
+            if (exists) {
+                autoDrugTextView.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
                 verticalStepperForm.setActiveStepAsCompleted();
+            }
             else {
                 if (drugname.isEmpty()) {
                     String emptycontent;
                     emptycontent = getResources().getString(R.string.error_empty_content);
+                    autoDrugTextView.getBackground().mutate().setColorFilter(getResources().getColor(R.color.input_error_color), PorterDuff.Mode.SRC_ATOP);
                     verticalStepperForm.setActiveStepAsUncompleted(emptycontent);
                 } else {
                     String nodrug;
                     nodrug = getResources().getString(R.string.error_drug_not_exists);
+                    autoDrugTextView.getBackground().mutate().setColorFilter(getResources().getColor(R.color.input_error_color), PorterDuff.Mode.SRC_ATOP);
                     verticalStepperForm.setActiveStepAsUncompleted(nodrug);
                 }
             }
