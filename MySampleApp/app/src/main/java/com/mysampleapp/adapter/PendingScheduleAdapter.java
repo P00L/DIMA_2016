@@ -80,8 +80,15 @@ public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingSchedule
                 mListener.onClick(v,position,false);
             }
         });
-        //skip button listener
+        //take button listener
         holder.takeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onClick(v,position,false);
+            }
+        });
+        //postpone button listener
+        holder.postponeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onClick(v,position,false);
@@ -102,6 +109,7 @@ public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingSchedule
         private TextView quantityTextView;
         private Button takeButton;
         private Button skipButton;
+        private Button postponeButton;
         private ImageView imageView;
 
         public ViewHolder(View itemView) {
@@ -115,6 +123,7 @@ public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingSchedule
             quantityTextView = (TextView) itemView.findViewById(R.id.quantity);
             skipButton = (Button) itemView.findViewById(R.id.skip);
             takeButton = (Button) itemView.findViewById(R.id.take);
+            postponeButton = (Button) itemView.findViewById(R.id.postpone);
         }
 
         public void setClickListener(ItemClickListener itemClickListener) {

@@ -518,6 +518,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
                 return false;
             }
         });
+        notesEditText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
         return notesEditText;
     }
 

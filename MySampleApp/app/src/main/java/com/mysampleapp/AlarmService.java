@@ -32,6 +32,8 @@ import java.util.Set;
 public class AlarmService extends IntentService {
 
     public static final String SCHEDULE_EXTRA = "schedule";
+    public static final String SCHEDULE_LIST_EXTRA = "scheduleList";
+    public static final String DELAY_EXTRA = "delay";
     public static final String ACTION_EXTRA = "action";
     public static final String SCHEDULE_OLD_EXTRA = "scheduleOld";
     public static final String DRUG_EXTRA = "drug";
@@ -46,8 +48,10 @@ public class AlarmService extends IntentService {
         Log.w("AlarmService", "service running");
         ScheduleDrugDO scheduleDrugDO;
         ScheduleDrugDO scheduleDrugDO_old;
+        ArrayList<ScheduleDrugDO> scheduleDrugList;
         DrugDO drugDO;
         DrugDO drugDO_old;
+        int delay;
         String action = intent.getStringExtra(AlarmService.ACTION_EXTRA);
         switch (action) {
             case "set":
@@ -65,6 +69,12 @@ public class AlarmService extends IntentService {
                 scheduleDrugDO = intent.getParcelableExtra(AlarmService.SCHEDULE_EXTRA);
                 Log.w("AlarmService", "cancelAlarm");
                 cancelAlarm(scheduleDrugDO);
+                break;
+            case "postpone":
+                Log.w("AlarmService", "postpone");
+                scheduleDrugList = intent.getParcelableArrayListExtra(AlarmService.SCHEDULE_LIST_EXTRA);
+                delay = intent.getIntExtra(AlarmService.DELAY_EXTRA,0);
+                postpone(scheduleDrugList,delay);
                 break;
             case "update_drug":
                 Log.w("AlarmService", "updateDrug");
@@ -257,6 +267,29 @@ public class AlarmService extends IntentService {
         Intent alertIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), scheduleDrugDO.getAlarmId().intValue(), alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(alarmIntent);
+    }
+
+    private void postpone(ArrayList<ScheduleDrugDO> scheduleDrugList, int delay) {
+        Log.w("AlarmService", "started postpone");
+        Log.w("AlarmService","dleay "+delay);
+        long now = Calendar.getInstance().getTimeInMillis();
+        for(ScheduleDrugDO scheduleDrugDO : scheduleDrugList){
+            cancelAlarm(scheduleDrugDO);
+
+            long alarmDelay = now+ delay*1000;
+
+            AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            // Define our intention of executing AlertReceiver
+            Intent alertIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
+
+            alertIntent.putExtra(AlarmService.SCHEDULE_EXTRA, scheduleDrugDO);
+            PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), scheduleDrugDO.getAlarmId().intValue(), alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Log.w("AlarmService", "alarm delay " + alarmDelay);
+
+            alarmManager.set(AlarmManager.RTC_WAKEUP, alarmDelay, alarmIntent);
+        }
+
     }
 
     private void updateDrug(DrugDO drugDO, DrugDO drugDO_old) {

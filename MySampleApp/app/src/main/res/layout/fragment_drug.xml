@@ -201,12 +201,20 @@
                     android:textSize="24sp" />
             </LinearLayout>
 
+            <Button
+                android:id="@+id/button_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/notes_layout"
+                android:orientation="horizontal"
+                android:text="Sottoscorta mail"/>
+
             <View
                 android:id="@+id/view1"
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/notes_layout"
+                android:layout_below="@+id/button_send"
                 android:layout_marginTop="10dp"
                 android:background="@color/colorAccent" />
 

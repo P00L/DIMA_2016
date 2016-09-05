@@ -53,6 +53,7 @@
         android:layout_marginEnd="@dimen/fab_margin"
         app:fabSize="mini"
         android:visibility="gone"
+        android:src="@drawable/ic_action_postpone"
         />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

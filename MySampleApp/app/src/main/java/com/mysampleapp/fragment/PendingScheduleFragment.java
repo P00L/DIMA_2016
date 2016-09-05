@@ -41,6 +41,7 @@ import android.widget.TextView;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.mysampleapp.AlarmService;
 import com.mysampleapp.DetailsTransition;
 import com.mysampleapp.R;
 import com.mysampleapp.SottoscortaService;
@@ -70,7 +71,7 @@ import java.util.Set;
  * Use the {@link PendingScheduleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PendingScheduleFragment extends Fragment implements ItemClickListener,ItemClickListenerAnimation {
+public class PendingScheduleFragment extends Fragment implements ItemClickListener, ItemClickListenerAnimation {
 
     private static final String ARG_SCHEDULELIST = "param1";
     private final static String LOG_TAG = PendingScheduleFragment.class.getSimpleName();
@@ -92,6 +93,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
     private FloatingActionButton fab2;
     private FloatingActionButton fab3;
     private Animation rotate_open;
+    private Animation rotate_open_360;
     private Animation rotate_close;
     private ProgressBar mProgress;
     private Paint p = new Paint();
@@ -147,6 +149,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
         fab3 = (FloatingActionButton) activity.findViewById(R.id.fab3);
         rotate_open = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_open_180);
         rotate_close = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_close_180);
+        rotate_open_360 = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_open_360);
 
         if (!fab.isShown()) {
             fab.show();
@@ -160,6 +163,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0) {
                     if (fab1.isShown()) {
+                        fabMenuBG.setVisibility(View.GONE);
                         fab1.hide();
                         fab2.hide();
                         fab3.hide();
@@ -205,6 +209,76 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                 }
         );
 
+        //postpone all
+        fab1.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DialogPickerDelay dialogPicker = new DialogPickerDelay();
+                        dialogPicker.setOnClick(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //start service to postpone alarm
+                                Intent i = new Intent(getContext(), AlarmService.class);
+                                i.putExtra(AlarmService.SCHEDULE_LIST_EXTRA, pendingItems);
+                                i.putExtra(AlarmService.ACTION_EXTRA, "postpone");
+                                i.putExtra(AlarmService.DELAY_EXTRA, Integer.parseInt(getResources().getStringArray(R.array.delay)[which]));
+                                getContext().startService(i);
+                                int number_pending = pendingItems.size();
+                                pendingItems.clear();
+                                mAdapter.notifyItemRangeRemoved(0, number_pending);
+                                if (pendingItems.size() == 0) {
+                                    enableEmptyState("No pendig schedule");
+                                    disableFab();
+                                    fab1.hide();
+                                    fab2.hide();
+                                    fab3.hide();
+                                }
+                                mAdapter.notifyItemRangeRemoved(0, number_pending);
+                                fab.show();
+                                fab.startAnimation(rotate_close);
+                                Snackbar.make(fab, "postpone all " +getResources().getStringArray(R.array.delay)[which]+" min!!", Snackbar.LENGTH_LONG).show();
+                            }
+                        });
+                        dialogPicker.show(activity.getSupportFragmentManager(), null);
+                    }
+                }
+        );
+        //skip all
+        fab2.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.w(LOG_TAG, "skip all");
+                        for (ScheduleDrugDO shedule : pendingItems) {
+                            clearSharedPref(shedule);
+                        }
+                        int number_pending = pendingItems.size();
+                        pendingItems.clear();
+                        if (pendingItems.size() == 0) {
+                            enableEmptyState("No pendig schedule");
+                            disableFab();
+                            fab1.hide();
+                            fab2.hide();
+                            fab3.hide();
+                        }
+                        mAdapter.notifyItemRangeRemoved(0, number_pending);
+                        fab.show();
+                        fab.startAnimation(rotate_close);
+                        Snackbar.make(fab, "Skipped all!!", Snackbar.LENGTH_LONG).show();
+                    }
+                }
+        );
+        //take all
+        fab3.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new SaveTask(pendingItems).execute();
+                    }
+                }
+        );
+
         DemoNoSQLTableBase demoTable = DemoNoSQLTableFactory.instance(getContext())
                 .getNoSQLTableByTableName("ScheduleDrug");
         operation = (DemoNoSQLOperation) demoTable.getOperationByName(getContext(), "all");
@@ -232,7 +306,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                         return s1.getDrug().compareTo(s2.getDrug());   //or whatever your sorting algorithm
                     }
                 }));
-                mAdapter = new PendingScheduleAdapter(getContext(), pendingItems, this,this);
+                mAdapter = new PendingScheduleAdapter(getContext(), pendingItems, this, this);
                 mRecyclerView.setAdapter(mAdapter);
                 enableFab();
             } else {
@@ -284,11 +358,13 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
     }
 
     @Override
-    public void onClick(View view, int position, boolean isLongClick) {
+    public void onClick(View view, final int position, boolean isLongClick) {
         switch (view.getId()) {
             case R.id.take:
                 Log.w(LOG_TAG, "take");
-                new SaveTask(pendingItems.get(position)).execute();
+                ArrayList<ScheduleDrugDO> tmp = new ArrayList<>();
+                tmp.add(pendingItems.get(position));
+                new SaveTask(tmp).execute();
                 break;
             case R.id.skip:
                 Log.w(LOG_TAG, "skip");
@@ -304,12 +380,32 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                 fab.show();
                 mAdapter.notifyItemRemoved(position);
                 break;
+            case R.id.postpone:
+                Log.w(LOG_TAG, "postpone");
+                DialogPickerDelay dialogPicker = new DialogPickerDelay();
+                dialogPicker.setOnClick(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ArrayList<ScheduleDrugDO> tmp = new ArrayList<>();
+                        //start service to postpone alarm
+                        Intent i = new Intent(getContext(), AlarmService.class);
+                        tmp.add(pendingItems.get(position));
+                        i.putExtra(AlarmService.SCHEDULE_LIST_EXTRA, tmp);
+                        i.putExtra(AlarmService.ACTION_EXTRA, "postpone");
+                        i.putExtra(AlarmService.DELAY_EXTRA, Integer.parseInt(getResources().getStringArray(R.array.delay)[which]));
+                        getContext().startService(i);
+                        pendingItems.remove(position);
+                        mAdapter.notifyItemRemoved(position);
+                    }
+                });
+                dialogPicker.show(activity.getSupportFragmentManager(), null);
+                break;
         }
     }
 
     @Override
     public void onClick(ImageView imageView, int position, boolean isLongClick) {
-        fab.startAnimation(rotate_open);
+        fab.startAnimation(rotate_open_360);
 
         //see github project to more detail
         Fragment scheduleFragment = ScheduleFragment.newInstance(pendingItems.get(position));
@@ -338,7 +434,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -415,7 +511,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                 if (pendingItems.size() > 0) {
                     Log.w(LOG_TAG, "SUCCESS " + "SUCCESS");
                     enableFab();
-                    mAdapter = new PendingScheduleAdapter(getContext(), pendingItems, listClass,listClass);
+                    mAdapter = new PendingScheduleAdapter(getContext(), pendingItems, listClass, listClass);
                     mRecyclerView.setAdapter(mAdapter);
                 } else {
                     disableFab();
@@ -440,18 +536,21 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
 
     private class SaveTask extends AsyncTask<Void, Void, Void> {
         private Boolean success;
-        private ScheduleDrugDO scheduleDrugDO;
+        private ArrayList<ScheduleDrugDO> scheduleDrugList;
         private DrugDO drugItem;
 
-        public SaveTask(ScheduleDrugDO scheduleDrug) {
-            scheduleDrugDO = scheduleDrug;
+        public SaveTask(ArrayList<ScheduleDrugDO> scheduleDrugList) {
+            this.scheduleDrugList = scheduleDrugList;
             success = false;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            /*
+            if (scheduleDrugList.size() != 1) {
+                mProgress.setVisibility(View.VISIBLE);
+            }
+                /*
             //TODO NON RIMANE SULLA ROTAZIONE
             // Create a progressdialog
             mProgressDialog = new ProgressDialog(getContext());
@@ -468,52 +567,78 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
 
         @Override
         protected Void doInBackground(Void... params) {
-            //getting the drug associated to the schedule to decrement the quantity
-            DemoNoSQLTableBase demoTable = DemoNoSQLTableFactory.instance(getContext())
-                    .getNoSQLTableByTableName("Drug");
-            DemoNoSQLOperation operation = ((DemoNoSQLTableDrug) demoTable).getOperationByNameSingle(getContext(), "one", scheduleDrugDO.getDrug());
-            DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-            try {
-                success = operation.executeOperation();
-                drugItem = ((DemoNoSQLTableDrug.DemoGetWithPartitionKeyAndSortKey) operation).getResult();
-                Log.w(LOG_TAG, drugItem.getQuantity() + "-" + scheduleDrugDO.getQuantity() + "=" + (drugItem.getQuantity() - scheduleDrugDO.getQuantity()));
-                drugItem.setQuantity(drugItem.getQuantity() - scheduleDrugDO.getQuantity());
-                mapper.save(drugItem);
-                success = true;
+            for (ScheduleDrugDO scheduleDrugDO : scheduleDrugList) {
+                //getting the drug associated to the schedule to decrement the quantity
+                DemoNoSQLTableBase demoTable = DemoNoSQLTableFactory.instance(getContext())
+                        .getNoSQLTableByTableName("Drug");
+                DemoNoSQLOperation operation = ((DemoNoSQLTableDrug) demoTable).getOperationByNameSingle(getContext(), "one", scheduleDrugDO.getDrug());
+                try {
+                    success = operation.executeOperation();
+                    drugItem = ((DemoNoSQLTableDrug.DemoGetWithPartitionKeyAndSortKey) operation).getResult();
+                    Log.w(LOG_TAG, drugItem.getQuantity() + "-" + scheduleDrugDO.getQuantity() + "=" + (drugItem.getQuantity() - scheduleDrugDO.getQuantity()));
+                    drugItem.setQuantity(drugItem.getQuantity() - scheduleDrugDO.getQuantity());
+                    mapper.save(drugItem);
+                    success = true;
 
-            } catch (final AmazonClientException ex) {
-                Log.e("ASD", "Failed saving item : " + ex.getMessage(), ex);
-                success = false;
+                } catch (final AmazonClientException ex) {
+                    Log.e("ASD", "Failed saving item : " + ex.getMessage(), ex);
+                    success = false;
+                }
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void args) {
-            int position = pendingItems.indexOf(scheduleDrugDO);
-            if (success) {
-                pendingItems.remove(scheduleDrugDO);
-                if (pendingItems.size() == 0) {
-                    enableEmptyState("No pendig schedule");
-                    disableFab();
-                    fab1.hide();
-                    fab2.hide();
-                    fab3.hide();
-                }
-                fab.show();
-                mAdapter.notifyItemRemoved(position);
-                clearSharedPref(scheduleDrugDO);
-                //start service to check sottoscorta
-                Intent i = new Intent(getContext(), SottoscortaService.class);
-                i.putExtra(SottoscortaService.DRUG_EXTRA, drugItem);
-                i.putExtra(SottoscortaService.ACTION_EXTRA, "take");
-                getContext().startService(i);
-                Snackbar.make(fab,scheduleDrugDO.getDrug()+" Taken!!", Snackbar.LENGTH_LONG).show();
+            if (scheduleDrugList.size() == 1) {
+                int position = pendingItems.indexOf(scheduleDrugList.get(0));
+                if (success) {
+                    pendingItems.remove(scheduleDrugList.get(0));
+                    if (pendingItems.size() == 0) {
+                        enableEmptyState("No pendig schedule");
+                        disableFab();
+                        fab1.hide();
+                        fab2.hide();
+                        fab3.hide();
+                    }
+                    fab.show();
+                    mAdapter.notifyItemRemoved(position);
+                    clearSharedPref(scheduleDrugList.get(0));
+                    //start service to check sottoscorta
+                    Intent i = new Intent(getContext(), SottoscortaService.class);
+                    i.putExtra(SottoscortaService.DRUG_EXTRA, drugItem);
+                    i.putExtra(SottoscortaService.ACTION_EXTRA, "take");
+                    getContext().startService(i);
+                    Snackbar.make(fab, scheduleDrugList.get(0).getDrug() + " Taken!", Snackbar.LENGTH_LONG).show();
 
+                } else {
+                    Snackbar.make(fab, scheduleDrugList.get(0).getDrug() + " Skipped!", Snackbar.LENGTH_LONG).show();
+                }
             } else {
-                Snackbar.make(fab, scheduleDrugDO.getDrug()+" Skipped!", Snackbar.LENGTH_LONG).show();
+                mProgress.setVisibility(View.GONE);
+                if (success) {
+                    Snackbar.make(fab, "Taken all!", Snackbar.LENGTH_LONG).show();
+                    for (ScheduleDrugDO shedule : pendingItems) {
+                        clearSharedPref(shedule);
+                    }
+                    int number_pending = pendingItems.size();
+                    pendingItems.clear();
+                    if (pendingItems.size() == 0) {
+                        enableEmptyState("No pendig schedule");
+                        disableFab();
+                        fab1.hide();
+                        fab2.hide();
+                        fab3.hide();
+                    }
+                    mAdapter.notifyItemRangeRemoved(0, number_pending);
+                    fab.show();
+                    fab.startAnimation(rotate_close);
+                    Snackbar.make(fab, "Taken all!!", Snackbar.LENGTH_LONG).show();
+                } else
+                    Snackbar.make(fab, "Error!", Snackbar.LENGTH_LONG).show();
             }
         }
+
     }
 
     private void clearSharedPref(ScheduleDrugDO scheduleDrugDO) {
@@ -570,11 +695,13 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                 int position = viewHolder.getAdapterPosition();
                 if (direction == ItemTouchHelper.LEFT) {
                     Log.w(LOG_TAG, "take");
-                    new SaveTask(pendingItems.get(position)).execute();
-                }else{
+                    ArrayList<ScheduleDrugDO> tmp = new ArrayList<>();
+                    tmp.add(pendingItems.get(position));
+                    new SaveTask(tmp).execute();
+                } else {
                     Log.w(LOG_TAG, "skip");
                     clearSharedPref(pendingItems.get(position));
-                    Snackbar.make(fab, pendingItems.get(position).getDrug()+" Skipped!", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(fab, pendingItems.get(position).getDrug() + " Skipped!", Snackbar.LENGTH_LONG).show();
                     pendingItems.remove(position);
                     if (pendingItems.size() == 0) {
                         enableEmptyState("No pendig schedule");

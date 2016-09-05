@@ -194,6 +194,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                         //do nothing
                     }
                 });
+
                 backConfirmation.setOnNotConfirmBack(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

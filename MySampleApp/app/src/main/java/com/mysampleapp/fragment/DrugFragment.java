@@ -1,6 +1,8 @@
 package com.mysampleapp.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,11 +11,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.mysampleapp.R;
@@ -29,7 +33,6 @@ import java.util.ArrayList;
  * to handle interaction events.
  * Use the {@link DrugFragment#newInstance} factory method to
  * create an instance of this fragment.
- *
  */
 public class DrugFragment extends Fragment {
 
@@ -39,6 +42,7 @@ public class DrugFragment extends Fragment {
     private AppCompatActivity activity;
     private FloatingActionButton fab;
     private Animation rotate_close;
+    private Button sendEmailButton;
 
 
     // TODO: Rename and change types and number of parameters
@@ -49,13 +53,14 @@ public class DrugFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public DrugFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if(getArguments() != null)
+        if (getArguments() != null)
             drugDO = getArguments().getParcelable(ARG_DRUGDO);
         super.onCreate(savedInstanceState);
     }
@@ -73,6 +78,7 @@ public class DrugFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         activity = (AppCompatActivity) getActivity();
         fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+        sendEmailButton = (Button) view.findViewById(R.id.button_send);
         fab.setImageResource(R.drawable.ic_action_modify);
         rotate_close = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_close_360);
         if (!fab.isShown()) {
@@ -91,6 +97,33 @@ public class DrugFragment extends Fragment {
             }
         });
 
+        sendEmailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogPickerDoctor dialogPicker = new DialogPickerDoctor();
+                dialogPicker.setOnClick(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //TODO SETTARE TUTTI I CAMPI
+                        //io metterei nelle shared pref i dottori attivi per non fare la query qui
+                        //e terrei aggiornate le shared pref sulla modifica/aggiunta/cancellazione del dottore
+                        Log.w("DrugFragment",which+"");
+                        Intent intentEmail = new Intent(Intent.ACTION_SEND);
+                        intentEmail.setData(Uri.parse("mailto:"));
+                        intentEmail.setType("message/rfc822");
+                        String[] to = {"fusari.pool@gmail.com"};
+                        intentEmail.putExtra(Intent.EXTRA_EMAIL, to);
+                        intentEmail.putExtra(Intent.EXTRA_SUBJECT, "prova mail");
+                        intentEmail.putExtra(Intent.EXTRA_TEXT, "finite pastiglie xxx");
+                        if (intentEmail.resolveActivity(getActivity().getPackageManager()) != null) {
+                            startActivity(Intent.createChooser(intentEmail, "Choose an email client from..."));
+                        }
+                    }
+                });
+                dialogPicker.show(activity.getSupportFragmentManager(), null);
+            }
+        });
+
         activity.getSupportActionBar().setTitle(R.string.drug);
 
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
@@ -98,8 +131,8 @@ public class DrugFragment extends Fragment {
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        ((HomeActivity)activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
-        ((HomeActivity)activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
+        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
+        ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
