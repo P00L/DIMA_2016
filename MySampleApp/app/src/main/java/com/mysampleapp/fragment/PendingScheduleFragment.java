@@ -13,6 +13,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -25,22 +26,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.transition.Fade;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.mysampleapp.DetailsTransition;
 import com.mysampleapp.R;
 import com.mysampleapp.SottoscortaService;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.adapter.ItemClickListener;
+import com.mysampleapp.adapter.ItemClickListenerAnimation;
 import com.mysampleapp.adapter.PendingScheduleAdapter;
 import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
@@ -64,7 +70,7 @@ import java.util.Set;
  * Use the {@link PendingScheduleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PendingScheduleFragment extends Fragment implements ItemClickListener {
+public class PendingScheduleFragment extends Fragment implements ItemClickListener,ItemClickListenerAnimation {
 
     private static final String ARG_SCHEDULELIST = "param1";
     private final static String LOG_TAG = PendingScheduleFragment.class.getSimpleName();
@@ -84,10 +90,12 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
     private FloatingActionButton fab;
     private FloatingActionButton fab1;
     private FloatingActionButton fab2;
+    private FloatingActionButton fab3;
     private Animation rotate_open;
     private Animation rotate_close;
     private ProgressBar mProgress;
     private Paint p = new Paint();
+    private FrameLayout fabMenuBG;
     private int edit_position;
     private AlertDialog.Builder alertDialog;
 
@@ -123,7 +131,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
         super.onViewCreated(view, savedInstanceState);
         activity = (AppCompatActivity) getActivity();
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-
+        fabMenuBG = (FrameLayout) view.findViewById(R.id.swipe_bg);
         //getting pending notification
         SharedPreferences sharedPref = getContext().getSharedPreferences(
                 getContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
@@ -136,6 +144,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
         fab = (FloatingActionButton) activity.findViewById(R.id.fab);
         fab1 = (FloatingActionButton) activity.findViewById(R.id.fab1);
         fab2 = (FloatingActionButton) activity.findViewById(R.id.fab2);
+        fab3 = (FloatingActionButton) activity.findViewById(R.id.fab3);
         rotate_open = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_open_180);
         rotate_close = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_close_180);
 
@@ -153,6 +162,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                     if (fab1.isShown()) {
                         fab1.hide();
                         fab2.hide();
+                        fab3.hide();
                         fab.startAnimation(rotate_close);
                         fab.hide();
                     } else {
@@ -176,6 +186,8 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                             //open menu
                             fab1.show();
                             fab2.show();
+                            fab3.show();
+                            fabMenuBG.setVisibility(View.VISIBLE);
                             fab.startAnimation(rotate_open);
 
                         } else {
@@ -184,8 +196,9 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                             //mRecyclerView.setClickable(true);
                             fab1.hide();
                             fab2.hide();
+                            fab3.hide();
+                            fabMenuBG.setVisibility(View.GONE);
                             fab.startAnimation(rotate_close);
-
                         }
 
                     }
@@ -219,7 +232,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                         return s1.getDrug().compareTo(s2.getDrug());   //or whatever your sorting algorithm
                     }
                 }));
-                mAdapter = new PendingScheduleAdapter(getContext(), pendingItems, this);
+                mAdapter = new PendingScheduleAdapter(getContext(), pendingItems, this,this);
                 mRecyclerView.setAdapter(mAdapter);
                 enableFab();
             } else {
@@ -286,11 +299,38 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                     disableFab();
                     fab1.hide();
                     fab2.hide();
+                    fab3.hide();
                 }
                 fab.show();
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRemoved(position);
                 break;
         }
+    }
+
+    @Override
+    public void onClick(ImageView imageView, int position, boolean isLongClick) {
+        fab.startAnimation(rotate_open);
+
+        //see github project to more detail
+        Fragment scheduleFragment = ScheduleFragment.newInstance(pendingItems.get(position));
+
+        // Note that we need the API version check here because the actual transition classes (e.g. Fade)
+        // are not in the support library and are only available in API 21+. The methods we are calling on the Fragment
+        // ARE available in the support library (though they don't do anything on API < 21)
+        //qui pendo potremo giocare con le animazioni come vogliamo
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            scheduleFragment.setSharedElementEnterTransition(new DetailsTransition());
+            scheduleFragment.setEnterTransition(new Fade());
+            setExitTransition(new Fade());
+            scheduleFragment.setSharedElementReturnTransition(new DetailsTransition());
+        }
+
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .addSharedElement(imageView, "kittenImage")
+                .replace(R.id.content_frame, scheduleFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     /**
@@ -313,6 +353,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
         if (fab1.isShown()) {
             fab1.hide();
             fab2.hide();
+            fab3.hide();
             fab.startAnimation(rotate_close);
         }
         if (items == null)
@@ -374,7 +415,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                 if (pendingItems.size() > 0) {
                     Log.w(LOG_TAG, "SUCCESS " + "SUCCESS");
                     enableFab();
-                    mAdapter = new PendingScheduleAdapter(getContext(), pendingItems, listClass);
+                    mAdapter = new PendingScheduleAdapter(getContext(), pendingItems, listClass,listClass);
                     mRecyclerView.setAdapter(mAdapter);
                 } else {
                     disableFab();
@@ -410,6 +451,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            /*
             //TODO NON RIMANE SULLA ROTAZIONE
             // Create a progressdialog
             mProgressDialog = new ProgressDialog(getContext());
@@ -420,6 +462,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
             mProgressDialog.setIndeterminate(false);
             // Show progressdialog
             mProgressDialog.show();
+            */
 
         }
 
@@ -447,39 +490,28 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
 
         @Override
         protected void onPostExecute(Void args) {
+            int position = pendingItems.indexOf(scheduleDrugDO);
             if (success) {
-                mProgressDialog.dismiss();
                 pendingItems.remove(scheduleDrugDO);
                 if (pendingItems.size() == 0) {
                     enableEmptyState("No pendig schedule");
                     disableFab();
                     fab1.hide();
                     fab2.hide();
+                    fab3.hide();
                 }
                 fab.show();
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRemoved(position);
                 clearSharedPref(scheduleDrugDO);
                 //start service to check sottoscorta
                 Intent i = new Intent(getContext(), SottoscortaService.class);
                 i.putExtra(SottoscortaService.DRUG_EXTRA, drugItem);
                 i.putExtra(SottoscortaService.ACTION_EXTRA, "take");
                 getContext().startService(i);
+                Snackbar.make(fab,scheduleDrugDO.getDrug()+" Taken!!", Snackbar.LENGTH_LONG).show();
 
             } else {
-                mProgressDialog.dismiss();
-                //TODO se qualcosa non va bisogna resettare docDO ai valori precedenti se viene premuto discard
-                //o forse meglio usare un oggetto temporaneo per salvare tutto se va bene settare anche quello giusto
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setMessage("Error")
-                        .setTitle("an error as occurred");
-                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                mAdapter.notifyDataSetChanged();
+                Snackbar.make(fab, scheduleDrugDO.getDrug()+" Skipped!", Snackbar.LENGTH_LONG).show();
             }
         }
     }
@@ -540,8 +572,19 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                     Log.w(LOG_TAG, "take");
                     new SaveTask(pendingItems.get(position)).execute();
                 }else{
-                    Log.w(LOG_TAG, "take");
-                    new SaveTask(pendingItems.get(position)).execute();
+                    Log.w(LOG_TAG, "skip");
+                    clearSharedPref(pendingItems.get(position));
+                    Snackbar.make(fab, pendingItems.get(position).getDrug()+" Skipped!", Snackbar.LENGTH_LONG).show();
+                    pendingItems.remove(position);
+                    if (pendingItems.size() == 0) {
+                        enableEmptyState("No pendig schedule");
+                        disableFab();
+                        fab1.hide();
+                        fab2.hide();
+                        fab3.hide();
+                    }
+                    fab.show();
+                    mAdapter.notifyItemRemoved(position);
                 }
             }
 
@@ -555,21 +598,24 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                     float width = height / 3;
 
                     if (dX > 0) {
-                        p.setColor(Color.parseColor("#D32F2F"));
+                        p.setColor(getResources().getColor(R.color.red));
                         RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX, (float) itemView.getBottom());
                         c.drawRect(background, p);
-                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_delete);
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_x);
                         RectF icon_dest = new RectF((float) itemView.getLeft() + width, (float) itemView.getTop() + width, (float) itemView.getLeft() + 2 * width, (float) itemView.getBottom() - width);
+                        c.clipRect(background);
                         c.drawBitmap(icon, null, icon_dest, p);
                     } else {
-                        p.setColor(Color.parseColor("#D32F2F"));
+                        p.setColor(getResources().getColor(R.color.green));
                         RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(), (float) itemView.getRight(), (float) itemView.getBottom());
                         c.drawRect(background, p);
-                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_delete);
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_take);
                         RectF icon_dest = new RectF((float) itemView.getRight() - 2 * width, (float) itemView.getTop() + width, (float) itemView.getRight() - width, (float) itemView.getBottom() - width);
+                        c.clipRect(background);
                         c.drawBitmap(icon, null, icon_dest, p);
                     }
                 }
+                c.restore();
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         };
@@ -577,9 +623,4 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
-    private void removeView() {
-        if (getView().getParent() != null) {
-            ((ViewGroup) getView().getParent()).removeView(getView());
-        }
-    }
 }

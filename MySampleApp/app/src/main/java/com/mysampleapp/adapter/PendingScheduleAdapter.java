@@ -1,16 +1,16 @@
 package com.mysampleapp.adapter;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.mysampleapp.R;
@@ -25,11 +25,14 @@ public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingSchedule
     private Context mContext;
     private ArrayList<ScheduleDrugDO> mList;
     private ItemClickListener mListener;
+    private ItemClickListenerAnimation animationListener;
 
-    public PendingScheduleAdapter(Context contexts, ArrayList<ScheduleDrugDO> list, ItemClickListener mListener) {
+    public PendingScheduleAdapter(Context contexts, ArrayList<ScheduleDrugDO> list, ItemClickListener mListener,
+    ItemClickListenerAnimation itemAnimationListener) {
         this.mContext = contexts;
         this.mList = list;
         this.mListener = mListener;
+        this.animationListener = itemAnimationListener;
     }
 
 
@@ -41,26 +44,17 @@ public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingSchedule
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         //TODO togliere toast
         final ScheduleDrugDO scheduleDrugDO = mList.get(position);
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
-                if (isLongClick) {
-                    Toast.makeText(mContext, "#" + position + " - " + mList.get(position) + " (Long click)", Toast.LENGTH_SHORT).show();
-                } else {
-                    Fragment fragment = ScheduleFragment.newInstance(scheduleDrugDO);
-                    AppCompatActivity activity = (AppCompatActivity) mContext;
-                    activity.getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.content_frame, fragment)
-                            .addToBackStack(null)
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .commit();
-                }
+                animationListener.onClick(holder.imageView, position, isLongClick);
             }
         });
+
+        ViewCompat.setTransitionName(holder.imageView, String.valueOf(position) + "_image");
 
         //set drug name
         holder.drugTextView.setText(scheduleDrugDO.getDrug());
@@ -108,6 +102,7 @@ public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingSchedule
         private TextView quantityTextView;
         private Button takeButton;
         private Button skipButton;
+        private ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -115,7 +110,8 @@ public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingSchedule
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
 
-            drugTextView = (TextView) itemView.findViewById(R.id.drug_name);
+            imageView = (ImageView) itemView.findViewById(R.id.icon_ID);
+            drugTextView = (TextView) itemView.findViewById(R.id.doc_name);
             quantityTextView = (TextView) itemView.findViewById(R.id.quantity);
             skipButton = (Button) itemView.findViewById(R.id.skip);
             takeButton = (Button) itemView.findViewById(R.id.take);

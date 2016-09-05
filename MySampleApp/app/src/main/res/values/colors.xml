@@ -8,6 +8,7 @@
     <color name="splash_background">#FFFFFF</color>
     <color name="main_background">#FFFFFF</color>
     <color name="black_overlay">#66000000</color>
+    <color name="white_overlay">#F2FFFFFF</color>
     <color name="nav_drawer_background">#FFFFFF</color>
     <color name="nav_drawer_top_background">#CCCCCC</color>
     <color name="nav_drawer_no_user_background">#AAAAAA</color>
@@ -16,6 +17,8 @@
     <color name="instructions_list_border_color">#FFDDDDDD</color>
     <color name="input_error_color">#af1212</color>
 
+    <color name="red">#c71212</color>
+    <color name="green">#05a618</color>
     <color name="schedule_item_col">#99D1C4E9</color>
     <color name="drug_item_col">#99B2EBF2</color>
     <color name="doc_item_col">#99B3E5FC</color>

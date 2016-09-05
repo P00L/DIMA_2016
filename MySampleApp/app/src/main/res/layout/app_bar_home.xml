@@ -23,14 +23,27 @@
 
     <include layout="@layout/content_home" />
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="88dp"
+        android:layout_gravity="bottom|end"
+        app:fabSize="mini"
+        android:src="@drawable/ic_action_take"
+        android:visibility="gone"
+        />
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="144dp"
+        android:layout_marginBottom="69dp"
+        android:layout_marginEnd="69dp"
         android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/fab_margin"
         app:fabSize="mini"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:src="@drawable/ic_action_x"
+        />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab1"
         android:layout_width="wrap_content"

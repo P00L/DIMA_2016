@@ -43,7 +43,23 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.drugTextView.setText(mList.get(position).getDrug());
         holder.imageView.setImageResource(R.drawable.ic_schedule);
-        holder.quantityTextView.setText(mList.get(position).getQuantity().intValue()+"");
+
+        //set quantity to take
+        switch (mList.get(position).getQuantity().toString()) {
+            case "1.0":
+                holder.quantityTextView.setText("take " + "1");
+                break;
+            case "0.5":
+                holder.quantityTextView.setText("take " + "1/2");
+                break;
+            case "0.25":
+                holder.quantityTextView.setText("take " + "1/4");
+                break;
+            case "2.0":
+                holder.quantityTextView.setText("take " + "2");
+                break;
+        }
+
         holder.imageButton.setImageResource(R.drawable.ic_action_pill);
         holder.setClickListener(new ItemClickListener() {
             @Override

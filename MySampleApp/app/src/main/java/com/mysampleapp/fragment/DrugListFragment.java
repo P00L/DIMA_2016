@@ -367,7 +367,7 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
                         return s1.getName().compareTo(s2.getName());   //or whatever your sorting algorithm
                     }
                 }));
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemInserted(items.indexOf(drugDO));
             }
         }
     }
@@ -463,7 +463,7 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
                         enableEmptyState(getResources().getString(R.string.enable_empty_drug));
                         enableFab();
                     }
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyItemRemoved(position);
                     Snackbar snackbar = Snackbar
                             .make(fab, "Deleting on DISMISS", Snackbar.LENGTH_LONG)
                             .setAction("UNDO", new View.OnClickListener() {
@@ -478,7 +478,7 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
                                             return s1.getName().compareTo(s2.getName());   //or whatever your sorting algorithm
                                         }
                                     }));
-                                    mAdapter.notifyDataSetChanged();
+                                    mAdapter.notifyItemInserted(position);
 
                                 }
                             });

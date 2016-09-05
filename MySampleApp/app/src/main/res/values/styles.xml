@@ -41,4 +41,20 @@
         <item name="android:shadowRadius">2</item>
     </style>
 
+
+    <style name="AppTheme.ButtonRed" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/red</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="AppTheme.ButtonGreen" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/green</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="AppTheme.ButtonBlue" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>

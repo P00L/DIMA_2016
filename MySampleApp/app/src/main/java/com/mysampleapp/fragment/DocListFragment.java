@@ -352,7 +352,7 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
                         return s1.getName().compareTo(s2.getName());   //or whatever your sorting algorithm
                     }
                 }));
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemInserted(items.indexOf(doctorDO));
             }
         }
     }
@@ -448,7 +448,7 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
                         enableEmptyState(getResources().getString(R.string.enable_empty_doc));
                         enableFab();
                     }
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyItemRemoved(position);
                     Snackbar snackbar = Snackbar
                             .make(fab, "Deleting on DISMISS", Snackbar.LENGTH_LONG)
                             .setAction("UNDO", new View.OnClickListener() {
@@ -463,7 +463,7 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
                                             return s1.getName().compareTo(s2.getName());   //or whatever your sorting algorithm
                                         }
                                     }));
-                                    mAdapter.notifyDataSetChanged();
+                                    mAdapter.notifyItemInserted(position);
 
                                 }
                             });

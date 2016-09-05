@@ -25,6 +25,7 @@
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
                     android:layout_centerHorizontal="true"
+                    android:transitionName="kittenImage"
                     android:src="@drawable/ic_icon_doctor"
                     android:id="@+id/doc_icon"/>
             </RelativeLayout>
