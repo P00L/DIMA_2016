@@ -203,4 +203,5 @@
     <string name="enable_empty_doc">Click\n" '+' "\nto insert a new Doctor</string>
     <string name="no_internet_connection">No data available,\ncheck your connection!</string>
 
+
 </resources>

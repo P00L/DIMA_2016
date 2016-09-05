@@ -33,6 +33,7 @@ import com.mysampleapp.demo.DemoConfiguration;
 import com.mysampleapp.demo.nosql.DrugDO;
 import com.mysampleapp.demo.nosql.NoSQLSelectTableDemoFragment;
 import com.mysampleapp.fragment.DocFormFragment;
+import com.mysampleapp.fragment.DocFragment;
 import com.mysampleapp.fragment.DocListFragment;
 import com.mysampleapp.fragment.DrugFormFragment;
 import com.mysampleapp.fragment.DrugFragment;
@@ -51,6 +52,7 @@ public class HomeActivity extends AppCompatActivity
         DrugFragment.OnFragmentInteractionListener,
         DocListFragment.OnFragmentInteractionListener,
         DocFormFragment.OnFragmentInteractionListener,
+        DocFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
         ScheduleListFragment.OnFragmentInteractionListener,
         ScheduleFormFragment.OnFragmentInteractionListener,

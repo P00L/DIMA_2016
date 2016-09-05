@@ -1,68 +1,215 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/drug_item_shape">
+
+            <ImageView
+                android:id="@+id/icon_ID"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:maxHeight="100dp"
+                android:maxWidth="100dp"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/ic_drug_pill"/>
+
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/name_layout"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                tools:context="com.mysampleapp.fragment.DrugFragment">
-
-                <ImageView
-                    android:id="@+id/icon_ID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:transitionName="kittenImage"
-                    tools:ignore="ContentDescription,UnusedAttribute"
-                    android:src="@drawable/ic_drug_pill"/>
-
+                android:layout_below="@+id/icon_ID"
+                android:orientation="horizontal" >
                 <TextView
                     android:id="@+id/drug_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ASD"
-                    android:textSize="25sp" />
+                    android:text="Name:"
+                    android:layout_weight="0"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
+                <TextView
+                    android:id="@+id/name_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ciccia"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/type_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name_layout"
+                android:orientation="horizontal">
                 <TextView
                     android:id="@+id/drug_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ASD"
-                    android:textSize="25sp" />
+                    android:text="Type:"
+                    android:layout_weight="0"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
+                <TextView
+                    android:id="@+id/type_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ciccia"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/weight_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/type_layout"
+                android:orientation="horizontal">
                 <TextView
                     android:id="@+id/drug_weight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ASD"
-                    android:textSize="25sp" />
+                    android:text="Weight:"
+                    android:layout_weight="0"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
+                <TextView
+                    android:id="@+id/weight_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ciccia"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/qty_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/weight_layout"
+                android:orientation="horizontal">
                 <TextView
                     android:id="@+id/drug_qty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ASD"
-                    android:textSize="25sp"
-                    android:textColor="@color/drug_qty"/>
+                    android:text="Quantity:"
+                    android:layout_weight="0"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
+                <TextView
+                    android:id="@+id/qty_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ciccia"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/minqty_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/qty_layout"
+                android:orientation="horizontal">
                 <TextView
                     android:id="@+id/drug_minqty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ASD"
-                    android:textSize="25sp"
-                    android:textColor="@color/drug_minqty"/>
+                    android:text="Sottoscorta:"
+                    android:layout_weight="0"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
+                <TextView
+                    android:id="@+id/minqty_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ciccia"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/notes_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/minqty_layout"
+                android:orientation="horizontal">
                 <TextView
                     android:id="@+id/drug_notes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="25sp"
-                    android:gravity="left"
-                    android:text="ASD" />
-
+                    android:text="Notes:"
+                    android:layout_weight="0"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
+                <TextView
+                    android:id="@+id/notes_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ciccia"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
             </LinearLayout>
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/notes_layout"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorAccent" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
 </ScrollView>

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,10 +39,29 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> impl
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder,final int position) {
         //setting up all the value of the image according to the position of the row
-        holder.titleTextView.setText(mList.get(position).getName());
+        holder.nameTextView.setText(mList.get(position).getName());
+        holder.surnameTextView.setText(mList.get(position).getSurname());
         holder.imageView.setImageResource(R.drawable.ic_icon_doctor);
+        if(mList.get(position).getActive())
+            holder.imageButton.setImageResource(R.drawable.btn_star_big_on_pressed);
+        else
+            holder.imageButton.setImageResource(android.R.drawable.btn_star);
+        holder.imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!mList.get(position).getActive()){
+                    holder.imageButton.setImageResource(R.drawable.btn_star_big_on_pressed);
+                    mList.get(position).setActive(true);
+                }
+                else{
+                    holder.imageButton.setImageResource(android.R.drawable.btn_star);
+                    mList.get(position).setActive(false);
+                }
+            }
+        });
+
         //handle click listener of all the row
         holder.setClickListener(new ItemClickListener() {
             @Override
@@ -102,15 +122,19 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> impl
     //this listener is to catch click and long click on all the row of the recycler view
     public static class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener {
-        private TextView titleTextView;
+        private TextView nameTextView;
+        private TextView surnameTextView;
         private ItemClickListener clickListener;
         private ImageView imageView;
+        private ImageButton imageButton;
 
         //getting the reference of all the view element of one row
         public ViewHolder(View itemView) {
             super(itemView);
-            titleTextView = (TextView) itemView.findViewById(R.id.text_name);
+            nameTextView = (TextView) itemView.findViewById(R.id.doc_name);
+            surnameTextView = (TextView) itemView.findViewById(R.id.doc_surname);
             imageView = (ImageView) itemView.findViewById(R.id.icon_ID);
+            imageButton = (ImageButton) itemView.findViewById(R.id.active_image_button);
             itemView.setTag(itemView);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);

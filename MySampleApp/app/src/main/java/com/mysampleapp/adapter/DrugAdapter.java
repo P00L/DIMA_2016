@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,8 +40,13 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> im
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.titleTextView.setText(mList.get(position).getName());
+        holder.nameTextView.setText(mList.get(position).getName());
+        holder.quantityTextView.setText(mList.get(position).getQuantity().intValue()+"");
         holder.imageView.setImageResource(R.drawable.ic_drug_pill);
+        if(mList.get(position).getQuantity().intValue() <= mList.get(position).getMinqty().intValue())
+            holder.imageButton.setImageResource(R.drawable.ic_action_pill_red);
+        else
+            holder.imageButton.setImageResource(R.drawable.ic_action_pill);
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
@@ -96,14 +102,19 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> im
 
     public static class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener{
-        private TextView titleTextView;
+        private TextView nameTextView;
         private ImageView imageView;
+        private TextView quantityTextView;
+        private ImageButton imageButton;
+
         private ItemClickListener clickListener;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            titleTextView = (TextView)itemView.findViewById(R.id.text_name);
+            nameTextView = (TextView) itemView.findViewById(R.id.drug_name);
             imageView = (ImageView) itemView.findViewById(R.id.icon_ID);
+            quantityTextView = (TextView) itemView.findViewById(R.id.drug_qty);
+            imageButton = (ImageButton) itemView.findViewById(R.id.active_image_button);
             itemView.setTag(itemView);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);

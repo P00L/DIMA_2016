@@ -24,14 +24,13 @@
             android:textSize="20sp"
             android:visibility="gone" />
         <!-- TODO METTERE MATERIAL ANZICHE HOLO-->
-                <ProgressBar
-                    android:id="@+id/progress_bar"
-                    style="@android:style/Widget.Holo.ProgressBar.Large"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:visibility="gone" />
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@android:style/Widget.Holo.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
-            </FrameLayout>
-        </android.support.design.widget.CoordinatorLayout>
-
+    </FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

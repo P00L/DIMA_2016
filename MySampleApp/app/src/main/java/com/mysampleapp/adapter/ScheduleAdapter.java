@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,8 +41,10 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.titleTextView.setText(mList.get(position).getDrug());
+        holder.drugTextView.setText(mList.get(position).getDrug());
         holder.imageView.setImageResource(R.drawable.ic_schedule);
+        holder.quantityTextView.setText(mList.get(position).getQuantity().intValue()+"");
+        holder.imageButton.setImageResource(R.drawable.ic_action_pill);
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
@@ -97,14 +100,18 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener{
-        private TextView titleTextView;
+        private TextView drugTextView;
+        private TextView quantityTextView;
         private ImageView imageView;
+        private ImageButton imageButton;
         private ItemClickListener clickListener;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            titleTextView = (TextView)itemView.findViewById(R.id.text_name);
+            drugTextView = (TextView)itemView.findViewById(R.id.schedule_drug_name);
             imageView = (ImageView) itemView.findViewById(R.id.icon_ID);
+            quantityTextView = (TextView) itemView.findViewById(R.id.schedule_drug_qty);
+            imageButton = (ImageButton) itemView.findViewById(R.id.active_image_button);
             itemView.setTag(itemView);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);

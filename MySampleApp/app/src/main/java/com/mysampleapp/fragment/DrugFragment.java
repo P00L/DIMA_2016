@@ -14,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.TextView;
 
 import com.mysampleapp.R;
@@ -110,23 +108,23 @@ public class DrugFragment extends Fragment {
 
             }
         });
-        TextView textViewName = (TextView) view.findViewById(R.id.drug_name);
-        textViewName.setText("Name: "+drugDO.getName());
+        TextView textViewName = (TextView) view.findViewById(R.id.name_val);
+        textViewName.setText(drugDO.getName());
 
-        TextView textViewType = (TextView) view.findViewById(R.id.drug_type);
-        textViewType.setText("Type: "+drugDO.getType());
+        TextView textViewType = (TextView) view.findViewById(R.id.type_val);
+        textViewType.setText(drugDO.getType());
 
-        TextView textViewWeight = (TextView) view.findViewById(R.id.drug_weight);
-        textViewWeight.setText("Weight: "+String.valueOf(drugDO.getWeight().intValue()));
+        TextView textViewWeight = (TextView) view.findViewById(R.id.weight_val);
+        textViewWeight.setText(String.valueOf(drugDO.getWeight().intValue()));
 
-        TextView textViewNotes = (TextView) view.findViewById(R.id.drug_notes);
-        textViewNotes.setText("Notes: "+drugDO.getNotes());
+        TextView textViewNotes = (TextView) view.findViewById(R.id.notes_val);
+        textViewNotes.setText(drugDO.getNotes());
 
-        TextView textViewQty = (TextView) view.findViewById(R.id.drug_qty);
-        textViewQty.setText("Quantity: "+String.valueOf(drugDO.getQuantity().intValue()));
+        TextView textViewQty = (TextView) view.findViewById(R.id.qty_val);
+        textViewQty.setText(String.valueOf(drugDO.getQuantity().intValue()));
 
-        TextView textViewMinQty = (TextView) view.findViewById(R.id.drug_minqty);
-        textViewMinQty.setText("Sottoscorta: "+String.valueOf(drugDO.getMinqty().intValue()));
+        TextView textViewMinQty = (TextView) view.findViewById(R.id.minqty_val);
+        textViewMinQty.setText(String.valueOf(drugDO.getMinqty().intValue()));
 
     }
 

@@ -13,9 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mysampleapp.R;
@@ -32,6 +30,7 @@ public class DocFragment extends Fragment {
     private AppCompatActivity activity;
     private FloatingActionButton fab;
     private Animation rotate_close;
+    private ImageButton active;
 
     public DocFragment() {
         // Required empty public constructor
@@ -58,6 +57,7 @@ public class DocFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_doc, container, false);
+        active = (ImageButton)view.findViewById(R.id.active_image_button);
         return view;
     }
 
@@ -68,6 +68,37 @@ public class DocFragment extends Fragment {
         activity = (AppCompatActivity) getActivity();
         rotate_close = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_close_360);
         fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+        active = (ImageButton) view.findViewById(R.id.active_image_button);
+        if(doctorDO.getActive())
+            active.setImageResource(R.drawable.btn_star_big_on_pressed);
+        else
+            active.setImageResource(android.R.drawable.btn_star);
+        active.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!doctorDO.getActive()){
+                    active.setImageResource(R.drawable.btn_star_big_on_pressed);
+                    doctorDO.setActive(true);
+                }
+                else{
+                    active.setImageResource(android.R.drawable.btn_star);
+                    doctorDO.setActive(false);
+                }
+            }
+        });
+
+        TextView textViewNameSurname = (TextView) view.findViewById(R.id.name_surname);
+        textViewNameSurname.setText(doctorDO.getName()+" "+doctorDO.getSurname());
+
+        TextView textViewAddress = (TextView) view.findViewById(R.id.address);
+        textViewAddress.setText(doctorDO.getAddress());
+
+        TextView textViewEmail = (TextView) view.findViewById(R.id.email);
+        textViewEmail.setText(doctorDO.getEmail());
+
+        TextView textViewPhone = (TextView) view.findViewById(R.id.phone_number);
+        textViewPhone.setText(doctorDO.getPhoneNumber().intValue()+"");
+
         if (!fab.isShown()) {
             fab.show();
         }
@@ -103,11 +134,13 @@ public class DocFragment extends Fragment {
             }
         });
 
-        // TODO: Rename method, update a
+        // TODO: Rename method, updat
 
-        TextView textView = (TextView) view.findViewById(R.id.doc_name);
-        textView.setText(doctorDO.getName());
+    }
 
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

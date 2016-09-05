@@ -1,22 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    card_view:cardCornerRadius="5dp"
+    card_view:cardUseCompatPadding="true">
 
-    <ImageView
-        android:id="@+id/icon_ID"
-        android:layout_width="108dp"
-        android:layout_height="108dp"
-        android:maxHeight="100dp"
-        android:maxWidth="100dp"
-        android:src="@drawable/ic_drug_pill"/>
 
-    <TextView
-        android:id="@+id/text_name"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="CIAO" />
+        android:layout_margin="5dp"
+        android:background="@drawable/drug_item_shape">
 
-</LinearLayout>
+        <ImageView
+            android:id="@+id/icon_ID"
+            android:layout_width="108dp"
+            android:layout_height="108dp"
+            android:layout_alignParentLeft="true"
+            android:maxHeight="100dp"
+            android:maxWidth="100dp"
+            android:src="@drawable/ic_drug_pill"/>
+
+        <TextView
+            android:id="@+id/drug_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/icon_ID"
+            android:text="NOME"
+            android:layout_marginTop="15dp"
+            android:textColor="@android:color/black"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/drug_qty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/icon_ID"
+            android:layout_centerInParent="true"
+            android:text="QUANTITY"
+            android:textColor="@android:color/black"
+            android:textSize="24sp" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/icon_ID"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorAccent" />
+
+        <ImageButton android:id="@+id/active_image_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_pill"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="#00ffffff"/>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
