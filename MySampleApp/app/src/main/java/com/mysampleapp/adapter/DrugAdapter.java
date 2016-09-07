@@ -42,11 +42,10 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> im
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.nameTextView.setText(mList.get(position).getName());
         holder.quantityTextView.setText(mList.get(position).getQuantity().intValue()+"");
-        holder.imageView.setImageResource(R.drawable.ic_drug_pill);
         if(mList.get(position).getQuantity().intValue() <= mList.get(position).getMinqty().intValue())
-            holder.imageButton.setImageResource(R.drawable.ic_action_pill_red);
+            holder.imageButton.setImageResource(R.drawable.pill_red);
         else
-            holder.imageButton.setImageResource(R.drawable.ic_action_pill);
+            holder.imageButton.setImageResource(R.drawable.pill);
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {

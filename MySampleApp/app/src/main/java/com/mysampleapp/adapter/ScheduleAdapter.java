@@ -42,7 +42,6 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.drugTextView.setText(mList.get(position).getDrug());
-        holder.imageView.setImageResource(R.drawable.ic_schedule);
 
         //set quantity to take
         switch (mList.get(position).getQuantity().toString()) {
@@ -60,7 +59,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
                 break;
         }
 
-        holder.imageButton.setImageResource(R.drawable.ic_action_pill);
+        holder.imageButton.setImageResource(R.drawable.pill);
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {

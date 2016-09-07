@@ -154,7 +154,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
         if (!fab.isShown()) {
             fab.show();
         }
-        fab.setImageResource(R.drawable.ic_action_expand);
+        fab.setImageResource(R.drawable.expand);
         //fab.startAnimation(rotate_close_180);
 
         //hide fab on scroll down show on scroll up
@@ -317,7 +317,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
         }
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_hamburger);
+        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.hamburger);
         ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -728,7 +728,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                         p.setColor(getResources().getColor(R.color.red));
                         RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX, (float) itemView.getBottom());
                         c.drawRect(background, p);
-                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_x);
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.x_swipe);
                         RectF icon_dest = new RectF((float) itemView.getLeft() + width, (float) itemView.getTop() + width, (float) itemView.getLeft() + 2 * width, (float) itemView.getBottom() - width);
                         c.clipRect(background);
                         c.drawBitmap(icon, null, icon_dest, p);
@@ -736,7 +736,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                         p.setColor(getResources().getColor(R.color.green));
                         RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(), (float) itemView.getRight(), (float) itemView.getBottom());
                         c.drawRect(background, p);
-                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_take);
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.take_swipe);
                         RectF icon_dest = new RectF((float) itemView.getRight() - 2 * width, (float) itemView.getTop() + width, (float) itemView.getRight() - width, (float) itemView.getBottom() - width);
                         c.clipRect(background);
                         c.drawBitmap(icon, null, icon_dest, p);

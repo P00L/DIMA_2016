@@ -93,7 +93,7 @@ public class HomeActivity extends AppCompatActivity
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDefaultDisplayHomeAsUpEnabled(false);
         toggle.setDrawerIndicatorEnabled(false);
-        toggle.setHomeAsUpIndicator(R.drawable.ic_action_hamburger);
+        toggle.setHomeAsUpIndicator(R.drawable.hamburger);
 
         toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override

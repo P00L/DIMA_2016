@@ -30,7 +30,7 @@
         android:layout_marginEnd="88dp"
         android:layout_gravity="bottom|end"
         app:fabSize="mini"
-        android:src="@drawable/ic_action_take"
+        android:src="@drawable/take"
         android:visibility="gone"
         />
     <android.support.design.widget.FloatingActionButton
@@ -42,7 +42,7 @@
         android:layout_gravity="bottom|end"
         app:fabSize="mini"
         android:visibility="gone"
-        android:src="@drawable/ic_action_x"
+        android:src="@drawable/x"
         />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab1"
@@ -53,7 +53,7 @@
         android:layout_marginEnd="@dimen/fab_margin"
         app:fabSize="mini"
         android:visibility="gone"
-        android:src="@drawable/ic_action_postpone"
+        android:src="@drawable/postpone"
         />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

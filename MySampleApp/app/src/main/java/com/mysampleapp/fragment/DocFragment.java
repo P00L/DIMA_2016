@@ -13,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.mysampleapp.ObservableScrollView;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DoctorDO;
@@ -23,7 +25,7 @@ import com.mysampleapp.demo.nosql.DoctorDO;
 import java.util.ArrayList;
 
 
-public class DocFragment extends Fragment {
+public class DocFragment extends Fragment implements ObservableScrollView.OnScrollChangedListener {
 
     private static final String ARG_DOCDO = "param1";
     private DoctorDO doctorDO;
@@ -31,6 +33,8 @@ public class DocFragment extends Fragment {
     private FloatingActionButton fab;
     private Animation rotate_close;
     private ImageButton active;
+    ObservableScrollView scrollView;
+    FrameLayout header;
 
     public DocFragment() {
         // Required empty public constructor
@@ -57,7 +61,7 @@ public class DocFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_doc, container, false);
-        active = (ImageButton)view.findViewById(R.id.active_image_button);
+        active = (ImageButton) view.findViewById(R.id.active_image_button);
         return view;
     }
 
@@ -68,14 +72,18 @@ public class DocFragment extends Fragment {
         activity = (AppCompatActivity) getActivity();
         rotate_close = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_close_360);
         fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+        scrollView = (ObservableScrollView) view.findViewById(R.id.scrollamelo);
+        scrollView.setOnScrollChangedListener(this);
+        // Store the reference of your image container
+        header = (FrameLayout) view.findViewById(R.id.img_container);
         active = (ImageButton) view.findViewById(R.id.active_image_button);
-        if(doctorDO.getActive())
+        if (doctorDO.getActive())
             active.setImageResource(R.drawable.btn_star_big_on_pressed);
         else
             active.setImageResource(android.R.drawable.btn_star);
 
         TextView textViewNameSurname = (TextView) view.findViewById(R.id.name_surname);
-        textViewNameSurname.setText(doctorDO.getName()+" "+doctorDO.getSurname());
+        textViewNameSurname.setText(doctorDO.getName() + " " + doctorDO.getSurname());
 
         TextView textViewAddress = (TextView) view.findViewById(R.id.address);
         textViewAddress.setText(doctorDO.getAddress());
@@ -84,12 +92,12 @@ public class DocFragment extends Fragment {
         textViewEmail.setText(doctorDO.getEmail());
 
         TextView textViewPhone = (TextView) view.findViewById(R.id.phone_number);
-        textViewPhone.setText(doctorDO.getPhoneNumber().intValue()+"");
+        textViewPhone.setText(doctorDO.getPhoneNumber().intValue() + "");
 
         if (!fab.isShown()) {
             fab.show();
         }
-        fab.setImageResource(R.drawable.ic_action_modify);
+        fab.setImageResource(R.drawable.modify);
         //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +120,7 @@ public class DocFragment extends Fragment {
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
+        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.prev);
         ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,6 +131,13 @@ public class DocFragment extends Fragment {
 
         // TODO: Rename method, updat
 
+    }
+
+    @Override
+    public void onScrollChanged(int deltaX, int deltaY) {
+        int scrollY = scrollView.getScrollY();
+        // Add parallax effect
+        header.setTranslationY(scrollY * 0.2f);
     }
 
     public interface OnFragmentInteractionListener {

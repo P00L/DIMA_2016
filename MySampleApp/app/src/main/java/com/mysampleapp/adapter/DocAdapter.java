@@ -43,7 +43,6 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> impl
         //setting up all the value of the image according to the position of the row
         holder.nameTextView.setText(mList.get(position).getName());
         holder.surnameTextView.setText(mList.get(position).getSurname());
-        holder.imageView.setImageResource(R.drawable.ic_icon_doctor);
         if(mList.get(position).getActive())
             holder.imageButton.setImageResource(R.drawable.btn_star_big_on_pressed);
         else
@@ -54,6 +53,12 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> impl
         //done così in the github tutorial i leave it like this
         ViewCompat.setTransitionName(holder.imageView, String.valueOf(position) + "_image");
 
+        holder.setClickListener(new ItemClickListener() {
+            @Override
+            public void onClick(View view, int position, boolean isLongClick) {
+                listener.onClick(holder.imageView, position, isLongClick);
+            }
+        });
     }
 
     @Override

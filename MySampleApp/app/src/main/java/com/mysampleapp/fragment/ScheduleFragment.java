@@ -76,7 +76,7 @@ public class ScheduleFragment extends Fragment {
         //Log.w("docdo", doctorDO.getName());
         activity = (AppCompatActivity) getActivity();
         fab = (FloatingActionButton) activity.findViewById(R.id.fab);
-        fab.setImageResource(R.drawable.ic_action_modify);
+        fab.setImageResource(R.drawable.modify);
         rotate_close = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_close_360);
         if (!fab.isShown()) {
             fab.show();
@@ -102,7 +102,7 @@ public class ScheduleFragment extends Fragment {
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        ((HomeActivity)activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_prev);
+        ((HomeActivity)activity).getToggle().setHomeAsUpIndicator(R.drawable.prev);
         ((HomeActivity)activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

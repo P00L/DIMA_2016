@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:transitionName="kittenImage"
         tools:ignore="ContentDescription,UnusedAttribute"
-        android:src="@drawable/ic_schedule"/>
+        android:src="@drawable/schedule"/>
 
     <TextView
         android:id="@+id/schedule_name"

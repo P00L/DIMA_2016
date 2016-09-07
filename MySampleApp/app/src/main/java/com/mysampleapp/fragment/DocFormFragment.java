@@ -189,7 +189,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.ic_action_x);
+        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.x);
         ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -23,10 +23,9 @@
             android:gravity="center"
             android:textSize="20sp"
             android:visibility="gone" />
-        <!-- TODO METTERE MATERIAL ANZICHE HOLO-->
         <ProgressBar
             android:id="@+id/progress_bar"
-            style="@android:style/Widget.Holo.ProgressBar.Large"
+            style="@android:style/Widget.Material.ProgressBar.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

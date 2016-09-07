@@ -25,7 +25,7 @@
                 android:maxWidth="100dp"
                 android:transitionName="kittenImage"
                 android:layout_marginTop="6dp"
-                android:src="@drawable/ic_drug_pill"/>
+                android:src="@drawable/drug"/>
 
             <LinearLayout
                 android:id="@+id/name_layout"
