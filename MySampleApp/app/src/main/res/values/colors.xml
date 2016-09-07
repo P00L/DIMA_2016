@@ -16,11 +16,13 @@
     <color name="sign_in_separator_color">#DDDDDD</color>
     <color name="instructions_list_border_color">#FFDDDDDD</color>
     <color name="input_error_color">#af1212</color>
-
+    <color name="photo_tint">#7f101010</color>
     <color name="red">#c71212</color>
     <color name="green">#05a618</color>
     <color name="schedule_item_col">#99D1C4E9</color>
     <color name="drug_item_col">#99B2EBF2</color>
+    <color name="drug_item_col_circle">#B2EBF2</color>
+    <color name="doc_item_col_circle">#B3E5FC</color>
     <color name="doc_item_col">#99B3E5FC</color>
     <color name="colorPrimary">#2196F3</color>
     <color name="colorPrimaryDark">#1976D2</color>

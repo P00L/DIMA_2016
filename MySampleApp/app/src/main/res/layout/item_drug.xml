@@ -13,14 +13,16 @@
         android:layout_margin="5dp"
         android:background="@drawable/drug_item_shape">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/icon_ID"
-            android:layout_width="108dp"
-            android:layout_height="108dp"
-            android:layout_alignParentLeft="true"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_drug_pill"
             android:maxHeight="100dp"
             android:maxWidth="100dp"
-            android:src="@drawable/ic_drug_pill"/>
+            app:civ_border_width="1dp"
+            app:civ_border_color="@color/drug_item_col_circle"/>
 
         <TextView
             android:id="@+id/drug_name"

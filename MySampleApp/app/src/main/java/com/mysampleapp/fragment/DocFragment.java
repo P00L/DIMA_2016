@@ -73,19 +73,6 @@ public class DocFragment extends Fragment {
             active.setImageResource(R.drawable.btn_star_big_on_pressed);
         else
             active.setImageResource(android.R.drawable.btn_star);
-        active.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!doctorDO.getActive()){
-                    active.setImageResource(R.drawable.btn_star_big_on_pressed);
-                    doctorDO.setActive(true);
-                }
-                else{
-                    active.setImageResource(android.R.drawable.btn_star);
-                    doctorDO.setActive(false);
-                }
-            }
-        });
 
         TextView textViewNameSurname = (TextView) view.findViewById(R.id.name_surname);
         textViewNameSurname.setText(doctorDO.getName()+" "+doctorDO.getSurname());

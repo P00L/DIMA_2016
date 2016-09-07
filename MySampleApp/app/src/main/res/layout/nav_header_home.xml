@@ -21,52 +21,56 @@
         android:layout_marginLeft="12dp"
         android:gravity="center"
         android:layout_centerInParent="true"
-        android:background="@drawable/linear_layout_bg"
-    >
-    <ImageView
-        android:id="@+id/userImage"
-        android:scaleType="fitCenter"
-        android:src="@mipmap/user"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="6dp"
-        android:background="@color/nav_drawer_background"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:padding="4dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/main_nav_menu_default_user_text"
-        android:background="@color/nav_drawer_no_user_background"
-        android:id="@+id/userName" />
+        android:background="@drawable/linear_layout_bg">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_text_sign_in"
-        android:id="@+id/button_signin"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:layout_below="@id/user_info"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/button_signin"
-        style="@style/ButtonText"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_text_sign_out"
-        android:id="@+id/button_signout"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:layout_below="@id/user_info"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/button_signin"
-        style="@style/ButtonText"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/userImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/user"
+            android:maxHeight="100dp"
+            android:maxWidth="100dp"
+            android:layout_marginTop="6dp"
+            app:civ_border_width="1dp"
+            app:civ_border_color="@color/drug_item_col_circle"/>
 
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:padding="4dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/main_nav_menu_default_user_text"
+            android:background="@color/nav_drawer_no_user_background"
+            android:id="@+id/userName" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_text_sign_in"
+            android:id="@+id/button_signin"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_below="@id/user_info"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/button_signin"
+            style="@style/ButtonText"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_text_sign_out"
+            android:id="@+id/button_signout"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_below="@id/user_info"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/button_signin"
+            style="@style/ButtonText"/>
+
+    </LinearLayout>
 
 
 </RelativeLayout>

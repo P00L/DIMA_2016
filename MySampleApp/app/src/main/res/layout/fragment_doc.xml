@@ -20,14 +20,19 @@
                 android:id="@+id/doc_ic_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <ImageView
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/doc_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
                     android:layout_centerHorizontal="true"
-                    android:transitionName="kittenImage"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/ic_icon_doctor"
-                    android:id="@+id/doc_icon"/>
+                    android:transitionName="kittenImage"
+                    app:civ_border_width="1dp"
+                    app:civ_border_color="@color/doc_item_col_circle"/>
+
             </RelativeLayout>
 
             <RelativeLayout

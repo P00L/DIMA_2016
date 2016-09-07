@@ -41,6 +41,7 @@ import android.widget.TextView;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
 import com.mysampleapp.DetailsTransition;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
@@ -63,6 +64,7 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
 
     private OnFragmentInteractionListener mListener;
     private RecyclerView mRecyclerView;
+    private RecyclerViewHeader header;
     private DocAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<DoctorDO> items;
@@ -73,6 +75,7 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
     private FloatingActionButton fab;
     private Animation rotate_open;
     private Paint p = new Paint();
+
 
     public DocListFragment() {
         // Required empty public constructor
@@ -113,6 +116,10 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
         mProgress = (ProgressBar) view.findViewById(R.id.progress_bar);
         fab = (FloatingActionButton) activity.findViewById(R.id.fab);
 
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        header = (RecyclerViewHeader) view.findViewById(R.id.header);
+        header.attachTo(mRecyclerView);
         initSwipe();
 
         if (!fab.isShown()) {
@@ -147,6 +154,7 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
                 Log.w(LOG_TAG, "restore items");
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
+                header.attachTo(mRecyclerView);
                 Collections.sort(items, (new Comparator<DoctorDO>() {
                     @Override
                     public int compare(DoctorDO s1, DoctorDO s2) {
@@ -273,6 +281,7 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
                     enableFab();
                     mLayoutManager = new LinearLayoutManager(getActivity());
                     mRecyclerView.setLayoutManager(mLayoutManager);
+                    header.attachTo(mRecyclerView);
                     Collections.sort(items, (new Comparator<DoctorDO>() {
                         @Override
                         public int compare(DoctorDO s1, DoctorDO s2) {

@@ -48,28 +48,8 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> impl
             holder.imageButton.setImageResource(R.drawable.btn_star_big_on_pressed);
         else
             holder.imageButton.setImageResource(android.R.drawable.btn_star);
-        holder.imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!mList.get(position).getActive()){
-                    holder.imageButton.setImageResource(R.drawable.btn_star_big_on_pressed);
-                    mList.get(position).setActive(true);
-                }
-                else{
-                    holder.imageButton.setImageResource(android.R.drawable.btn_star);
-                    mList.get(position).setActive(false);
-                }
-            }
-        });
 
-        //handle click listener of all the row
-        holder.setClickListener(new ItemClickListener() {
-            @Override
-            public void onClick(View view, int position, boolean isLongClick) {
-                //redirect it to the fragment list passing the image view element shared to be animated
-                listener.onClick(holder.imageView, position, isLongClick);
-            }
-        });
+
         //setting up the name of the shared element
         //done così in the github tutorial i leave it like this
         ViewCompat.setTransitionName(holder.imageView, String.valueOf(position) + "_image");
