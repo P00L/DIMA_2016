@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home"
+            android:title="Home" />
+        <item
             android:id="@+id/nav_doc"
             android:icon="@drawable/doctor"
             android:title="Doctor" />
@@ -10,20 +14,16 @@
             android:icon="@drawable/drug"
             android:title="Drug" />
         <item
-            android:id="@+id/nav_sql"
-            android:icon="@drawable/search"
-            android:title="Select Table" />
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/home"
-            android:title="Home" />
-        <item
             android:id="@+id/nav_schedule"
             android:icon="@drawable/schedule"
             android:title="Scheduler" />
         <item
             android:id="@+id/nav_pending_schedule"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/pending_schedule"
             android:title="@string/pending_schedule" />
+        <item
+            android:id="@+id/nav_sql"
+            android:icon="@drawable/search"
+            android:title="Select Table" />
     </group>
 </menu>

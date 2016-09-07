@@ -2,16 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_skip_all"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/com_facebook_tooltip_blue_xout"
-        android:visible="false"/>
-    <item
-        android:id="@+id/action_take_all"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/com_facebook_button_like_icon_selected"
-        android:visible="false"/>
-    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
