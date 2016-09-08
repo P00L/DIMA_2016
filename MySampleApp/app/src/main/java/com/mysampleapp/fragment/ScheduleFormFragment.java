@@ -484,7 +484,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         // Apply the adapter to the spinner
         qunatitySpinner.setAdapter(adapter);
         if (scheduleDrugDO_tmp.getQuantity() != null) {
-            Log.w(LOG_TAG, "quantity " + scheduleDrugDO.getQuantity().toString());
+            Log.w(LOG_TAG, "sottoscorta " + scheduleDrugDO.getQuantity().toString());
             switch (scheduleDrugDO.getQuantity().toString()) {
                 case "1":
                     qunatitySpinner.setSelection(0);
@@ -849,7 +849,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
             if (!notesEditText.getText().toString().isEmpty())
                 scheduleDrugDO_tmp.setNotes(notesEditText.getText().toString());
         }
-        // Saving quantity field
+        // Saving sottoscorta field
         if (qunatitySpinner != null) {
             switch (qunatitySpinner.getSelectedItemPosition()) {
                 case 0:

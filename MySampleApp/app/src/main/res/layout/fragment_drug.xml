@@ -1,7 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <com.mysampleapp.ObservableScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,232 +14,230 @@
         <FrameLayout
             android:id="@+id/img_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp">
 
             <ImageView
                 android:id="@+id/img"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/header_heicht"
                 android:scaleType="centerCrop"
                 android:src="@drawable/header_drug" />
         </FrameLayout>
 
-
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/icon_ID"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/drug"
-                android:transitionName="kittenImage" />
+            android:layout_margin="@dimen/margin_card"
+            app:cardBackgroundColor="@color/white">
 
             <LinearLayout
-                android:id="@+id/name_layout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/drug_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="Name:"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/icon_ID"
+                    android:layout_width="@dimen/icon_dim"
+                    android:layout_height="@dimen/icon_dim"
+                    android:layout_gravity="center"
+                    android:src="@drawable/drug"
+                    android:transitionName="kittenImage"
+                    app:civ_fill_color="@color/colorAccent" />
 
-                <TextView
-                    android:id="@+id/name_val"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="ciccia"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
+                    android:layout_marginStart="@dimen/margin_text_detail"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="DRUG"
+                        android:textSize="@dimen/size_text_detail" />
+
+                    <TextView
+                        android:id="@+id/type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="TYPE"
+                        android:textSize="@dimen/size_text_detail" />
+                </LinearLayout>
             </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_card"
+            app:cardBackgroundColor="@color/white">
 
             <LinearLayout
-                android:id="@+id/type_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/name_layout"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/drug_type"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/weight_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="Type:"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
+                    android:layout_marginBottom="@dimen/margin_row_details"
+                    android:layout_marginTop="@dimen/margin_row_details"
+                    android:clickable="true"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/type_val"
-                    android:layout_width="wrap_content"
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/margin_icon_small_detail"
+                        android:src="@drawable/weight" />
+
+                    <TextView
+                        android:id="@+id/weight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_text_detail"
+                        android:gravity="center_vertical"
+                        android:text="WEIGHT mg"
+                        android:textSize="@dimen/size_text_detail" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/separe_detail"
+                    android:layout_marginEnd="@dimen/separe_margin_details"
+                    android:layout_marginStart="@dimen/separe_margin_details"
+                    android:background="@color/colorAccent" />
+
+                <LinearLayout
+                    android:id="@+id/quantity_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="ciccia"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
+                    android:layout_marginBottom="@dimen/margin_row_details"
+                    android:layout_marginTop="@dimen/margin_row_details"
+                    android:clickable="true"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/margin_icon_small_detail"
+                        android:src="@drawable/quantity" />
+
+                    <TextView
+                        android:id="@+id/quantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_text_detail"
+                        android:gravity="center_vertical"
+                        android:text="QUANTITY"
+                        android:textSize="@dimen/size_text_detail" />
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/refill"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/sottoscorta"
+                        android:background="#00ffffff" />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/separe_detail"
+                    android:layout_marginEnd="@dimen/separe_margin_details"
+                    android:layout_marginStart="@dimen/separe_margin_details"
+                    android:background="@color/colorAccent" />
+
+                <LinearLayout
+                    android:id="@+id/sottoscorta_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_row_details"
+                    android:layout_marginTop="@dimen/margin_row_details"
+                    android:clickable="true"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/margin_icon_small_detail"
+                        android:src="@drawable/sottoscorta" />
+
+                    <TextView
+                        android:id="@+id/sottoscorta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_text_detail"
+                        android:gravity="center_vertical"
+                        android:text="SOTTOSCORTA"
+                        android:textSize="@dimen/size_text_detail" />
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/email"
+                        android:background="#00ffffff" />
+
+                </LinearLayout>
+
             </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_card"
+            app:cardBackgroundColor="@color/white">
 
             <LinearLayout
-                android:id="@+id/weight_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/type_layout"
-                android:orientation="horizontal">
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_row_details"
+                    android:layout_marginTop="@dimen/margin_row_details"
+                    android:clickable="true"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/margin_icon_small_detail"
+                        android:src="@drawable/notes" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/margin_text_detail"
+                        android:gravity="center_vertical"
+                        android:text="notes"
+                        android:textSize="@dimen/size_text_detail" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/drug_weight"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/notes"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="Weight:"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/weight_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="ciccia"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="NOTES"
+                    android:textSize="@dimen/size_text_detail" />
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/qty_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/weight_layout"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/drug_qty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="Quantity:"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/qty_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="ciccia"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/minqty_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/qty_layout"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/drug_minqty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="Sottoscorta:"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/minqty_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="ciccia"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/notes_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/minqty_layout"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/drug_notes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="Notes:"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/notes_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="ciccia"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/button_send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/notes_layout"
-                android:orientation="horizontal"
-                android:text="Sottoscorta mail" />
-
-            <View
-                android:id="@+id/view1"
-                android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/button_send"
-                android:layout_marginTop="10dp"
-                android:background="@color/colorAccent" />
-
-        </LinearLayout>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 </com.mysampleapp.ObservableScrollView>

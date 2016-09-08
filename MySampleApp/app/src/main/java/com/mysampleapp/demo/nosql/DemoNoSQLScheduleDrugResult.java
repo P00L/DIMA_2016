@@ -195,7 +195,7 @@ public class DemoNoSQLScheduleDrugResult implements DemoNoSQLResult {
         hourValueTextView.setText(result.getHour());
         notesKeyTextView.setText("notes");
         notesValueTextView.setText(result.getNotes());
-        quantityKeyTextView.setText("quantity");
+        quantityKeyTextView.setText("sottoscorta");
         quantityValueTextView.setText("" + result.getQuantity().longValue());
         return layout;
     }

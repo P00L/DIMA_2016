@@ -25,5 +25,6 @@
     <dimen name="margin_star_detail">15dp</dimen>
     <dimen name="margin_row_details">15dp</dimen>
     <dimen name="separe_margin_details">15dp</dimen>
+    <dimen name="header_heicht">150dp</dimen>
 
 </resources>

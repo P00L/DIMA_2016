@@ -351,7 +351,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         // Here we generate programmatically the view that will be added by the system to the step content layout
         qty_text = new EditText(getActivity());
         qty_text.setSingleLine(true);
-        qty_text.setHint("quantity");
+        qty_text.setHint("sottoscorta");
         qty_text.setInputType(InputType.TYPE_CLASS_NUMBER);
         qty_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         if (drugDO_tmp.getQuantity() != null)
@@ -625,7 +625,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                 if (!editMode) {
                     drug_list.add(drugDO_tmp);
                 } else {
-                    //check if modified quantity may be the case of a refill and clean shared pref
+                    //check if modified sottoscorta may be the case of a refill and clean shared pref
                     if (drugDO.getQuantity() < drugDO.getMinqty()) {
                         Intent i = new Intent(getContext(), SottoscortaService.class);
                         i.putExtra(AlarmService.ACTION_EXTRA, "refill");
@@ -677,7 +677,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
                 drugDO_tmp.setType(type_text.getText().toString());
         }
 
-        // Saving quantity field
+        // Saving sottoscorta field
         if (qty_text != null) {
             if (!qty_text.getText().toString().isEmpty())
                 drugDO_tmp.setQuantity(Double.parseDouble(qty_text.getText().toString()));

@@ -35,7 +35,7 @@ import java.util.ArrayList;
  * Use the {@link ScheduleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ScheduleFragment extends Fragment implements ObservableScrollView.OnScrollChangedListener{
+public class ScheduleFragment extends Fragment implements ObservableScrollView.OnScrollChangedListener {
 
     private static final String ARG_SCHEDULEDRUGDO = "param1";
     private AppCompatActivity activity;
@@ -75,7 +75,7 @@ public class ScheduleFragment extends Fragment implements ObservableScrollView.O
     }
 
     @Override
-    public void onViewCreated(final View view, final Bundle savedInstanceState){
+    public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //Log.w("docdo", doctorDO.getName());
         activity = (AppCompatActivity) getActivity();
@@ -93,7 +93,7 @@ public class ScheduleFragment extends Fragment implements ObservableScrollView.O
             @Override
             public void onClick(View view) {
                 //il fab manda al form di edit e passa doctorDO come parametro da salvare nel Bundle
-                ScheduleFormFragment fragment = ScheduleFormFragment.newInstance(scheduleDrugDO,true,new ArrayList<ScheduleDrugDO>());
+                ScheduleFormFragment fragment = ScheduleFormFragment.newInstance(scheduleDrugDO, true, new ArrayList<ScheduleDrugDO>());
                 activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, fragment)
@@ -110,8 +110,8 @@ public class ScheduleFragment extends Fragment implements ObservableScrollView.O
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        ((HomeActivity)activity).getToggle().setHomeAsUpIndicator(R.drawable.prev);
-        ((HomeActivity)activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
+        ((HomeActivity) activity).getToggle().setHomeAsUpIndicator(R.drawable.prev);
+        ((HomeActivity) activity).getToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // handle toolbar home button click
@@ -121,10 +121,36 @@ public class ScheduleFragment extends Fragment implements ObservableScrollView.O
             }
         });
 
-        // TODO: Rename method, update a
+        TextView drugTextView = (TextView) view.findViewById(R.id.drug);
+        drugTextView.setText(scheduleDrugDO.getDrug());
 
-        TextView textView = (TextView) view.findViewById(R.id.schedule_name);
-        textView.setText(scheduleDrugDO.getDrug());
+        TextView qtyTextView = (TextView) view.findViewById(R.id.qty);
+
+        switch (scheduleDrugDO.getQuantity().toString()) {
+            case "1.0":
+                qtyTextView.setText("1");
+                break;
+            case "0.5":
+                qtyTextView.setText("1/2");
+                break;
+            case "0.25":
+                qtyTextView.setText("1/4");
+                break;
+            case "2.0":
+                qtyTextView.setText("2");
+                break;
+        }
+
+        TextView hourTextView = (TextView) view.findViewById(R.id.hour);
+        hourTextView.setText(scheduleDrugDO.getHour()+"");
+
+
+        TextView dayTextView = (TextView) view.findViewById(R.id.day);
+        dayTextView.setText(scheduleDrugDO.getDay()+"");
+
+
+        TextView notesTextView = (TextView) view.findViewById(R.id.notes);
+        notesTextView.setText(scheduleDrugDO.getNotes());
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -161,6 +187,12 @@ public class ScheduleFragment extends Fragment implements ObservableScrollView.O
         int scrollY = scrollView.getScrollY();
         // Add parallax effect
         header.setTranslationY(scrollY * 0.2f);
+        if (deltaY > 0) {
+            fab.hide();
+            //fab.animate().translationY(fab.getHeight() + 32).setInterpolator(new AccelerateInterpolator(2)).start();
+        } else if (deltaY < 0)
+            fab.show();
+        //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
     /**

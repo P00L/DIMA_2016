@@ -3,6 +3,7 @@ package com.mysampleapp.fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -36,6 +37,8 @@ import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DoctorDO;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormLayout;
@@ -687,8 +690,52 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                 docDO.setAddress(address_text.getText().toString());
 
                 mProgressDialog.dismiss();
-                if (!editMode)
+                if (!editMode) {
                     docs.add(docDO);
+                    if(docDO.getActive()){
+                        //get shared pref file
+                        SharedPreferences sharedPref = getContext().getSharedPreferences(
+                                getContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
+
+                        //getting data from shared pref and add the new sottoscorta pendig id notification to update always same notification
+                        Set<String> s = new HashSet<String>(sharedPref.getStringSet(getContext().getString(R.string.active_doctor),
+                                new HashSet<String>()));
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        s.add(docDO.getName()+"/"+docDO.getSurname()+"/"+docDO.getEmail());
+
+                        editor.putStringSet(getContext().getString(R.string.active_doctor), s);
+                        editor.apply();
+
+                    }
+                }else{
+                    //remove form shared preference eventually doctor active
+                    //get shared pref file
+                    SharedPreferences sharedPref = getContext().getSharedPreferences(
+                            getContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
+
+                    //getting data from shared pref and add the new sottoscorta pendig id notification to update always same notification
+                    Set<String> s = new HashSet<String>(sharedPref.getStringSet(getContext().getString(R.string.active_doctor),
+                            new HashSet<String>()));
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    s.remove(docDO_old.getName()+"/"+docDO_old.getSurname()+"/"+docDO_old.getEmail());
+
+                    editor.putStringSet(getContext().getString(R.string.active_doctor), s);
+                    editor.apply();
+                    if(docDO.getActive()){
+                        //get shared pref file
+                        sharedPref = getContext().getSharedPreferences(
+                                getContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
+
+                        //getting data from shared pref and add the new sottoscorta pendig id notification to update always same notification
+                        s = new HashSet<String>(sharedPref.getStringSet(getContext().getString(R.string.active_doctor),
+                                new HashSet<String>()));
+                        editor = sharedPref.edit();
+                        s.add(docDO.getName()+"/"+docDO.getSurname()+"/"+docDO.getEmail());
+
+                        editor.putStringSet(getContext().getString(R.string.active_doctor), s);
+                        editor.apply();
+                    }
+                }
                 activity.getSupportFragmentManager().popBackStack();
             } else {
                 mProgressDialog.dismiss();

@@ -202,6 +202,8 @@
     <string name="enable_empty_drug">Click\n" '+' "\nto insert a new Drug</string>
     <string name="enable_empty_doc">Click\n" '+' "\nto insert a new Doctor</string>
     <string name="no_internet_connection">No data available,\ncheck your connection!</string>
+    <string name="active_doctor">active_doctor</string>
+    <string name="active_doctor_ordered">active_doctor_ordered</string>
 
 
 </resources>

@@ -568,7 +568,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
         @Override
         protected Void doInBackground(Void... params) {
             for (ScheduleDrugDO scheduleDrugDO : scheduleDrugList) {
-                //getting the drug associated to the schedule to decrement the quantity
+                //getting the drug associated to the schedule to decrement the sottoscorta
                 DemoNoSQLTableBase demoTable = DemoNoSQLTableFactory.instance(getContext())
                         .getNoSQLTableByTableName("Drug");
                 DemoNoSQLOperation operation = ((DemoNoSQLTableDrug) demoTable).getOperationByNameSingle(getContext(), "one", scheduleDrugDO.getDrug());

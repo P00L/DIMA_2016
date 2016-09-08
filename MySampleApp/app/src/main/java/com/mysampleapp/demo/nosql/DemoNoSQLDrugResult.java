@@ -192,7 +192,7 @@ public class DemoNoSQLDrugResult implements DemoNoSQLResult {
         minqtyValueTextView.setText("" + result.getMinqty().longValue());
         notesKeyTextView.setText("notes");
         notesValueTextView.setText(result.getNotes());
-        quantityKeyTextView.setText("quantity");
+        quantityKeyTextView.setText("sottoscorta");
         quantityValueTextView.setText("" + result.getQuantity().longValue());
         typeKeyTextView.setText("type");
         typeValueTextView.setText(result.getType());

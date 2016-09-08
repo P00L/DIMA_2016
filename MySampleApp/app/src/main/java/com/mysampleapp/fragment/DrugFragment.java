@@ -1,15 +1,20 @@
 package com.mysampleapp.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,14 +24,22 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.mobile.AWSMobileClient;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.mysampleapp.AlarmService;
 import com.mysampleapp.ObservableScrollView;
 import com.mysampleapp.R;
+import com.mysampleapp.SottoscortaService;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DrugDO;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,10 +57,10 @@ public class DrugFragment extends Fragment implements ObservableScrollView.OnScr
     private AppCompatActivity activity;
     private FloatingActionButton fab;
     private Animation rotate_close;
-    private Button sendEmailButton;
     private ObservableScrollView scrollView;
     private FrameLayout header;
-
+    private DynamoDBMapper mapper;
+    private TextView textViewQty;
 
 
     // TODO: Rename and change types and number of parameters
@@ -81,13 +94,13 @@ public class DrugFragment extends Fragment implements ObservableScrollView.OnScr
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
         activity = (AppCompatActivity) getActivity();
         fab = (FloatingActionButton) activity.findViewById(R.id.fab);
         scrollView = (ObservableScrollView) view.findViewById(R.id.scrollView);
         scrollView.setOnScrollChangedListener(this);
         // Store the reference of your image container
         header = (FrameLayout) view.findViewById(R.id.img_container);
-        sendEmailButton = (Button) view.findViewById(R.id.button_send);
         fab.setImageResource(R.drawable.modify);
         rotate_close = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_close_360);
         if (!fab.isShown()) {
@@ -103,33 +116,6 @@ public class DrugFragment extends Fragment implements ObservableScrollView.OnScr
                         .addToBackStack(null)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
-            }
-        });
-
-        sendEmailButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogPickerDoctor dialogPicker = new DialogPickerDoctor();
-                dialogPicker.setOnClick(new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //TODO SETTARE TUTTI I CAMPI
-                        //io metterei nelle shared pref i dottori attivi per non fare la query qui
-                        //e terrei aggiornate le shared pref sulla modifica/aggiunta/cancellazione del dottore
-                        Log.w("DrugFragment",which+"");
-                        Intent intentEmail = new Intent(Intent.ACTION_SEND);
-                        intentEmail.setData(Uri.parse("mailto:"));
-                        intentEmail.setType("message/rfc822");
-                        String[] to = {"fusari.pool@gmail.com"};
-                        intentEmail.putExtra(Intent.EXTRA_EMAIL, to);
-                        intentEmail.putExtra(Intent.EXTRA_SUBJECT, "prova mail");
-                        intentEmail.putExtra(Intent.EXTRA_TEXT, "finite pastiglie xxx");
-                        if (intentEmail.resolveActivity(getActivity().getPackageManager()) != null) {
-                            startActivity(Intent.createChooser(intentEmail, "Choose an email client from..."));
-                        }
-                    }
-                });
-                dialogPicker.show(activity.getSupportFragmentManager(), null);
             }
         });
 
@@ -150,24 +136,72 @@ public class DrugFragment extends Fragment implements ObservableScrollView.OnScr
 
             }
         });
-        TextView textViewName = (TextView) view.findViewById(R.id.name_val);
+        TextView textViewName = (TextView) view.findViewById(R.id.name);
         textViewName.setText(drugDO.getName());
 
-        TextView textViewType = (TextView) view.findViewById(R.id.type_val);
+        TextView textViewType = (TextView) view.findViewById(R.id.type);
         textViewType.setText(drugDO.getType());
 
-        TextView textViewWeight = (TextView) view.findViewById(R.id.weight_val);
-        textViewWeight.setText(String.valueOf(drugDO.getWeight().intValue()));
+        TextView textViewWeight = (TextView) view.findViewById(R.id.weight);
+        textViewWeight.setText(String.valueOf(drugDO.getWeight().intValue()) + " mg");
 
-        TextView textViewNotes = (TextView) view.findViewById(R.id.notes_val);
+        TextView textViewNotes = (TextView) view.findViewById(R.id.notes);
         textViewNotes.setText(drugDO.getNotes());
 
-        TextView textViewQty = (TextView) view.findViewById(R.id.qty_val);
+        textViewQty = (TextView) view.findViewById(R.id.quantity);
         textViewQty.setText(String.valueOf(drugDO.getQuantity().intValue()));
 
-        TextView textViewMinQty = (TextView) view.findViewById(R.id.minqty_val);
+        TextView textViewMinQty = (TextView) view.findViewById(R.id.sottoscorta);
         textViewMinQty.setText(String.valueOf(drugDO.getMinqty().intValue()));
 
+        ImageButton refill = (ImageButton) view.findViewById(R.id.refill);
+        refill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogPickerRefill dialogPicker = new DialogPickerRefill();
+                dialogPicker.setOnClick(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        drugDO.setQuantity(Integer.parseInt(getResources().getStringArray(R.array.refill)[which]) + drugDO.getQuantity());
+                        new SaveTask().execute();
+                    }
+                });
+                dialogPicker.show(activity.getSupportFragmentManager(), null);
+            }
+        });
+
+        ImageButton email = (ImageButton) view.findViewById(R.id.email);
+        email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogPickerDoctor dialogPicker = new DialogPickerDoctor();
+                dialogPicker.setOnClick(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences sharedPref = getContext().getSharedPreferences(
+                                getContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
+
+                        String doctor_list = sharedPref.getString(getContext().getString(R.string.active_doctor_ordered), "");
+                        Log.w("asd",doctor_list.toString());
+                        String[] doctors = doctor_list.split("//");
+                        Log.w("asd",doctors.toString());
+                        String[] splitted = doctors[which].split("/");
+                        Log.w("asd",splitted.toString());
+                        Intent intentEmail = new Intent(Intent.ACTION_SEND);
+                        intentEmail.setData(Uri.parse("mailto:"));
+                        intentEmail.setType("message/rfc822");
+                        String[] to = {splitted[2]};
+                        intentEmail.putExtra(Intent.EXTRA_EMAIL, to);
+                        intentEmail.putExtra(Intent.EXTRA_SUBJECT, "refill pill");
+                        intentEmail.putExtra(Intent.EXTRA_TEXT, "I need " + drugDO.getName());
+                        if (intentEmail.resolveActivity(getActivity().getPackageManager()) != null) {
+                            startActivity(Intent.createChooser(intentEmail, "Choose an email client from..."));
+                        }
+                    }
+                });
+                dialogPicker.show(activity.getSupportFragmentManager(), null);
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -199,6 +233,12 @@ public class DrugFragment extends Fragment implements ObservableScrollView.OnScr
         int scrollY = scrollView.getScrollY();
         // Add parallax effect
         header.setTranslationY(scrollY * 0.2f);
+        if (deltaY > 0) {
+            fab.hide();
+            //fab.animate().translationY(fab.getHeight() + 32).setInterpolator(new AccelerateInterpolator(2)).start();
+        } else if (deltaY < 0)
+            fab.show();
+        //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
     public interface OnFragmentInteractionListener {
@@ -214,6 +254,51 @@ public class DrugFragment extends Fragment implements ObservableScrollView.OnScr
     public void onPause() {
         super.onPause();
         getArguments().putParcelable(ARG_DRUGDO, drugDO);
+    }
+
+    private class SaveTask extends AsyncTask<Void, Void, Void> {
+        private Boolean success;
+
+        public SaveTask() {
+            success = false;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                mapper.save(drugDO);
+                success = true;
+
+            } catch (final AmazonClientException ex) {
+                Log.e("ASD", "Failed saving item : " + ex.getMessage(), ex);
+                success = false;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void args) {
+            if (success) {
+                textViewQty.setText(String.valueOf(drugDO.getQuantity().intValue()));
+            } else {
+                Snackbar snackbar = Snackbar
+                        .make(fab, "refill failed!", Snackbar.LENGTH_LONG)
+                        .setAction("RETRY", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                new SaveTask().execute();
+                            }
+                        });
+                snackbar.show();
+
+            }
+        }
     }
 
 }

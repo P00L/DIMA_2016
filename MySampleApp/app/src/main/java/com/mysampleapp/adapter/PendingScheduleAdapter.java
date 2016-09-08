@@ -58,7 +58,7 @@ public class PendingScheduleAdapter extends RecyclerView.Adapter<PendingSchedule
 
         //set drug name
         holder.drugTextView.setText(scheduleDrugDO.getDrug());
-        //set quantity to take
+        //set sottoscorta to take
         switch (scheduleDrugDO.getQuantity().toString()) {
             case "1.0":
                 holder.quantityTextView.setText("take " + "1");

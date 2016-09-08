@@ -69,7 +69,7 @@ public class ScheduleDrugDO implements Parcelable {
     public void setNotes(final String _notes) {
         this._notes = _notes;
     }
-    @DynamoDBAttribute(attributeName = "quantity")
+    @DynamoDBAttribute(attributeName = "sottoscorta")
     public Double getQuantity() {
         return _quantity;
     }

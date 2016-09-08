@@ -43,7 +43,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.drugTextView.setText(mList.get(position).getDrug());
 
-        //set quantity to take
+        //set sottoscorta to take
         switch (mList.get(position).getQuantity().toString()) {
             case "1.0":
                 holder.quantityTextView.setText("take " + "1");

@@ -1,6 +1,7 @@
 package com.mysampleapp.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -56,6 +57,8 @@ import com.mysampleapp.demo.nosql.DoctorDO;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DocListFragment extends Fragment implements ItemClickListenerAnimation {
 
@@ -347,6 +350,22 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
         protected void onPostExecute(Void args) {
             if (success) {
                 Snackbar.make(fab, doctorDO.getName()+" Deleted!", Snackbar.LENGTH_LONG).show();
+
+                //remove form shared preference eventually doctor active
+                //get shared pref file
+                SharedPreferences sharedPref = getContext().getSharedPreferences(
+                        getContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
+
+                //getting data from shared pref and add the new sottoscorta pendig id notification to update always same notification
+                Set<String> s = new HashSet<String>(sharedPref.getStringSet(getContext().getString(R.string.active_doctor),
+                        new HashSet<String>()));
+                SharedPreferences.Editor editor = sharedPref.edit();
+                s.remove(doctorDO.getName()+"/"+doctorDO.getSurname()+"/"+doctorDO.getEmail());
+
+                editor.putStringSet(getContext().getString(R.string.active_doctor), s);
+                editor.apply();
+
+                Log.w("SottoscortaService", "pending list " + s.toString());
             }
             else {
                 items.add(doctorDO);
