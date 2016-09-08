@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.mysampleapp.ObservableScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/scrollamelo"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,78 +14,180 @@
         <FrameLayout
             android:id="@+id/img_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp">
 
             <ImageView
                 android:id="@+id/img"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
-                android:src="@color/colorAccent" />
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/doc_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:src="@drawable/doctor"
-                android:transitionName="kittenImage" />
-            <TextView
-                android:id="@+id/name_surname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="QWERTY"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/name_surname"
-                android:text="QWERTY"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/address"
-                android:text="QWERTY"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/phone_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/email"
-                android:text="QWERTY"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:src="@drawable/header_doc" />
 
             <ImageButton
                 android:id="@+id/active_image_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignRight="@+id/phone_number"
-                android:layout_centerVertical="true"
                 android:background="#00ffffff"
+                android:layout_gravity="bottom|start"
+                android:layout_margin="@dimen/margin_star_detail"
                 android:src="@android:drawable/btn_star" />
+        </FrameLayout>
 
-        </LinearLayout>
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_card"
+            app:cardBackgroundColor="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/icon_ID"
+                    android:layout_width="@dimen/icon_dim"
+                    android:layout_height="@dimen/icon_dim"
+                    android:layout_gravity="center"
+                    android:src="@drawable/doctor"
+                    android:transitionName="kittenImage"
+                    app:civ_fill_color="@color/colorAccent" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="@dimen/margin_text_detail"
+                  android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="NOME"
+                        android:textSize="@dimen/size_text_detail" />
+
+                    <TextView
+                        android:id="@+id/surname"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="COGNOME"
+                        android:textSize="@dimen/size_text_detail" />
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_card"
+            app:cardBackgroundColor="@color/white">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/email_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_row_details"
+                    android:layout_marginBottom="@dimen/margin_row_details"
+                    android:orientation="horizontal"
+                    android:clickable="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/margin_icon_small_detail"
+                        android:src="@drawable/email" />
+
+                    <TextView
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/margin_text_detail"
+                        android:gravity="center_vertical"
+                        android:text="A@A.A"
+                        android:textSize="@dimen/size_text_detail" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="fill_parent"
+                    android:layout_marginStart="@dimen/separe_margin_details"
+                    android:layout_marginEnd="@dimen/separe_margin_details"
+                    android:layout_height="@dimen/separe_detail"
+                    android:background="@color/colorAccent" />
+
+                <LinearLayout
+                    android:id="@+id/phone_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_row_details"
+                    android:layout_marginBottom="@dimen/margin_row_details"
+                    android:orientation="horizontal"
+                    android:clickable="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/margin_icon_small_detail"
+                        android:src="@drawable/phone" />
+
+                    <TextView
+                        android:id="@+id/phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/margin_text_detail"
+                        android:gravity="center_vertical"
+                        android:text="33356413945"
+                        android:textSize="@dimen/size_text_detail" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/separe_detail"
+                    android:layout_marginStart="@dimen/separe_margin_details"
+                    android:layout_marginEnd="@dimen/separe_margin_details"
+                    android:background="@color/colorAccent" />
+
+                <LinearLayout
+                    android:id="@+id/maps_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_row_details"
+                    android:layout_marginBottom="@dimen/margin_row_details"
+                    android:orientation="horizontal"
+                    android:clickable="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/margin_icon_small_detail"
+                        android:src="@drawable/address" />
+
+                    <TextView
+                        android:id="@+id/address"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/margin_text_detail"
+                        android:gravity="center_vertical"
+                        android:text="via asfsafoajsdogp 55"
+                        android:textSize="@dimen/size_text_detail" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
     </LinearLayout>
 </com.mysampleapp.ObservableScrollView>

@@ -18,8 +18,10 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.mysampleapp.ObservableScrollView;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.DrugDO;
@@ -34,7 +36,7 @@ import java.util.ArrayList;
  * Use the {@link DrugFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DrugFragment extends Fragment {
+public class DrugFragment extends Fragment implements ObservableScrollView.OnScrollChangedListener {
 
     private static final String ARG_DRUGDO = "param1";
     private OnFragmentInteractionListener mListener;
@@ -43,6 +45,9 @@ public class DrugFragment extends Fragment {
     private FloatingActionButton fab;
     private Animation rotate_close;
     private Button sendEmailButton;
+    private ObservableScrollView scrollView;
+    private FrameLayout header;
+
 
 
     // TODO: Rename and change types and number of parameters
@@ -78,6 +83,10 @@ public class DrugFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         activity = (AppCompatActivity) getActivity();
         fab = (FloatingActionButton) activity.findViewById(R.id.fab);
+        scrollView = (ObservableScrollView) view.findViewById(R.id.scrollView);
+        scrollView.setOnScrollChangedListener(this);
+        // Store the reference of your image container
+        header = (FrameLayout) view.findViewById(R.id.img_container);
         sendEmailButton = (Button) view.findViewById(R.id.button_send);
         fab.setImageResource(R.drawable.modify);
         rotate_close = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_close_360);
@@ -183,6 +192,13 @@ public class DrugFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onScrollChanged(int deltaX, int deltaY) {
+        int scrollY = scrollView.getScrollY();
+        // Add parallax effect
+        header.setTranslationY(scrollY * 0.2f);
     }
 
     public interface OnFragmentInteractionListener {

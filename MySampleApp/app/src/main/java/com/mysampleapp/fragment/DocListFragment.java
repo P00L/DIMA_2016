@@ -64,7 +64,6 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
 
     private OnFragmentInteractionListener mListener;
     private RecyclerView mRecyclerView;
-    private RecyclerViewHeader header;
     private DocAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<DoctorDO> items;
@@ -118,8 +117,6 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        header = (RecyclerViewHeader) view.findViewById(R.id.header);
-        header.attachTo(mRecyclerView);
         initSwipe();
 
         if (!fab.isShown()) {
@@ -154,7 +151,6 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
                 Log.w(LOG_TAG, "restore items");
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
-                header.attachTo(mRecyclerView);
                 Collections.sort(items, (new Comparator<DoctorDO>() {
                     @Override
                     public int compare(DoctorDO s1, DoctorDO s2) {
@@ -281,7 +277,6 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
                     enableFab();
                     mLayoutManager = new LinearLayoutManager(getActivity());
                     mRecyclerView.setLayoutManager(mLayoutManager);
-                    header.attachTo(mRecyclerView);
                     Collections.sort(items, (new Comparator<DoctorDO>() {
                         @Override
                         public int compare(DoctorDO s1, DoctorDO s2) {

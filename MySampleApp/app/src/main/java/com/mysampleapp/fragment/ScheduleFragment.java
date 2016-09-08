@@ -17,8 +17,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.mysampleapp.ObservableScrollView;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.demo.nosql.ScheduleDrugDO;
@@ -33,7 +35,7 @@ import java.util.ArrayList;
  * Use the {@link ScheduleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ScheduleFragment extends Fragment {
+public class ScheduleFragment extends Fragment implements ObservableScrollView.OnScrollChangedListener{
 
     private static final String ARG_SCHEDULEDRUGDO = "param1";
     private AppCompatActivity activity;
@@ -41,6 +43,8 @@ public class ScheduleFragment extends Fragment {
     private ScheduleDrugDO scheduleDrugDO;
     private FloatingActionButton fab;
     private Animation rotate_close;
+    private ObservableScrollView scrollView;
+    private FrameLayout header;
 
     public ScheduleFragment() {
         // Required empty public constructor
@@ -75,6 +79,10 @@ public class ScheduleFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //Log.w("docdo", doctorDO.getName());
         activity = (AppCompatActivity) getActivity();
+        scrollView = (ObservableScrollView) view.findViewById(R.id.scrollView);
+        scrollView.setOnScrollChangedListener(this);
+        // Store the reference of your image container
+        header = (FrameLayout) view.findViewById(R.id.img_container);
         fab = (FloatingActionButton) activity.findViewById(R.id.fab);
         fab.setImageResource(R.drawable.modify);
         rotate_close = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_close_360);
@@ -146,6 +154,13 @@ public class ScheduleFragment extends Fragment {
     public void setResult(ScheduleDrugDO scheduleDrugDO) {
         this.scheduleDrugDO = scheduleDrugDO;
 
+    }
+
+    @Override
+    public void onScrollChanged(int deltaX, int deltaY) {
+        int scrollY = scrollView.getScrollY();
+        // Add parallax effect
+        header.setTranslationY(scrollY * 0.2f);
     }
 
     /**

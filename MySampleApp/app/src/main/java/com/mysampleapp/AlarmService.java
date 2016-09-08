@@ -232,7 +232,7 @@ public class AlarmService extends IntentService {
 
         Log.w("AlarmService", "alarm delay " + alarmDelay);
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmDelay, alarmIntent);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmDelay, alarmIntent);
     }
 
     private void updateAlarm(ScheduleDrugDO scheduleDrugDO, ScheduleDrugDO scheduleDrugDO_old) {
@@ -287,7 +287,7 @@ public class AlarmService extends IntentService {
 
             Log.w("AlarmService", "alarm delay " + alarmDelay);
 
-            alarmManager.set(AlarmManager.RTC_WAKEUP, alarmDelay, alarmIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmDelay, alarmIntent);
         }
 
     }

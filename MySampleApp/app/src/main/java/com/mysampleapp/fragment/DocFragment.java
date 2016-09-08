@@ -1,5 +1,7 @@
 package com.mysampleapp.fragment;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mysampleapp.ObservableScrollView;
@@ -33,8 +37,8 @@ public class DocFragment extends Fragment implements ObservableScrollView.OnScro
     private FloatingActionButton fab;
     private Animation rotate_close;
     private ImageButton active;
-    ObservableScrollView scrollView;
-    FrameLayout header;
+    private ObservableScrollView scrollView;
+    private FrameLayout header;
 
     public DocFragment() {
         // Required empty public constructor
@@ -72,7 +76,7 @@ public class DocFragment extends Fragment implements ObservableScrollView.OnScro
         activity = (AppCompatActivity) getActivity();
         rotate_close = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_close_360);
         fab = (FloatingActionButton) activity.findViewById(R.id.fab);
-        scrollView = (ObservableScrollView) view.findViewById(R.id.scrollamelo);
+        scrollView = (ObservableScrollView) view.findViewById(R.id.scrollView);
         scrollView.setOnScrollChangedListener(this);
         // Store the reference of your image container
         header = (FrameLayout) view.findViewById(R.id.img_container);
@@ -82,8 +86,11 @@ public class DocFragment extends Fragment implements ObservableScrollView.OnScro
         else
             active.setImageResource(android.R.drawable.btn_star);
 
-        TextView textViewNameSurname = (TextView) view.findViewById(R.id.name_surname);
-        textViewNameSurname.setText(doctorDO.getName() + " " + doctorDO.getSurname());
+        TextView textViewName = (TextView) view.findViewById(R.id.name);
+        textViewName.setText(doctorDO.getName());
+
+        TextView textViewSurname = (TextView) view.findViewById(R.id.surname);
+        textViewSurname.setText(doctorDO.getSurname());
 
         TextView textViewAddress = (TextView) view.findViewById(R.id.address);
         textViewAddress.setText(doctorDO.getAddress());
@@ -91,8 +98,50 @@ public class DocFragment extends Fragment implements ObservableScrollView.OnScro
         TextView textViewEmail = (TextView) view.findViewById(R.id.email);
         textViewEmail.setText(doctorDO.getEmail());
 
-        TextView textViewPhone = (TextView) view.findViewById(R.id.phone_number);
+        TextView textViewPhone = (TextView) view.findViewById(R.id.phone);
         textViewPhone.setText(doctorDO.getPhoneNumber().intValue() + "");
+
+        LinearLayout emailLinearLayout = (LinearLayout) view.findViewById(R.id.email_layout);
+        emailLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentEmail = new Intent(Intent.ACTION_SEND);
+                intentEmail.setData(Uri.parse("mailto:"));
+                intentEmail.setType("message/rfc822");
+                String[] to = {doctorDO.getEmail()};
+                intentEmail.putExtra(Intent.EXTRA_EMAIL, to);
+                if (intentEmail.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(Intent.createChooser(intentEmail, "Choose an email client from..."));
+                }
+            }
+        });
+
+        LinearLayout phoneLinearLayout = (LinearLayout) view.findViewById(R.id.phone_layout);
+        phoneLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + doctorDO.getPhoneNumber().intValue()));
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+
+            }
+        });
+
+        LinearLayout mapsLinearLayout = (LinearLayout) view.findViewById(R.id.maps_layout);
+        mapsLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String map = "http://maps.google.co.in/maps?q=" + doctorDO.getAddress();
+                Uri mapUri = Uri.parse(map);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(mapUri);
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+            }
+        });
 
         if (!fab.isShown()) {
             fab.show();
@@ -138,6 +187,13 @@ public class DocFragment extends Fragment implements ObservableScrollView.OnScro
         int scrollY = scrollView.getScrollY();
         // Add parallax effect
         header.setTranslationY(scrollY * 0.2f);
+
+        if (deltaY > 0) {
+            fab.hide();
+            //fab.animate().translationY(fab.getHeight() + 32).setInterpolator(new AccelerateInterpolator(2)).start();
+        } else if (deltaY < 0)
+            fab.show();
+        //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
     public interface OnFragmentInteractionListener {
