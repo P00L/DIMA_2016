@@ -13,13 +13,15 @@
         android:layout_margin="5dp"
         android:background="@drawable/schedule_item_shape">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/icon_ID"
-            android:layout_width="108dp"
-            android:layout_height="108dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_alignParentLeft="true"
-            android:maxHeight="100dp"
-            android:maxWidth="100dp"
+            app:civ_fill_color="@color/colorAccent"
             android:src="@drawable/schedule"/>
 
         <TextView
@@ -27,8 +29,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/icon_ID"
-            android:text="NOME"
-            android:layout_marginTop="15dp"
+            android:text="NAME"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="10dp"
+            android:singleLine="true"
+            android:layout_toStartOf="@+id/active_image_button"
             android:textColor="@android:color/black"
             android:textSize="24sp" />
 
@@ -37,8 +42,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/icon_ID"
-            android:layout_centerInParent="true"
             android:text="QUANTITY"
+            android:layout_marginTop="60dp"
+            android:layout_marginLeft="10dp"
+            android:singleLine="true"
+            android:layout_toStartOf="@+id/active_image_button"
             android:textColor="@android:color/black"
             android:textSize="24sp" />
 

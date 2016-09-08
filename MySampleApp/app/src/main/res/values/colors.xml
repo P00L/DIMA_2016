@@ -14,7 +14,7 @@
     <color name="nav_drawer_no_user_background">#AAAAAA</color>
     <color name="dark_content_text">#333333</color>
     <color name="sign_in_separator_color">#DDDDDD</color>
-    <color name="instructions_list_border_color">#FFDDDDDD</color>
+    <color name="instructions_list_border_color">#99DDDDDD</color>
     <color name="input_error_color">#af1212</color>
     <color name="photo_tint">#7f101010</color>
     <color name="red">#c71212</color>

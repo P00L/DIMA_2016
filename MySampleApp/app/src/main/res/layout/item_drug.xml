@@ -21,16 +21,20 @@
             android:src="@drawable/drug"
             android:maxHeight="100dp"
             android:maxWidth="100dp"
-            app:civ_border_width="1dp"
-            app:civ_border_color="@color/drug_item_col_circle"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            app:civ_fill_color="@color/colorAccent" />
 
         <TextView
             android:id="@+id/drug_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/icon_ID"
-            android:text="NOME"
-            android:layout_marginTop="15dp"
+            android:text="NAME"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="10dp"
+            android:singleLine="true"
+            android:layout_toStartOf="@+id/active_image_button"
             android:textColor="@android:color/black"
             android:textSize="24sp" />
 
@@ -39,8 +43,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/icon_ID"
-            android:layout_centerInParent="true"
+            android:layout_marginTop="60dp"
             android:text="QUANTITY"
+            android:layout_marginStart="10dp"
+            android:singleLine="true"
+            android:layout_toStartOf="@+id/active_image_button"
             android:textColor="@android:color/black"
             android:textSize="24sp" />
 
@@ -48,7 +55,7 @@
             android:id="@+id/view1"
             android:layout_width="fill_parent"
             android:layout_height="2dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_below="@+id/icon_ID"
             android:layout_marginTop="10dp"
             android:background="@color/colorAccent" />
@@ -57,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/pill"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:background="#00ffffff"/>
