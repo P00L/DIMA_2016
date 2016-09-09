@@ -17,7 +17,7 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="margin_card">10dp</dimen>
-    <dimen name="icon_dim">100dp</dimen>
+    <dimen name="icon_dim">90dp</dimen>
     <dimen name="margin_icon_small_detail">10dp</dimen>
     <dimen name="margin_text_detail">20dp</dimen>
     <dimen name="size_text_detail">24sp</dimen>

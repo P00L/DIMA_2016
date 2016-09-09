@@ -13,20 +13,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/icon_ID"
-            android:layout_width="100dp"
-            android:layout_height="60dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginEnd="20dp"
-            android:src="@drawable/pending_schedule" />
+            android:layout_width="@dimen/icon_dim"
+            android:layout_height="@dimen/icon_dim"
+            android:src="@drawable/pending_schedule"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            app:civ_fill_color="@color/colorAccent" />
 
         <TextView
             android:id="@+id/doc_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/icon_ID"
+            android:layout_marginStart="@dimen/margin_text_detail"
             android:text="DRUG"
+            android:layout_marginTop="25dp"
             android:textColor="@android:color/black"
             android:textSize="30sp" />
 
@@ -37,6 +41,7 @@
             android:layout_below="@+id/doc_name"
             android:layout_toEndOf="@+id/icon_ID"
             android:text="prendi una"
+            android:layout_marginStart="@dimen/margin_text_detail"
             android:textColor="@android:color/black"
             android:textSize="24sp" />
 
@@ -46,7 +51,7 @@
             android:theme="@style/AppTheme.ButtonRed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/icon_ID"
+            android:layout_marginStart="10dp"
             android:layout_below="@+id/view1"
             android:drawableLeft="@drawable/x"
             android:text="SKIP" />
@@ -56,10 +61,11 @@
             android:theme="@style/AppTheme.ButtonBlue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/view1"
-            android:layout_toEndOf="@+id/skip"
             android:drawableRight="@drawable/postpone"
-            android:text="POSTPONE" />
+            android:layout_marginBottom="5dp"
+            android:text="POSTPONE"
+            android:layout_below="@+id/view1"
+            android:layout_centerHorizontal="true" />
 
 
         <Button
@@ -68,6 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_marginEnd="10dp"
             android:layout_below="@+id/view1"
             android:drawableRight="@drawable/take"
             android:text="TAKE" />
@@ -77,9 +84,11 @@
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/quantity"
+            android:layout_below="@+id/icon_ID"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="@dimen/separe_margin_details"
+            android:layout_marginEnd="@dimen/separe_margin_details"
             android:background="@color/colorAccent" />
 
 

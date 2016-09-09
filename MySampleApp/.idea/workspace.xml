@@ -20,12 +20,22 @@
           <theme>@style/AppTheme</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/item_pending_schedule.xml">
+        <config>
+          <theme>@style/AppTheme</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/menu/activity_home_drawer.xml">
         <config>
           <theme>@android:style/Theme.Material.Light</theme>
         </config>
       </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/menu/home.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/menu/search_menu.xml">
         <config>
           <theme>@android:style/Theme.Material.Light</theme>
         </config>
@@ -37,16 +47,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ce56a1d3-da81-4576-b051-c30b53894040" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/refill.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/ServiceNotification.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/ServiceNotification.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/SottoscortaService.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/SottoscortaService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DrugFormFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DrugFormFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DrugFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DrugFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFormFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleListFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/quantity.xml" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/quantity.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_drug.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_drug.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_pending_schedule.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_pending_schedule.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/menu/home.xml" afterPath="$PROJECT_DIR$/app/src/main/res/menu/home.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" />
     </list>
     <ignored path="MySampleApp.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -79,11 +85,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SottoscortaService.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SottoscortaService.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/SottoscortaService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.47959185">
+            <state vertical-scroll-proportion="0.0">
               <caret line="133" column="52" selection-start-line="133" selection-start-column="52" selection-end-line="133" selection-end-column="52" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HomeActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="184" column="0" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dimens.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/dimens.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.9067164">
+              <caret line="19" column="28" selection-start-line="19" selection-start-column="28" selection-end-line="19" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -2783,8 +2809,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/res/drawable/expand.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/drawable/hamburger.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/modify.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/plus.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/postpone.xml" />
@@ -2795,7 +2819,6 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/item_drug.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_drug_list.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_schedule_list.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/menu/home.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/menu/activity_home_drawer.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/doctor.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/schedule.xml" />
@@ -2803,7 +2826,6 @@
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/drug.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_pending_schedule.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/AlarmService.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/item_pending_schedule.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/phone.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/email.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/address.xml" />
@@ -2815,7 +2837,6 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_doc.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_schedule.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/arrays.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DialogPickerRefill.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/DocListFragment.java" />
@@ -2834,6 +2855,11 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/fragment/ScheduleListFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/ServiceNotification.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/SottoscortaService.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/menu/home.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/pending_schedule_white.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/item_pending_schedule.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" />
       </list>
     </option>
   </component>
@@ -2894,6 +2920,104 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="values" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="values" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dimens.xml" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResGroupNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="menu" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="layout" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="drawable" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -3016,6 +3140,16 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="com" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MySampleApp" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -3351,7 +3485,13 @@
       <option name="project" value="LOCAL" />
       <updated>1473369155170</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="changed drug icon.&#10;fixed delete of schedule now clear shared pref and delete alarm.&#10;fixed notes edittext in form fragment.&#10;fixed notification layout.&#10;TODO fix phone number in doctor&#10;">
+      <created>1473431058672</created>
+      <option name="number" value="00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1473431058672</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -3435,61 +3575,14 @@
     <MESSAGE value="new doctor layout" />
     <MESSAGE value="added header" />
     <MESSAGE value="added drug layout.&#10;added schedule layout.&#10;added saving of active doctor in shared preference and keep consistency in case of modifiy or delete.&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="added drug layout.&#10;added schedule layout.&#10;added saving of active doctor in shared preference and keep consistency in case of modifiy or delete.&#10;" />
+    <MESSAGE value="changed drug icon.&#10;fixed delete of schedule now clear shared pref and delete alarm.&#10;fixed notes edittext in form fragment.&#10;fixed notification layout.&#10;TODO fix phone number in doctor&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed drug icon.&#10;fixed delete of schedule now clear shared pref and delete alarm.&#10;fixed notes edittext in form fragment.&#10;fixed notification layout.&#10;TODO fix phone number in doctor&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_drug_list.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6348548">
-          <caret line="27" column="49" selection-start-line="27" selection-start-column="49" selection-end-line="27" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_schedule_list.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.8340249">
-          <caret line="26" column="49" selection-start-line="26" selection-start-column="49" selection-end-line="26" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/home.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.12592593">
-          <caret line="2" column="56" selection-start-line="2" selection-start-column="56" selection-end-line="2" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/doc_item_shape.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/activity_home_drawer.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8740741">
-          <caret line="26" column="43" selection-start-line="26" selection-start-column="43" selection-end-line="26" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/schedule.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.12592593">
-          <caret line="2" column="23" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/pending_schedule.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3074074">
@@ -3511,16 +3604,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.36514524">
           <caret line="34" column="49" selection-start-line="34" selection-start-column="49" selection-end-line="34" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_pending_schedule.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49377593">
-          <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -3642,13 +3725,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.07112971">
           <caret line="1" column="37" selection-start-line="1" selection-start-column="37" selection-end-line="1" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/dimens.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.71268654">
-          <caret line="27" column="35" selection-start-line="27" selection-start-column="35" selection-end-line="27" selection-end-column="35" />
         </state>
       </provider>
     </entry>
@@ -3828,11 +3904,11 @@
         <state vertical-scroll-proportion="0.80754715">
           <caret line="375" column="83" selection-start-line="375" selection-start-column="83" selection-end-line="375" selection-end-column="83" />
           <folding>
-            <element signature="e#6593#6611#0" expanded="true" />
-            <element signature="e#14262#14315#0" expanded="true" />
-            <element signature="e#14597#14643#0" expanded="true" />
-            <element signature="e#14898#14944#0" expanded="true" />
-            <element signature="e#19733#19784#0" expanded="true" />
+            <element signature="e#6593#6611#0" expanded="false" />
+            <element signature="e#14262#14315#0" expanded="false" />
+            <element signature="e#14597#14643#0" expanded="false" />
+            <element signature="e#14898#14944#0" expanded="false" />
+            <element signature="e#19733#19784#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -3842,7 +3918,7 @@
         <state vertical-scroll-proportion="0.46037737">
           <caret line="264" column="6" selection-start-line="264" selection-start-column="6" selection-end-line="268" selection-end-column="41" />
           <folding>
-            <element signature="e#11716#11773#0" expanded="true" />
+            <element signature="e#11716#11773#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -3857,10 +3933,82 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/search_menu.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/home.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.19029851">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/SottoscortaService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47959185">
+        <state vertical-scroll-proportion="0.0">
           <caret line="133" column="52" selection-start-line="133" selection-start-column="52" selection-end-line="133" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_home.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_drug.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35983264">
+          <caret line="26" column="54" selection-start-line="16" selection-start-column="7" selection-end-line="26" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_pending_schedule.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6150628">
+          <caret line="19" column="51" selection-start-line="19" selection-start-column="51" selection-end-line="19" selection-end-column="51" />
+          <folding>
+            <element signature="e#752#769#0" expanded="true" />
+            <element signature="e#804#821#0" expanded="true" />
+            <element signature="e#1263#1290#0" expanded="true" />
+            <element signature="e#1790#1817#0" expanded="true" />
+            <element signature="e#3534#3564#0" expanded="true" />
+            <element signature="e#3602#3632#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/activity/HomeActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="184" column="0" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/dimens.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.9067164">
+          <caret line="19" column="28" selection-start-line="19" selection-start-column="28" selection-end-line="19" selection-end-column="28" />
           <folding />
         </state>
       </provider>
