@@ -162,7 +162,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:paddingRight="50dp"
-                        android:src="@drawable/sottoscorta"
+                        android:src="@drawable/refill"
                         android:background="#00ffffff" />
 
                 </RelativeLayout>

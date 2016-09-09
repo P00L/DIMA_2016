@@ -57,20 +57,33 @@ public class ServiceNotification extends IntentService {
     public void createNotification(Context context, Intent intent, Set<String> set_result) {
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.mipmap.ic_launcher1)
-                .setContentTitle("Drug reminder")
-                .setContentText("...");
-        NotificationCompat.InboxStyle inboxStyle =
-                new NotificationCompat.InboxStyle();
+                .setSmallIcon(R.drawable.pending_schedule)
+                .setColor(getResources().getColor(R.color.colorPrimary));
 
-        // Sets a title for the Inbox in expanded layout
-        inboxStyle.setBigContentTitle("Drug reminder");
-        // Moves events into the expanded layout
-        for (String s : set_result) {
-            inboxStyle.addLine(s.split("/")[1]);
+
+        if (set_result.size() == 1) {
+            mBuilder.setContentTitle("Drug reminder");
+            for (String s : set_result) {
+                mBuilder.setContentText(s.split("/")[1]);
+            }
+
+        //single line
+        } else {
+            //multiline
+            mBuilder.setContentTitle("Drug reminder")
+                    .setContentText("...");
+
+            NotificationCompat.InboxStyle inboxStyle =
+                    new NotificationCompat.InboxStyle();
+            // Sets a title for the Inbox in expanded layout
+            inboxStyle.setBigContentTitle("Drug reminder");
+            // Moves events into the expanded layout
+            for (String s : set_result) {
+                inboxStyle.addLine(s.split("/")[1]);
+            }
+            // Moves the expanded layout object into the notification object.
+            mBuilder.setStyle(inboxStyle);
         }
-        // Moves the expanded layout object into the notification object.
-        mBuilder.setStyle(inboxStyle);
 
         Intent resultIntent = new Intent(context, HomeActivity.class);
         resultIntent.putExtra(SplashActivity.ACTIVITY_HOME_FRAGMENT_EXTRA, "fragment_pending");
@@ -83,8 +96,6 @@ public class ServiceNotification extends IntentService {
                 );
         mBuilder.setContentIntent(resultPendingIntent);
         mBuilder.setDefaults(NotificationCompat.DEFAULT_VIBRATE);
-// added action TODO now it is setted to return to the same place as clicking notification
-        mBuilder.addAction(R.mipmap.ic_launcher1, "Call", resultPendingIntent);
 
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
         mBuilder.setAutoCancel(true);

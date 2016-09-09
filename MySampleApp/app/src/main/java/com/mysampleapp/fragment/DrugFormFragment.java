@@ -18,13 +18,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.amazonaws.AmazonClientException;
@@ -456,11 +459,15 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         // Here we generate programmatically the view that will be added by the system to the step content layout
         notes_text = new EditText(getActivity());
         notes_text.setHint("notes");
-        notes_text.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        notes_text.setMinLines(3);
-        notes_text.setMaxLines(7);
+        notes_text.setSingleLine(false);
+        notes_text.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
+        notes_text.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         notes_text.setLines(5);
-        notes_text.setGravity(Gravity.LEFT | Gravity.BOTTOM);
+        notes_text.setMaxLines(20);
+        notes_text.setVerticalScrollBarEnabled(true);
+        notes_text.setMovementMethod(ScrollingMovementMethod.getInstance());
+        notes_text.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
+
         notes_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         if (drugDO_tmp.getNotes() != null)
             notes_text.setText(drugDO_tmp.getNotes().toString());

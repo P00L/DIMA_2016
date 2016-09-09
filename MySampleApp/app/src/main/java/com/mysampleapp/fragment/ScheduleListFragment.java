@@ -1,7 +1,11 @@
 package com.mysampleapp.fragment;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -42,6 +46,7 @@ import android.widget.TextView;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.mysampleapp.AlarmReceiver;
 import com.mysampleapp.DetailsTransition;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
@@ -57,6 +62,8 @@ import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class ScheduleListFragment extends Fragment implements ItemClickListenerAnimation {
@@ -350,6 +357,25 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
         protected void onPostExecute(Void args) {
             if (success) {
                 Snackbar.make(fab, scheduleDrugDO.getDrug()+" Deleted!", Snackbar.LENGTH_LONG).show();
+                SharedPreferences sharedPref = getContext().getSharedPreferences(
+                        getContext().getString(R.string.preference_file_name), Context.MODE_PRIVATE);
+
+                //getting data from shared pref and add the new alarm manager as pending
+                //returning the pending list of id alarm manager as string or an empty set
+                Set<String> s = new HashSet<String>(sharedPref.getStringSet(getContext().getString(R.string.pending_alarm),
+                        new HashSet<String>()));
+                SharedPreferences.Editor editor = sharedPref.edit();
+                s.remove(scheduleDrugDO.getAlarmId().intValue() + "/" + scheduleDrugDO.getDrug());
+                editor.putStringSet(getContext().getString(R.string.pending_alarm), s);
+                //persist immediatly the data in the shared pref
+                editor.apply();
+
+                //clear alarm manager accordng to alarm id
+                AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+                Intent alertIntent = new Intent(getContext(), AlarmReceiver.class);
+                PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(), scheduleDrugDO.getAlarmId().intValue(), alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager.cancel(alarmIntent);
+
             }
             else {
                 items.add(scheduleDrugDO);

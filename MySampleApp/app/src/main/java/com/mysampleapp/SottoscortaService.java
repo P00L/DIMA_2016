@@ -131,7 +131,8 @@ public class SottoscortaService extends IntentService {
     public void createNotification(Context context, DrugDO drugDO, int notificatoID) {
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.mipmap.ic_launcher1)
+                .setSmallIcon(R.drawable.sottoscorta)
+                .setColor(getResources().getColor(R.color.colorPrimary))
                 .setContentTitle("Sottoscorta")
                 .setContentText(drugDO.getName());
 

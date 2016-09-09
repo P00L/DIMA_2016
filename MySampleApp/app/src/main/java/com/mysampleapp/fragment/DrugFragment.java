@@ -272,6 +272,7 @@ public class DrugFragment extends Fragment implements ObservableScrollView.OnScr
         @Override
         protected Void doInBackground(Void... params) {
             try {
+                Log.w("asdasdasdas",drugDO.getUserId());
                 mapper.save(drugDO);
                 success = true;
 

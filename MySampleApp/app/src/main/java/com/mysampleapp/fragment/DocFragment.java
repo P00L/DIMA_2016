@@ -99,7 +99,7 @@ public class DocFragment extends Fragment implements ObservableScrollView.OnScro
         textViewEmail.setText(doctorDO.getEmail());
 
         TextView textViewPhone = (TextView) view.findViewById(R.id.phone);
-        textViewPhone.setText(doctorDO.getPhoneNumber().intValue() + "");
+        textViewPhone.setText(doctorDO.getPhoneNumber()+"");
 
         LinearLayout emailLinearLayout = (LinearLayout) view.findViewById(R.id.email_layout);
         emailLinearLayout.setOnClickListener(new View.OnClickListener() {

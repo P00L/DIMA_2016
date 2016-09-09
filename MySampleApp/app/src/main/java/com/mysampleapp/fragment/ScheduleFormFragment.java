@@ -23,12 +23,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -507,7 +510,16 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
     private View createNotesStep() {
         notesEditText = new EditText(getActivity());
         notesEditText.setHint(R.string.anything_useful);
-        notesEditText.setSingleLine(true);
+        notesEditText = new EditText(getActivity());
+        notesEditText.setHint("notes");
+        notesEditText.setSingleLine(false);
+        notesEditText.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
+        notesEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        notesEditText.setLines(5);
+        notesEditText.setMaxLines(20);
+        notesEditText.setVerticalScrollBarEnabled(true);
+        notesEditText.setMovementMethod(ScrollingMovementMethod.getInstance());
+        notesEditText.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
         notesEditText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         if (scheduleDrugDO_tmp.getNotes() != null)
             notesEditText.setText(scheduleDrugDO_tmp.getNotes());
