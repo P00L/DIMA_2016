@@ -22,7 +22,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> impl
     private Context mContext;
     private ArrayList<DoctorDO> mList;
     private ArrayList<DoctorDO> mListCopy;
-    private final ItemClickListenerAnimation listener;
+    private ItemClickListenerAnimation listener;
 
     public DocAdapter(Context contexts, ArrayList<DoctorDO> list, ItemClickListenerAnimation listener) {
         this.mContext = contexts;
@@ -39,7 +39,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> impl
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder,final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         //setting up all the value of the image according to the position of the row
         holder.nameTextView.setText(mList.get(position).getName());
         holder.surnameTextView.setText(mList.get(position).getSurname());
@@ -64,6 +64,11 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> impl
     @Override
     public int getItemCount() {
         return mList.size();
+    }
+
+    //FONDAMENTALE per SEARCHVIEW
+    public DoctorDO getItem(int position){
+        return mList.get(position);
     }
 
     @Override
@@ -132,12 +137,12 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> impl
 
         @Override
         public void onClick(View view) {
-            clickListener.onClick(view, getPosition(), false);
+            clickListener.onClick(view, getLayoutPosition(), false);
         }
 
         @Override
         public boolean onLongClick(View view) {
-            clickListener.onClick(view, getPosition(), true);
+            clickListener.onClick(view, getLayoutPosition(), true);
             return true;
         }
     }

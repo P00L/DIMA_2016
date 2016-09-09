@@ -2,7 +2,6 @@ package com.mysampleapp.demo.nosql;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -192,7 +191,7 @@ public class DemoNoSQLDrugResult implements DemoNoSQLResult {
         minqtyValueTextView.setText("" + result.getMinqty().longValue());
         notesKeyTextView.setText("notes");
         notesValueTextView.setText(result.getNotes());
-        quantityKeyTextView.setText("sottoscorta");
+        quantityKeyTextView.setText("quantity");
         quantityValueTextView.setText("" + result.getQuantity().longValue());
         typeKeyTextView.setText("type");
         typeValueTextView.setText(result.getType());

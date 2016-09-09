@@ -42,7 +42,6 @@ import android.widget.TextView;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
 import com.mysampleapp.DetailsTransition;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
@@ -394,7 +393,9 @@ public class DocListFragment extends Fragment implements ItemClickListenerAnimat
 
 
         //see github project to more detail
-        Fragment docFragment = DocFragment.newInstance(items.get(position));
+        //Fragment docFragment = DocFragment.newInstance(items.get(position));
+
+        Fragment docFragment = DocFragment.newInstance(mAdapter.getItem(position));
 
         // Note that we need the API version check here because the actual transition classes (e.g. Fade)
         // are not in the support library and are only available in API 21+. The methods we are calling on the Fragment

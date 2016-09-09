@@ -5,14 +5,8 @@ import android.os.Parcelable;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBIndexHashKey;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBIndexRangeKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBRangeKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @DynamoDBTable(tableName = "myfirstapp-mobilehub-1482957139-Drug")
 
@@ -80,7 +74,7 @@ public class DrugDO implements Parcelable {
         this._notes = _notes;
     }
 
-    @DynamoDBAttribute(attributeName = "sottoscorta")
+    @DynamoDBAttribute(attributeName = "quantity")
     public Double getQuantity() {
         return _quantity;
     }

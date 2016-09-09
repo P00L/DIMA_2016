@@ -11,6 +11,7 @@
     <color name="white_overlay">#F2FFFFFF</color>
     <color name="nav_drawer_background">#FFFFFF</color>
     <color name="nav_drawer_top_background">#CCCCCC</color>
+    <color name="items_info_shape">#99f0f0f0</color>
     <color name="nav_drawer_no_user_background">#AAAAAA</color>
     <color name="dark_content_text">#333333</color>
     <color name="sign_in_separator_color">#DDDDDD</color>

@@ -61,6 +61,11 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> im
         return mList.size();
     }
 
+    //FONDAMENTALE per SEARCHVIEW
+    public DrugDO getItem(int position){
+        return mList.get(position);
+    }
+
     @Override
     public Filter getFilter() {
         return new Filter() {
