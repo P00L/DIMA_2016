@@ -467,7 +467,8 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         notes_text.setVerticalScrollBarEnabled(true);
         notes_text.setMovementMethod(ScrollingMovementMethod.getInstance());
         notes_text.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
-
+        notes_text.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
+        notes_text.setGravity(Gravity.BOTTOM);
         notes_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         if (drugDO_tmp.getNotes() != null)
             notes_text.setText(drugDO_tmp.getNotes().toString());

@@ -27,6 +27,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -520,6 +521,7 @@ public class ScheduleFormFragment extends Fragment implements VerticalStepperFor
         notesEditText.setVerticalScrollBarEnabled(true);
         notesEditText.setMovementMethod(ScrollingMovementMethod.getInstance());
         notesEditText.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
+        notesEditText.setGravity(Gravity.BOTTOM);
         notesEditText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         if (scheduleDrugDO_tmp.getNotes() != null)
             notesEditText.setText(scheduleDrugDO_tmp.getNotes());

@@ -100,6 +100,7 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
     private FrameLayout fabMenuBG;
     private int edit_position;
     private AlertDialog.Builder alertDialog;
+    private MyAsyncTask myAsyncTask;
 
     public PendingScheduleFragment() {
         // Required empty public constructor
@@ -292,7 +293,8 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
 
         if (pendingItems == null) {
             Log.w(LOG_TAG, "load");
-            new MyAsyncTask(this).execute();
+            myAsyncTask = new MyAsyncTask(this);
+            myAsyncTask.execute();
         } else {
             //fake instantiation of items to avoid reload on rotation if came from a rotation
             items = new ArrayList<>();
@@ -446,6 +448,10 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
     @Override
     public void onPause() {
         super.onPause();
+        if (myAsyncTask !=null) {
+            myAsyncTask.cancel(true);
+            mProgress.setVisibility(View.GONE);
+        }
         if (fab1.isShown()) {
             fab1.hide();
             fab2.hide();
@@ -524,7 +530,8 @@ public class PendingScheduleFragment extends Fragment implements ItemClickListen
                         .setAction("RETRY", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                new MyAsyncTask(listClass).execute();
+                                myAsyncTask = new MyAsyncTask(listClass);
+                                myAsyncTask.execute();
                             }
                         });
                 snackbar.show();

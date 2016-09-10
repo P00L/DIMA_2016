@@ -83,6 +83,7 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
     private Animation rotate_open;
     private ProgressBar mProgress;
     private Paint p = new Paint();
+    private MyAsyncTask myAsyncTask;
 
     public ScheduleListFragment() {
         // Required empty public constructor
@@ -170,7 +171,8 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
         navigationView.setCheckedItem(R.id.nav_schedule);
 
         if (items == null) {
-            new MyAsyncTask(this).execute();
+            myAsyncTask = new MyAsyncTask(this);
+            myAsyncTask.execute();
         } else {
             if (items.size() > 0) {
                 mLayoutManager = new LinearLayoutManager(getActivity());
@@ -314,7 +316,8 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
                             .setAction("RETRY", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    new MyAsyncTask(listClass).execute();
+                                    myAsyncTask = new MyAsyncTask(listClass);
+                                    myAsyncTask.execute();
                                 }
                             });
                     snackbar.show();
@@ -394,6 +397,10 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
     @Override
     public void onPause() {
         super.onPause();
+        if (myAsyncTask !=null) {
+            myAsyncTask.cancel(true);
+            mProgress.setVisibility(View.GONE);
+        }
         getArguments().putParcelableArrayList(ARG_SCHEDULELIST, items);
     }
 

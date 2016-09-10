@@ -84,7 +84,7 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
     private Animation rotate_open;
     private ProgressBar mProgress;
     private Paint p = new Paint();
-
+    private MyAsyncTask myAsyncTask;
 
     public DrugListFragment() {
         // Required empty public constructor
@@ -152,7 +152,8 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
 
         noDataTextView = (TextView) view.findViewById(R.id.no_data);
         if (items == null) {
-            new MyAsyncTask(this).execute();
+            myAsyncTask = new MyAsyncTask(this);
+            myAsyncTask.execute();
         } else {
             if (items.size() > 0) {
                 Log.w(LOG_TAG, "restore items");
@@ -310,7 +311,8 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
                             .setAction("RETRY", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    new MyAsyncTask(listClass).execute();
+                                    myAsyncTask = new MyAsyncTask(listClass);
+                                    myAsyncTask.execute();
                                 }
                             });
                     snackbar.show();
@@ -376,6 +378,10 @@ public class DrugListFragment extends Fragment implements ItemClickListenerAnima
     @Override
     public void onPause() {
         super.onPause();
+        if (myAsyncTask !=null) {
+            myAsyncTask.cancel(true);
+            mProgress.setVisibility(View.GONE);
+        }
         getArguments().putParcelableArrayList(ARG_DRUGLIST, items);
     }
 
