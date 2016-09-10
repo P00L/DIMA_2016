@@ -75,6 +75,11 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         return mList.size();
     }
 
+    //FONDAMENTALE per SEARCHVIEW
+    public ScheduleDrugDO getItem(int position){
+        return mList.get(position);
+    }
+
     @Override
     public Filter getFilter() {
         return new Filter() {

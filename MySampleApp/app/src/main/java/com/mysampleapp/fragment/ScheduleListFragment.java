@@ -56,7 +56,6 @@ import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
 import com.mysampleapp.demo.nosql.DemoNoSQLTableScheduleDrug;
-import com.mysampleapp.demo.nosql.DoctorDO;
 import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 
 import java.util.ArrayList;
@@ -411,8 +410,9 @@ public class ScheduleListFragment extends Fragment implements ItemClickListenerA
         fab.startAnimation(rotate_open);
 
         //see github project to more detail
-        Fragment scheduleFragment = ScheduleFragment.newInstance(items.get(position));
+        //Fragment scheduleFragment = ScheduleFragment.newInstance(items.get(position));
 
+        Fragment scheduleFragment = ScheduleFragment.newInstance(mAdapter.getItem(position));
         // Note that we need the API version check here because the actual transition classes (e.g. Fade)
         // are not in the support library and are only available in API 21+. The methods we are calling on the Fragment
         // ARE available in the support library (though they don't do anything on API < 21)
