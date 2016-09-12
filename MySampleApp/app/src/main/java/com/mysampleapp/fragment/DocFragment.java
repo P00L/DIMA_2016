@@ -97,7 +97,7 @@ public class DocFragment extends Fragment implements ObservableScrollView.OnScro
         textViewEmail.setText(doctorDO.getEmail());
 
         TextView textViewPhone = (TextView) view.findViewById(R.id.phone);
-        textViewPhone.setText(doctorDO.getPhoneNumber()+"");
+        textViewPhone.setText(doctorDO.getPhoneNumber());
 
         LinearLayout emailLinearLayout = (LinearLayout) view.findViewById(R.id.email_layout);
         emailLinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -119,7 +119,7 @@ public class DocFragment extends Fragment implements ObservableScrollView.OnScro
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + doctorDO.getPhoneNumber().intValue()));
+                intent.setData(Uri.parse("tel:" + doctorDO.getPhoneNumber()));
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(intent);
                 }

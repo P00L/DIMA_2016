@@ -439,7 +439,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         phoneNumber_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         if (docDO_tmp.getPhoneNumber() != null)
-            phoneNumber_text.setText(String.valueOf(docDO_tmp.getPhoneNumber().intValue()));
+            phoneNumber_text.setText(docDO_tmp.getPhoneNumber());
         phoneNumber_text.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -546,7 +546,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         else
             docDO_tmp.setActive(Boolean.FALSE);
         tmp = phoneNumber_text.getText().toString();
-        docDO_tmp.setPhoneNumber(Double.parseDouble(tmp));
+        docDO_tmp.setPhoneNumber(tmp);
         docDO_tmp.setAddress(address_text.getText().toString());
 
         new SaveTask(editMode, doc_list).execute();
@@ -686,7 +686,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
                 else
                     docDO.setActive(Boolean.FALSE);
                 tmp = phoneNumber_text.getText().toString();
-                docDO.setPhoneNumber(Double.parseDouble(tmp));
+                docDO.setPhoneNumber(tmp);
                 docDO.setAddress(address_text.getText().toString());
 
                 mProgressDialog.dismiss();
@@ -785,7 +785,7 @@ public class DocFormFragment extends Fragment implements VerticalStepperForm {
         // Saving phone_number field
         if (phoneNumber_text != null) {
             if (!phoneNumber_text.getText().toString().isEmpty())
-                docDO_tmp.setPhoneNumber(Double.parseDouble(phoneNumber_text.getText().toString()));
+                docDO_tmp.setPhoneNumber(phoneNumber_text.getText().toString());
         }
         // Saving address field
         if (address_text != null) {

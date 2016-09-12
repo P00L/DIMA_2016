@@ -5,14 +5,8 @@ import android.os.Parcelable;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBIndexHashKey;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBIndexRangeKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBRangeKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @DynamoDBTable(tableName = "myfirstapp-mobilehub-1482957139-Doctor")
 
@@ -22,7 +16,7 @@ public class DoctorDO implements Parcelable {
     private Boolean _active;
     private String _address;
     private String _name;
-    private Double _phoneNumber;
+    private String _phoneNumber;
     private String _surname;
 
 
@@ -39,7 +33,7 @@ public class DoctorDO implements Parcelable {
         this._active = Boolean.parseBoolean(data[1]);
         this._address = data[2];
         this._name = data[3];
-        this._phoneNumber = Double.parseDouble(data[4]);
+        this._phoneNumber = data[4];
         this._surname = data[5];
     }
 
@@ -91,11 +85,11 @@ public class DoctorDO implements Parcelable {
     }
 
     @DynamoDBAttribute(attributeName = "phoneNumber")
-    public Double getPhoneNumber() {
+    public String getPhoneNumber() {
         return _phoneNumber;
     }
 
-    public void setPhoneNumber(final Double _phoneNumber) {
+    public void setPhoneNumber(final String _phoneNumber) {
         this._phoneNumber = _phoneNumber;
     }
 
@@ -115,12 +109,6 @@ public class DoctorDO implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        String phone_str;
-        if (this._phoneNumber == null){
-            phone_str = "";
-        }else{
-            phone_str = this._phoneNumber.toString();
-        }
         String active_str;
         if (this._phoneNumber == null){
             active_str = "";
@@ -132,7 +120,7 @@ public class DoctorDO implements Parcelable {
                 active_str,
                 this._address,
                 this._name,
-                phone_str,
+                this._phoneNumber,
                 this._surname,});
 
     }

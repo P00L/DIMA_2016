@@ -2,7 +2,6 @@ package com.mysampleapp.demo.nosql;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -193,7 +192,7 @@ public class DemoNoSQLDoctorResult implements DemoNoSQLResult {
         nameKeyTextView.setText("name");
         nameValueTextView.setText(result.getName());
         phoneNumberKeyTextView.setText("phoneNumber");
-        phoneNumberValueTextView.setText("" + result.getPhoneNumber().longValue());
+        phoneNumberValueTextView.setText(result.getPhoneNumber());
         surnameKeyTextView.setText("surname");
         surnameValueTextView.setText(result.getSurname());
         return layout;

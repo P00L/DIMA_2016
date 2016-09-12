@@ -661,7 +661,8 @@ public class DemoNoSQLTableDoctor extends DemoNoSQLTableBase {
             DemoSampleDataGenerator.getRandomSampleString("address"));
         firstItem.setName(
             DemoSampleDataGenerator.getRandomSampleString("name"));
-        firstItem.setPhoneNumber(DemoSampleDataGenerator.getRandomSampleNumber());
+        firstItem.setPhoneNumber(
+                DemoSampleDataGenerator.getRandomSampleString("phoneNumber"));
         firstItem.setSurname(
             DemoSampleDataGenerator.getRandomSampleString("surname"));
         AmazonClientException lastException = null;
@@ -681,7 +682,7 @@ public class DemoNoSQLTableDoctor extends DemoNoSQLTableBase {
             item.setActive(DemoSampleDataGenerator.getRandomSampleBool());
             item.setAddress(DemoSampleDataGenerator.getRandomSampleString("address"));
             item.setName(DemoSampleDataGenerator.getRandomSampleString("name"));
-            item.setPhoneNumber(DemoSampleDataGenerator.getRandomSampleNumber());
+            item.setPhoneNumber(DemoSampleDataGenerator.getRandomSampleString("phoneNumber"));
             item.setSurname(DemoSampleDataGenerator.getRandomSampleString("surname"));
 
             items[count] = item;
