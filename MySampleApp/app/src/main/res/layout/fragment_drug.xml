@@ -45,6 +45,7 @@
                     android:layout_width="@dimen/icon_dim"
                     android:layout_height="@dimen/icon_dim"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
                     android:src="@drawable/drug"
                     android:transitionName="kittenImage"
                     app:civ_fill_color="@color/colorAccent" />
@@ -60,7 +61,7 @@
                         android:id="@+id/name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:layout_marginTop="2dp"
                         android:text="DRUG"
                         android:textSize="@dimen/size_text_detail"
                         android:textColor="@android:color/black"/>
@@ -69,7 +70,7 @@
                         android:id="@+id/type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="3dp"
                         android:text="TYPE"
                         android:textSize="@dimen/size_text_detail"
                         android:textColor="@android:color/black"/>

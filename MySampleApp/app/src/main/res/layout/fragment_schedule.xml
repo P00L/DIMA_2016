@@ -45,6 +45,7 @@
                     android:layout_width="@dimen/icon_dim"
                     android:layout_height="@dimen/icon_dim"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
                     android:src="@drawable/schedule"
                     android:transitionName="kittenImage"
                     app:civ_fill_color="@color/colorAccent" />

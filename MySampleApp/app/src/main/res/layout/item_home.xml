@@ -22,8 +22,8 @@
             android:layout_width="@dimen/icon_dim"
             android:layout_height="@dimen/icon_dim"
             android:src="@drawable/pending_schedule"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
             app:civ_fill_color="@color/colorAccent" />
 
         <TextView
@@ -32,10 +32,12 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/icon_ID"
             android:layout_marginStart="@dimen/margin_text_detail"
+            android:singleLine="true"
+            android:layout_toStartOf="@+id/hour"
             android:text="DRUG"
             android:layout_marginTop="10dp"
             android:textColor="@android:color/black"
-            android:textSize="30sp" />
+            android:textSize="25sp" />
 
         <TextView
             android:id="@+id/quantity"
@@ -43,10 +45,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/doc_name"
             android:layout_toEndOf="@+id/icon_ID"
+            android:singleLine="true"
+            android:layout_toStartOf="@+id/hour"
             android:text="prendi una"
             android:layout_marginStart="@dimen/margin_text_detail"
             android:textColor="@android:color/black"
-            android:textSize="24sp" />
+            android:textSize="@dimen/size_text_detail" />
         <TextView
             android:id="@+id/hour"
             android:layout_width="wrap_content"
@@ -61,14 +65,11 @@
 
         <View
             android:id="@+id/view1"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="2dp"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/quantity"
-            android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginStart="@dimen/separe_margin_details"
-            android:layout_marginEnd="@dimen/separe_margin_details"
             android:background="@color/colorAccent" />
 
 

@@ -17,13 +17,15 @@
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/icon_ID"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="@dimen/icon_dim"
+            android:layout_height="@dimen/icon_dim"
             android:src="@drawable/drug"
             android:maxHeight="100dp"
             android:maxWidth="100dp"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
             app:civ_fill_color="@color/colorAccent" />
 
         <TextView
@@ -32,32 +34,32 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/icon_ID"
             android:text="NAME"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:singleLine="true"
             android:layout_toStartOf="@+id/active_image_button"
             android:textColor="@android:color/black"
-            android:textSize="24sp" />
+            android:textSize="@dimen/size_text_detail" />
 
         <TextView
             android:id="@+id/drug_qty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/icon_ID"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="40dp"
             android:text="QUANTITY"
             android:layout_marginStart="10dp"
             android:singleLine="true"
             android:layout_toStartOf="@+id/active_image_button"
             android:textColor="@android:color/black"
-            android:textSize="24sp" />
+            android:textSize="@dimen/size_text_detail" />
 
         <View
             android:id="@+id/view1"
             android:layout_width="fill_parent"
             android:layout_height="2dp"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/icon_ID"
+            android:layout_below="@+id/drug_qty"
             android:layout_marginTop="10dp"
             android:background="@color/colorAccent" />
 
