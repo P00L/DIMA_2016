@@ -54,7 +54,7 @@ public class DialogPickerDoctor extends DialogFragment {
         editor.apply();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Pick doctor")
+        builder.setTitle("Pick doctor:")
                 .setItems(doctors, onClick);
         return builder.create();
     }

@@ -16,6 +16,8 @@ import com.mysampleapp.R;
 import com.mysampleapp.demo.nosql.ScheduleDrugDO;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> implements Filterable {
@@ -59,16 +61,57 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
                 break;
         }
 
-        holder.imageButton.setImageResource(R.drawable.pill);
-        holder.setClickListener(new ItemClickListener() {
-            @Override
-            public void onClick(View view, int position, boolean isLongClick) {
-                listener.onClick(holder.imageView, position, isLongClick);
+        String days = mList.get(position).getDay();
+        String[] splitday = days.split("/");
+        List<String> list = new ArrayList<String>();
+        //convert string format of day to int to match Calendar day
+        for (String s : splitday)
+            switch (s) {
+                case "L":
+                    list.add("2");
+                    break;
+                case "MA":
+                    list.add("3");
+                    break;
+                case "ME":
+                    list.add("4");
+                    break;
+                case "G":
+                    list.add("5");
+                    break;
+                case "V":
+                    list.add("6");
+                    break;
+                case "S":
+                    list.add("7");
+                    break;
+                case "D":
+                    list.add("1");
+                    break;
+                default:
+                    list.add("x");
+                    break;
             }
-        });
+        if (list.contains(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) + "")) {
+            holder.imageButton.setImageResource(R.drawable.calendar_blue);
 
-        ViewCompat.setTransitionName(holder.imageView, String.valueOf(position) + "_image");
+        }else{
+            holder.imageButton.setImageResource(R.drawable.calendar);
+        }
+
+    holder.setClickListener(new
+
+    ItemClickListener() {
+        @Override
+        public void onClick (View view,int position, boolean isLongClick){
+            listener.onClick(holder.imageView, position, isLongClick);
+        }
     }
+
+    );
+
+    ViewCompat.setTransitionName(holder.imageView,String.valueOf(position)+"_image");
+}
 
     @Override
     public int getItemCount() {
@@ -76,7 +119,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     }
 
     //FONDAMENTALE per SEARCHVIEW
-    public ScheduleDrugDO getItem(int position){
+    public ScheduleDrugDO getItem(int position) {
         return mList.get(position);
     }
 
@@ -118,39 +161,39 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         return results;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener, View.OnLongClickListener{
-        private TextView drugTextView;
-        private TextView quantityTextView;
-        private ImageView imageView;
-        private ImageButton imageButton;
-        private ItemClickListener clickListener;
+public static class ViewHolder extends RecyclerView.ViewHolder
+        implements View.OnClickListener, View.OnLongClickListener {
+    private TextView drugTextView;
+    private TextView quantityTextView;
+    private ImageView imageView;
+    private ImageButton imageButton;
+    private ItemClickListener clickListener;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
-            drugTextView = (TextView)itemView.findViewById(R.id.schedule_drug_name);
-            imageView = (ImageView) itemView.findViewById(R.id.icon_ID);
-            quantityTextView = (TextView) itemView.findViewById(R.id.schedule_drug_qty);
-            imageButton = (ImageButton) itemView.findViewById(R.id.active_image_button);
-            itemView.setTag(itemView);
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
+    public ViewHolder(View itemView) {
+        super(itemView);
+        drugTextView = (TextView) itemView.findViewById(R.id.schedule_drug_name);
+        imageView = (ImageView) itemView.findViewById(R.id.icon_ID);
+        quantityTextView = (TextView) itemView.findViewById(R.id.schedule_drug_qty);
+        imageButton = (ImageButton) itemView.findViewById(R.id.active_image_button);
+        itemView.setTag(itemView);
+        itemView.setOnClickListener(this);
+        itemView.setOnLongClickListener(this);
 
-        }
-
-        public void setClickListener(ItemClickListener itemClickListener) {
-            this.clickListener = itemClickListener;
-        }
-
-        @Override
-        public void onClick(View view) {
-            clickListener.onClick(view, getPosition(), false);
-        }
-
-        @Override
-        public boolean onLongClick(View view) {
-            clickListener.onClick(view, getPosition(), true);
-            return true;
-        }
     }
+
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.clickListener = itemClickListener;
+    }
+
+    @Override
+    public void onClick(View view) {
+        clickListener.onClick(view, getPosition(), false);
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        clickListener.onClick(view, getPosition(), true);
+        return true;
+    }
+}
 }

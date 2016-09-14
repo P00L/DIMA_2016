@@ -21,7 +21,7 @@ public class DialogPickerDelay extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String[] delay = getResources().getStringArray(R.array.delay);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Pick delay")
+        builder.setTitle("Pick delay (minutes):")
                 .setItems(delay, onClick);
         return builder.create();
     }

@@ -139,7 +139,7 @@ public class DrugFormFragment extends Fragment implements VerticalStepperForm {
         activity = (AppCompatActivity) getActivity();
         FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
 
-        String[] mySteps = {"Name", "Type", "Quantity", "Weight", "Sottoscorta", "Notes"};
+        String[] mySteps = {"Name", "Type", "Quantity", "Weight (mg)", "Sottoscorta", "Notes"};
         int colorPrimary = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
         int colorPrimaryDark = ContextCompat.getColor(getContext(), R.color.com_facebook_button_send_background_color);
 

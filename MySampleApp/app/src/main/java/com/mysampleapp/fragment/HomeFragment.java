@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -106,9 +107,38 @@ public class HomeFragment extends Fragment implements ItemClickListener, ItemCli
         activity = (AppCompatActivity) getActivity();
         mProgress = (ProgressBar) view.findViewById(R.id.progress_bar);
         fab = (FloatingActionButton) activity.findViewById(R.id.fab);
-        fab.hide();
+        if (!fab.isShown()) {
+            fab.show();
+        }
+
+        fab.setImageResource(R.drawable.plus);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(false);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    fab.hide();
+                    //fab.animate().translationY(fab.getHeight() + 32).setInterpolator(new AccelerateInterpolator(2)).start();
+                } else if (dy < 0)
+                    fab.show();
+                //fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+            }
+        });
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = ScheduleFormFragment.newInstance(new ScheduleDrugDO(), false, items);
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+            }
+        });
+
         noDataTextView = (TextView) view.findViewById(R.id.no_data);
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
         DemoNoSQLTableBase demoTable = DemoNoSQLTableFactory.instance(getContext())
@@ -289,7 +319,7 @@ public class HomeFragment extends Fragment implements ItemClickListener, ItemCli
                     mAdapter = new HomeAdapter(getContext(), todayItems, listClass, listClass);
                     mRecyclerView.setAdapter(mAdapter);
                 } else {
-                    enableEmptyState("No pending schedule \n for today");
+                    enableEmptyState("No Schedule for today");
                 }
             } else {
                 Log.w(LOG_TAG, "FAIL " + "FAIL");

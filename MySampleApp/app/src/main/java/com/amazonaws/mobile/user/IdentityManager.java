@@ -7,6 +7,7 @@ package com.amazonaws.mobile.user;
 //
 // Source code generated from template: aws-my-sample-app-android v0.8
 //
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -44,6 +45,7 @@ public class IdentityManager {
     public interface IdentityHandler {
         /**
          * Handles the user's unique identifier.
+         *
          * @param identityId Amazon Cognito Identity ID which uniquely identifies
          *                   the user.
          */
@@ -52,27 +54,40 @@ public class IdentityManager {
         /**
          * Handles any error that might have occurred while getting the user's
          * unique identifier from Amazon Cognito.
+         *
          * @param exception exception
          */
         public void handleError(final Exception exception);
     }
 
-    /** Log tag. */
+    /**
+     * Log tag.
+     */
     private static final String LOG_TAG = IdentityManager.class.getSimpleName();
 
-    /** Cognito caching credentials provider. */
+    /**
+     * Cognito caching credentials provider.
+     */
     private CognitoCachingCredentialsProvider credentialsProvider;
 
-    /** Executor service for obtaining credentials in a background thread. */
+    /**
+     * Executor service for obtaining credentials in a background thread.
+     */
     private final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
-    /** Current provider being used to obtain a Cognito access token. */
+    /**
+     * Current provider being used to obtain a Cognito access token.
+     */
     private IdentityProvider currentIdentityProvider = null;
 
-    /** Results adapter for adapting results that came from logging in with a provider. */
+    /**
+     * Results adapter for adapting results that came from logging in with a provider.
+     */
     private SignInResultsAdapter resultsAdapter;
 
-    /** Keep tract of the currently registered SignInStateChangeListiners. */
+    /**
+     * Keep tract of the currently registered SignInStateChangeListiners.
+     */
     private final HashSet<SignInStateChangeListener> signInStateChangeListeners = new HashSet<>();
 
 
@@ -81,7 +96,9 @@ public class IdentityManager {
      */
     public class AWSRefreshingCognitoIdentityProvider extends AWSBasicCognitoIdentityProvider {
 
-        /** Log tag. */
+        /**
+         * Log tag.
+         */
         private final String LOG_TAG = AWSRefreshingCognitoIdentityProvider.class.getSimpleName();
 
         public AWSRefreshingCognitoIdentityProvider(final String accountId,
@@ -109,7 +126,8 @@ public class IdentityManager {
 
     /**
      * Constructor. Initializes the cognito credentials provider.
-     * @param appContext the application context.
+     *
+     * @param appContext          the application context.
      * @param clientConfiguration the client configuration options such as retries and timeouts.
      */
     public IdentityManager(final Context appContext, final ClientConfiguration clientConfiguration) {
@@ -121,14 +139,14 @@ public class IdentityManager {
 
     private void initializeCognito(final Context context, final ClientConfiguration clientConfiguration) {
         AWSRefreshingCognitoIdentityProvider cognitoIdentityProvider = new AWSRefreshingCognitoIdentityProvider(
-            null, AWSConfiguration.AMAZON_COGNITO_IDENTITY_POOL_ID, clientConfiguration, AWSConfiguration.AMAZON_COGNITO_REGION);
+                null, AWSConfiguration.AMAZON_COGNITO_IDENTITY_POOL_ID, clientConfiguration, AWSConfiguration.AMAZON_COGNITO_REGION);
 
         credentialsProvider =
-            new CognitoCachingCredentialsProvider(context,
-                cognitoIdentityProvider,
-                AWSConfiguration.AMAZON_COGNITO_REGION,
-                clientConfiguration
-            );
+                new CognitoCachingCredentialsProvider(context,
+                        cognitoIdentityProvider,
+                        AWSConfiguration.AMAZON_COGNITO_REGION,
+                        clientConfiguration
+                );
 
     }
 
@@ -138,7 +156,7 @@ public class IdentityManager {
     public boolean areCredentialsExpired() {
 
         final Date credentialsExpirationDate =
-            credentialsProvider.getSessionCredentitalsExpiration();
+                credentialsProvider.getSessionCredentitalsExpiration();
 
         if (credentialsExpirationDate == null) {
             Log.d(LOG_TAG, "Credentials are EXPIRED.");
@@ -146,10 +164,10 @@ public class IdentityManager {
         }
 
         long currentTime = System.currentTimeMillis() -
-            (long)(SDKGlobalConfiguration.getGlobalTimeOffset() * 1000);
+                (long) (SDKGlobalConfiguration.getGlobalTimeOffset() * 1000);
 
         final boolean credsAreExpired =
-            (credentialsExpirationDate.getTime() - currentTime) < 0;
+                (credentialsExpirationDate.getTime() - currentTime) < 0;
 
         Log.d(LOG_TAG, "Credentials are " + (credsAreExpired ? "EXPIRED." : "OK"));
 
@@ -165,6 +183,7 @@ public class IdentityManager {
 
     /**
      * Gets the cached unique identifier for the user.
+     *
      * @return the cached unique identifier for the user.
      */
     public String getCachedUserID() {
@@ -174,6 +193,7 @@ public class IdentityManager {
     /**
      * Gets the user's unique identifier. This method can be called from
      * any thread.
+     *
      * @param handler handles the unique identifier for the user
      */
     public void getUserID(final IdentityHandler handler) {
@@ -217,26 +237,29 @@ public class IdentityManager {
     }
 
     /**
-     *  Implement this interface to get callbacks for the results to a sign-in operation.
+     * Implement this interface to get callbacks for the results to a sign-in operation.
      */
     public interface SignInResultsHandler {
 
         /**
          * Sign-in was successful.
+         *
          * @param provider sign-in identity provider
          */
         void onSuccess(IdentityProvider provider);
 
         /**
          * Sign-in was cancelled by the user.
+         *
          * @param provider sign-in identity provider
          */
         void onCancel(IdentityProvider provider);
 
         /**
          * Sign-in failed.
+         *
          * @param provider sign-in identity provider
-         * @param ex exception that occurred
+         * @param ex       exception that occurred
          */
         void onError(IdentityProvider provider, Exception ex);
     }
@@ -272,8 +295,8 @@ public class IdentityManager {
 
         public void onSuccess(final IdentityProvider provider) {
             Log.d(LOG_TAG,
-                String.format("SignInResultsAdapter.onSuccess(): %s provider sign-in succeeded.",
-                    provider.getDisplayName()));
+                    String.format("SignInResultsAdapter.onSuccess(): %s provider sign-in succeeded.",
+                            provider.getDisplayName()));
             // Update cognito login with the token.
             loginWithProvider(provider);
         }
@@ -294,15 +317,15 @@ public class IdentityManager {
 
         public void onCancel(final IdentityProvider provider) {
             Log.d(LOG_TAG,
-                String.format("SignInResultsAdapter.onCancel(): %s provider sign-in canceled.",
-                    provider.getDisplayName()));
+                    String.format("SignInResultsAdapter.onCancel(): %s provider sign-in canceled.",
+                            provider.getDisplayName()));
             handler.onCancel(provider);
         }
 
         public void onError(final IdentityProvider provider, final Exception ex) {
             Log.e(LOG_TAG,
-                String.format("SignInResultsAdapter.onError(): %s provider error. %s",
-                    provider.getDisplayName(), ex.getMessage()), ex);
+                    String.format("SignInResultsAdapter.onError(): %s provider error. %s",
+                            provider.getDisplayName(), ex.getMessage()), ex);
             handler.onError(provider, ex);
         }
     }
@@ -310,6 +333,7 @@ public class IdentityManager {
     /**
      * Add a listener to receive callbacks when sign-in or sign-out occur.  The listener
      * methods will always be called on a background thread.
+     *
      * @param listener the sign-in state change listener.
      */
     public void addSignInStateChangeListener(final SignInStateChangeListener listener) {
@@ -320,6 +344,7 @@ public class IdentityManager {
 
     /**
      * Remove a listener from receiving callbacks when sign-in or sign-out occur.
+     *
      * @param listener the sign-in state change listener.
      */
     public void removeSignInStateChangeListener(final SignInStateChangeListener listener) {
@@ -330,6 +355,7 @@ public class IdentityManager {
 
     /**
      * Set the results handler that will be used for results when calling loginWithProvider.
+     *
      * @param signInResultsHandler the results handler.
      */
     public void setResultsHandler(final SignInResultsHandler signInResultsHandler) {
@@ -343,6 +369,7 @@ public class IdentityManager {
     /**
      * Call getResultsAdapter to get the IdentityManager's handler that adapts results before
      * sending them back to the handler set by {@link #setResultsHandler(SignInResultsHandler)}
+     *
      * @return the Identity Manager's results adapter.
      */
     public SignInResultsAdapter getResultsAdapter() {
@@ -375,6 +402,13 @@ public class IdentityManager {
                     listener.onUserSignedOut();
                 }
             }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    credentialsProvider.refresh();
+                }
+            }).start();
+
         }
     }
 
@@ -390,6 +424,7 @@ public class IdentityManager {
 
     /**
      * Login with an identity provider (ie. Facebook, Twitter, etc.).
+     *
      * @param provider A sign-in provider.
      */
     public void loginWithProvider(final IdentityProvider provider) {
@@ -422,6 +457,7 @@ public class IdentityManager {
 
     /**
      * Gets the current provider.
+     *
      * @return current provider or null if not signed-in
      */
     public IdentityProvider getCurrentIdentityProvider() {
@@ -451,7 +487,7 @@ public class IdentityManager {
     /**
      * Reload the user info and image in the background.
      *
-     * @param provider sign-in provider
+     * @param provider         sign-in provider
      * @param onReloadComplete Runnable to be executed on the main thread after user info
      *                         and user image is reloaded.
      */
@@ -469,6 +505,7 @@ public class IdentityManager {
 
     /**
      * Convenient method to get the user image of the current identity provider.
+     *
      * @return user image of the current identity provider, or null if not signed in or unavailable
      */
     public Bitmap getUserImage() {
@@ -477,6 +514,7 @@ public class IdentityManager {
 
     /**
      * Convenient method to get the user name from the current identity provider.
+     *
      * @return user name from the current identity provider, or null if not signed in
      */
     public String getUserName() {

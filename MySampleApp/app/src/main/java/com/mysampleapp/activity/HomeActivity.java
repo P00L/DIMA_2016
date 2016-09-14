@@ -265,7 +265,7 @@ public class HomeActivity extends AppCompatActivity
             // The user is currently signed in with a provider. Sign out of that provider.
             identityManager.signOut();
             // Show the sign-in button and hide the sign-out button.
-            signOutButton.setVisibility(View.INVISIBLE);
+            signOutButton.setVisibility(View.GONE);
             signInButton.setVisibility(View.VISIBLE);
             updateUserImage();
             updateUserName();
@@ -293,8 +293,8 @@ public class HomeActivity extends AppCompatActivity
         signInButton.setOnClickListener(this);
 
         final boolean isUserSignedIn = identityManager.isUserSignedIn();
-        signOutButton.setVisibility(isUserSignedIn ? View.VISIBLE : View.INVISIBLE);
-        signInButton.setVisibility(!isUserSignedIn ? View.VISIBLE : View.INVISIBLE);
+        signOutButton.setVisibility(isUserSignedIn ? View.VISIBLE : View.GONE);
+        signInButton.setVisibility(!isUserSignedIn ? View.VISIBLE : View.GONE);
 
     }
 

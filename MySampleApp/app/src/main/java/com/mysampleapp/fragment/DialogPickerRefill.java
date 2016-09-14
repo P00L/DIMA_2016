@@ -21,7 +21,7 @@ public class DialogPickerRefill extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String[] delay = getResources().getStringArray(R.array.refill);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Pick refill")
+        builder.setTitle("Pick quantity:")
                 .setItems(delay, onClick);
         return builder.create();
     }

@@ -41,15 +41,15 @@
             android:layout_marginTop="2dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:padding="4dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:padding="3dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/main_nav_menu_default_user_text"
             android:background="@color/nav_drawer_no_user_background"
             android:id="@+id/userName" />
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
             android:text="@string/button_text_sign_in"
             android:id="@+id/button_signin"
             android:layout_marginLeft="6dp"
@@ -59,8 +59,8 @@
             android:background="@drawable/button_signin"
             style="@style/ButtonText"/>
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
             android:text="@string/button_text_sign_out"
             android:id="@+id/button_signout"
             android:layout_marginLeft="6dp"

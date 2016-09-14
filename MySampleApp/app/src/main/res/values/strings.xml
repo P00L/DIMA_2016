@@ -2,7 +2,7 @@
 
     <!-- CUSTOMIZE THESE FOR YOUR APP -->
 
-    <string name="app_name">My Sample App</string>
+    <string name="app_name">PocketPills</string>
     <string name="facebook_app_id">1077725718983365</string>
 
     <!-- REQUIRED FOR GENERAL APP FUNCTIONALITY - YOU MAY WANT TO KEEP THESE -->
@@ -182,7 +182,7 @@
     <string name="home">Home</string>
     <string name="doctor">Doctor</string>
     <string name="title_activity_doc_list">DocListActivity</string>
-    <string name="scheduler">Scheduler</string>
+    <string name="scheduler">Schedule</string>
     <string name="preference_file_name">com.mySampleapp.PREFERENCE_FILE_KEY</string>
     <string name="pending_alarm">pending_alarm</string>
     <string name="add_schedule">Add Schedule</string>
@@ -199,8 +199,8 @@
     <string name="pending_schedule">Pending Schedule</string>
     <string name="quantity">quantity</string>
     <string name="sottoscorta_alarm">sottoscorta_alarm</string>
-    <string name="enable_empty_drug">Click\n" '+' "\nto insert a new Drug</string>
-    <string name="enable_empty_doc">Click\n" '+' "\nto insert a new Doctor</string>
+    <string name="enable_empty_drug">Click " '+' "\nto insert a new Drug</string>
+    <string name="enable_empty_doc">Click  " '+' "\nto insert a new Doctor</string>
     <string name="no_internet_connection">No data available,\ncheck your connection!</string>
     <string name="active_doctor">active_doctor</string>
     <string name="active_doctor_ordered">active_doctor_ordered</string>
