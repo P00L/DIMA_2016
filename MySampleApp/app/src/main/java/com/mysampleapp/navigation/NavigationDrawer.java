@@ -24,9 +24,9 @@ import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobile.user.IdentityManager;
 import com.amazonaws.mobile.user.IdentityProvider;
 import com.mysampleapp.R;
-import com.mysampleapp.demo.DemoConfiguration;
-import com.mysampleapp.demo.DemoInstructionFragment;
-import com.mysampleapp.demo.HomeDemoFragment;
+import com.mysampleapp.nosqldb.DemoConfiguration;
+import com.mysampleapp.nosqldb.DemoInstructionFragment;
+import com.mysampleapp.nosqldb.HomeDemoFragment;
 
 import static com.mysampleapp.R.string.app_name;
 

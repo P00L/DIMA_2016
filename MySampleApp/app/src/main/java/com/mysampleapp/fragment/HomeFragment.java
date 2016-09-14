@@ -1,8 +1,6 @@
 package com.mysampleapp.fragment;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -29,18 +27,17 @@ import android.widget.TextView;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.mysampleapp.AlarmService;
 import com.mysampleapp.DetailsTransition;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.adapter.HomeAdapter;
 import com.mysampleapp.adapter.ItemClickListener;
 import com.mysampleapp.adapter.ItemClickListenerAnimation;
-import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
-import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
-import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
-import com.mysampleapp.demo.nosql.DemoNoSQLTableScheduleDrug;
-import com.mysampleapp.demo.nosql.ScheduleDrugDO;
+import com.mysampleapp.nosqldb.nosql.DemoNoSQLOperation;
+import com.mysampleapp.nosqldb.nosql.DemoNoSQLTableBase;
+import com.mysampleapp.nosqldb.nosql.DemoNoSQLTableFactory;
+import com.mysampleapp.nosqldb.nosql.DemoNoSQLTableScheduleDrug;
+import com.mysampleapp.nosqldb.models.ScheduleDrugDO;
 
 import java.util.ArrayList;
 import java.util.Calendar;

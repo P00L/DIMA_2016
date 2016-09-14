@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.mysampleapp.ObservableScrollView;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
-import com.mysampleapp.demo.nosql.DoctorDO;
+import com.mysampleapp.nosqldb.models.DoctorDO;
 
 import java.util.ArrayList;
 

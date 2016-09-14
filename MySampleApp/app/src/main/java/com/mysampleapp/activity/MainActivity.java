@@ -26,8 +26,8 @@ import android.widget.ListView;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobile.user.IdentityManager;
 import com.mysampleapp.R;
-import com.mysampleapp.demo.DemoConfiguration;
-import com.mysampleapp.demo.HomeDemoFragment;
+import com.mysampleapp.nosqldb.DemoConfiguration;
+import com.mysampleapp.nosqldb.HomeDemoFragment;
 import com.mysampleapp.navigation.NavigationDrawer;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {

@@ -47,11 +47,11 @@ import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
 import com.mysampleapp.adapter.DocAdapter;
 import com.mysampleapp.adapter.ItemClickListenerAnimation;
-import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
-import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
-import com.mysampleapp.demo.nosql.DemoNoSQLTableDoctor;
-import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
-import com.mysampleapp.demo.nosql.DoctorDO;
+import com.mysampleapp.nosqldb.nosql.DemoNoSQLOperation;
+import com.mysampleapp.nosqldb.nosql.DemoNoSQLTableBase;
+import com.mysampleapp.nosqldb.nosql.DemoNoSQLTableDoctor;
+import com.mysampleapp.nosqldb.nosql.DemoNoSQLTableFactory;
+import com.mysampleapp.nosqldb.models.DoctorDO;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -44,15 +44,15 @@ import android.widget.TimePicker;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.mysampleapp.AlarmService;
+import com.mysampleapp.service.AlarmService;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
-import com.mysampleapp.demo.nosql.DemoNoSQLOperation;
-import com.mysampleapp.demo.nosql.DemoNoSQLTableBase;
-import com.mysampleapp.demo.nosql.DemoNoSQLTableDrug;
-import com.mysampleapp.demo.nosql.DemoNoSQLTableFactory;
-import com.mysampleapp.demo.nosql.DrugDO;
-import com.mysampleapp.demo.nosql.ScheduleDrugDO;
+import com.mysampleapp.nosqldb.nosql.DemoNoSQLOperation;
+import com.mysampleapp.nosqldb.nosql.DemoNoSQLTableBase;
+import com.mysampleapp.nosqldb.nosql.DemoNoSQLTableDrug;
+import com.mysampleapp.nosqldb.nosql.DemoNoSQLTableFactory;
+import com.mysampleapp.nosqldb.models.DrugDO;
+import com.mysampleapp.nosqldb.models.ScheduleDrugDO;
 
 import java.util.ArrayList;
 

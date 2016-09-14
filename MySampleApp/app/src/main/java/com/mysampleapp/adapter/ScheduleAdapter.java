@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mysampleapp.R;
-import com.mysampleapp.demo.nosql.ScheduleDrugDO;
+import com.mysampleapp.nosqldb.models.ScheduleDrugDO;
 
 import java.util.ArrayList;
 import java.util.Calendar;

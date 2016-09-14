@@ -9,21 +9,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.mysampleapp.ObservableScrollView;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
-import com.mysampleapp.demo.nosql.ScheduleDrugDO;
+import com.mysampleapp.nosqldb.models.ScheduleDrugDO;
 
 import java.util.ArrayList;
 

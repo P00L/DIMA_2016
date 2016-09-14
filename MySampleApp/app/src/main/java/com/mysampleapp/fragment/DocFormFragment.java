@@ -34,7 +34,7 @@ import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.mysampleapp.R;
 import com.mysampleapp.activity.HomeActivity;
-import com.mysampleapp.demo.nosql.DoctorDO;
+import com.mysampleapp.nosqldb.models.DoctorDO;
 
 import java.util.ArrayList;
 import java.util.HashSet;

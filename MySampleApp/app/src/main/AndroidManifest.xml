@@ -29,11 +29,11 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
 
-        <receiver android:name=".AlarmReceiver"
+        <receiver android:name=".receiver.AlarmReceiver"
             android:enabled="true"
             android:process=":remote"/>
 
-        <receiver android:name=".BootReceiver"
+        <receiver android:name=".receiver.BootReceiver"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
@@ -41,13 +41,13 @@
         </receiver>
 
         <service
-            android:name=".ServiceNotification"
+            android:name=".service.ServiceNotification"
             android:exported="false"/>
         <service
-            android:name=".AlarmService"
+            android:name=".service.AlarmService"
             android:exported="false"/>
         <service
-            android:name=".SottoscortaService"
+            android:name=".service.SottoscortaService"
             android:exported="false"/>
 
         <activity

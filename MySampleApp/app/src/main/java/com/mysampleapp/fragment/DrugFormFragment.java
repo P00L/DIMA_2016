@@ -27,17 +27,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.mysampleapp.AlarmService;
+import com.mysampleapp.service.AlarmService;
 import com.mysampleapp.R;
-import com.mysampleapp.SottoscortaService;
+import com.mysampleapp.service.SottoscortaService;
 import com.mysampleapp.activity.HomeActivity;
-import com.mysampleapp.demo.nosql.DrugDO;
+import com.mysampleapp.nosqldb.models.DrugDO;
 
 import java.util.ArrayList;
 

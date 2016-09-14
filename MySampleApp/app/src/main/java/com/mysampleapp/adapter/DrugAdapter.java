@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mysampleapp.R;
-import com.mysampleapp.demo.nosql.DrugDO;
+import com.mysampleapp.nosqldb.models.DrugDO;
 
 import java.util.ArrayList;
 
